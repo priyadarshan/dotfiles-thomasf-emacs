@@ -4,8 +4,25 @@
 ;; This file is generated from thomasf-emacs.org
 ;;
 
+(provide 'thomasf-init)
+
+(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
+(if (fboundp 'tool-bar-mode) (tool-bar-mode -1))
+(if (fboundp 'scroll-bar-mode) (scroll-bar-mode -1))
+
+(setq inhibit-startup-message t
+      inhibit-splash-screen t
+      inhibit-startup-buffer-menu t
+      inhibit-startup-echo-area-message t
+      initial-scratch-message ";; scratch buffer -- remember to be happy, maybe, etc. \n\n"
+      )
+
+(when (or (not (boundp 'emacs-version))
+          (string< emacs-version "24.0"))
+  (error (concat "emacs config requires Emacs 24.0 or later.")))
+
 (setq load-path (cons (concat dotfiles-dir "vendor/org-mode/lisp") load-path))
 (setq load-path (cons (concat dotfiles-dir "vendor/org-mode/contrib/lisp") load-path))
 (setq org-modules '(org-bibtex org-docview org-id org-info org-jsinfo org-habit org-mew org-mhe org-vm org-wl org-w3m org-git-link org-velocity))
+(require 'cl)
 (require 'org-install)
-(provide 'thomasf-init)
