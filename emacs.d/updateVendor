@@ -35,7 +35,9 @@ installRepo() {
         --exclude="yasnippet/snippets/" \
         --exclude="yasnippet/pkg/" \
         --exclude="yasnippet/extras/imported/" \
+        --exclude="yasnippet/extras/bundles/" \
         --exclude="anything/developer-tools/" \
+        --exclude="org-install.el~" \
         "${repo}" "${loadPath}"
 }
 
