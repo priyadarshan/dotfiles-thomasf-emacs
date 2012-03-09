@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name : #+begin_example...#+end_example
+# key: eb
+# condition: (or (= (current-column) 2) (= (current-column) 0))
+# --
+#+begin_example
+$0
+#+end_example

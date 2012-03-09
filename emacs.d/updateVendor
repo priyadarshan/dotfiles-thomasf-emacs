@@ -1,0 +1,120 @@
+#!/bin/bash
+#
+# This is my personal el-get-like bash script to manage my vendor dirs statically.
+#  I still use el-get for recepie reference https://github.com/dimitri/el-get
+#
+set -e
+
+REPOS=localdata/repos
+VENDOR=vendor
+THEMES=themes
+mkdir -p $REPOS
+
+# Execute one command inside a repository
+inRepo() {
+    (
+        cd ${REPOS}/${name}
+        $*
+    )
+}
+
+# Transfer an repository to vendor dir
+installRepo() {
+    repo="${REPOS}/${name}"
+    rsync -a --delete \
+        --exclude="*.elc" \
+        --exclude=".git/" \
+        --exclude=".gitignore" \
+        --exclude=".gitmodules" \
+        --exclude="Rakefile" \
+        --exclude="Makefile" \
+        --exclude="TODO.txt" \
+        --exclude="doc/" \
+        --exclude="testing/" \
+        --exclude=".gitmodules/" \
+        --exclude="yasnippet/snippets/" \
+        --exclude="yasnippet/pkg/" \
+        --exclude="yasnippet/extras/imported/" \
+        --exclude="anything/developer-tools/" \
+        "${repo}" "${loadPath}"
+}
+
+# Clone or update a git repository
+getGit() {
+    repo="${REPOS}/${name}"
+    if [ -d "$repo" ]; then
+        (
+            cd ${repo}
+            git pull -q
+        )
+    else
+        git clone -q "$url" "${repo}"
+    fi
+}
+
+# Get single file by http
+getFile() {
+    target="${REPOS}/${name}"
+    curl -s -k -L "$url"  > "${target}"
+}
+
+# Copy single file to loadPath target
+installFile() {
+    cp -f "${REPOS}/${name}" "${loadPath}"
+}
+
+#
+# Unset or set all manifest variables to default 
+#
+#
+unset name # local file/dir name for vendor lib
+unset url # remote file (http://some.url/file)
+loadPath="${VENDOR}"
+
+#
+# And the "recipies", all async, all at once.
+#
+(   name=org-mode; url=git://orgmode.org/org-mode.git
+    getGit && inRepo make autoloads && installRepo ) &
+
+(   name=yasnippet; url=https://github.com/capitaomorte/yasnippet
+    getGit && installRepo ) &
+
+(   name=auto-complete; url=https://github.com/m2ym/auto-complete
+    getGit && installRepo ) &
+
+(   name=zencoding; url=https://github.com/rooney/zencoding
+    getGit && installRepo ) &
+
+(   name=anything; url=http://repo.or.cz/r/anything-config.git
+    getGit && installRepo ) &
+
+(   name=emacs-eclim; url=https://github.com/senny/emacs-eclim
+    getGit && installRepo ) &
+
+#(    name=solarized-bbatsov; loadPath=themes; url=https://github.com/bbatsov/solarized-emacs
+#     getGit && installRepo ) &
+
+(   name=asciidoc.el; url=https://raw.github.com/metaperl/asciidoc-el/master/asciidoc.el
+    getFile && installFile ) &
+
+(   name=coffee-mode.el; url=https://raw.github.com/defunkt/coffee-mode/master/coffee-mode.el
+    getFile && installFile ) & 
+
+(   name=php-mode.el; url=https://github.com/ejmr/php-mode/raw/master/php-mode.el
+    getFile && installFile ) &
+
+(   name=auto-complete-yasnippet.el; url=http://www.cx4a.org/pub/auto-complete-yasnippet.el
+    getFile && installFile ) &
+
+(   name=ac-python.el; url=http://chrispoole.com/downloads/ac-python.el
+    getFile && installFile ) &
+
+(   name=artbollocks-mode.el; url=https://gitorious.org/robmyers/scripts/blobs/raw/master/artbollocks-mode.el
+    getFile && installFile ) &
+
+(   name=zenburn-theme.el; loadPath=themes; url=https://raw.github.com/bbatsov/zenburn-emacs/master/zenburn-theme.el
+    getFile && installFile ) &
+
+echo "Verify changes using git + ./compile + maybe ./profile !"
+

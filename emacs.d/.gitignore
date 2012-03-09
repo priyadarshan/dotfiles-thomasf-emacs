@@ -1,0 +1,14 @@
+geben
+tramp
+eshell/
+localdata/
+snippets/.yas*
+.yas-compiled-snippets.el
+*.elc
+url/
+auto-save-list/
+anything-c-adaptive-history
+elpa/archives/
+abbrev_defs
+thomasf-emacs.el
+
