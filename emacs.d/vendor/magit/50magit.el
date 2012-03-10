@@ -1,9 +1,9 @@
-;;; magit-autoloads.el --- automatically extracted autoloads
+;;; 50magit.el --- automatically extracted autoloads
 ;;
 ;;; Code:
 
 
-;;;### (autoloads (magit-status) "magit" "magit.el" (20283 55252))
+;;;### (autoloads (magit-status) "magit" "magit.el" (20314 43373))
 ;;; Generated autoloads from magit.el
 
 (autoload 'magit-status "magit" "\
@@ -21,7 +21,7 @@ user input.
 ;;;***
 
 ;;;### (autoloads (turn-on-magit-stgit magit-stgit-mode) "magit-stgit"
-;;;;;;  "magit-stgit.el" (20283 55252))
+;;;;;;  "magit-stgit.el" (20314 43373))
 ;;; Generated autoloads from magit-stgit.el
 
 (autoload 'magit-stgit-mode "magit-stgit" "\
@@ -37,7 +37,7 @@ Unconditionally turn on `magit-stgit-mode'.
 ;;;***
 
 ;;;### (autoloads (turn-on-magit-svn magit-svn-mode) "magit-svn"
-;;;;;;  "magit-svn.el" (20283 55252))
+;;;;;;  "magit-svn.el" (20314 43373))
 ;;; Generated autoloads from magit-svn.el
 
 (autoload 'magit-svn-mode "magit-svn" "\
@@ -53,7 +53,7 @@ Unconditionally turn on `magit-svn-mode'.
 ;;;***
 
 ;;;### (autoloads (turn-on-magit-topgit magit-topgit-mode) "magit-topgit"
-;;;;;;  "magit-topgit.el" (20283 55252))
+;;;;;;  "magit-topgit.el" (20314 43373))
 ;;; Generated autoloads from magit-topgit.el
 
 (autoload 'magit-topgit-mode "magit-topgit" "\
@@ -68,16 +68,34 @@ Unconditionally turn on `magit-topgit-mode'.
 
 ;;;***
 
-;;;### (autoloads nil nil ("magit-bisect.el" "magit-key-mode.el"
-;;;;;;  "magit-pkg.el") (20283 55252 520274))
+;;;### (autoloads (rebase-mode) "rebase-mode" "rebase-mode.el" (20314
+;;;;;;  43373))
+;;; Generated autoloads from rebase-mode.el
+
+(autoload 'rebase-mode "rebase-mode" "\
+Major mode for editing of a Git rebase file.
+
+Rebase files are generated when you run 'git rebase -i' or run
+`magit-interactive-rebase'.  They describe how Git should perform
+the rebase.  See the documentation for git-rebase (e.g., by
+running 'man git-rebase' at the command line) for details.
+
+\(fn)" t nil)
+
+(add-to-list 'auto-mode-alist '("git-rebase-todo" . rebase-mode))
 
 ;;;***
 
-(provide 'magit-autoloads)
+;;;### (autoloads nil nil ("magit-bisect.el" "magit-key-mode.el"
+;;;;;;  "magit-pkg.el" "magit-wip.el") (20314 43636 665247))
+
+;;;***
+
+(provide '50magit)
 ;; Local Variables:
 ;; version-control: never
 ;; no-byte-compile: t
 ;; no-update-autoloads: t
 ;; coding: utf-8
 ;; End:
-;;; magit-autoloads.el ends here
+;;; 50magit.el ends here

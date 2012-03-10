@@ -98,6 +98,7 @@ Main block op load paths
   (add-to-list 'load-path (concat vendor-dir "zencoding"))
   (add-to-list 'load-path (concat vendor-dir "nyan-mode"))
   (add-to-list 'load-path (concat vendor-dir "yasnippet"))
+  (add-to-list 'load-path (concat vendor-dir "magit"))
   (add-to-list 'load-path (concat vendor-dir "haskell-mode"))
   (add-to-list 'load-path (concat vendor-dir "haskell-mode-exts"))
   (add-to-list 'load-path (concat themes-dir "solarized-bbatsov"))
@@ -155,6 +156,7 @@ Theme load paths
   (autoload 'haskell-sort-imports "haskell-sort-imports" "haskell-sort-imports" t)
 
   (load "haskell-site-file")
+  (load "50magit")
 #+end_src
 ** Require whats always needed
 #+begin_src emacs-lisp
