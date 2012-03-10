@@ -9,7 +9,7 @@
 ;;          2001-2002 Reuben Thomas (>=v1.4)
 ;;          2003      Dave Love <fx@gnu.org>
 ;; Keywords: faces files Haskell
-;; Version: v2.8.0
+;; Version: $Name:  $
 ;; URL: http://www.haskell.org/haskell-mode/
 
 ;; This file is not part of GNU Emacs.
@@ -169,7 +169,7 @@
 ;; All functions/variables start with `(literate-)haskell-'.
 
 ;; Version of mode.
-(defconst haskell-version "v2.8.0"
+(defconst haskell-version "$Name:  $"
   "`haskell-mode' version number.")
 (defun haskell-version ()
   "Echo the current version of `haskell-mode' in the minibuffer."
@@ -608,7 +608,8 @@ See `haskell-check-command' for the default."
 (defun haskell-flymake-init ()
   "Flymake init function for Haskell.
 To be added to `flymake-init-create-temp-buffer-copy'."
-  (let ((checker-elts (split-string haskell-saved-check-command)))
+  (let ((checker-elts (and haskell-saved-check-command
+			   (split-string haskell-saved-check-command))))
     (list (car checker-elts)
 	  (append (cdr checker-elts)
 		  (list (flymake-init-create-temp-buffer-copy
