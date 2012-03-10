@@ -12,4 +12,5 @@ elpa/archives/
 abbrev_defs
 thomasf-emacs.el
 thomasf-org.el
+thomasf-gui.el
 
