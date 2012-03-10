@@ -6,7 +6,6 @@
 ;;         Marshall T. Vandegrift <llasram@gmail.com>
 ;; Keywords: data yaml
 ;; Version: 0.0.7
-;; URL: https://github.com/yoshiki/yaml-mode
 
 ;; This file is not part of Emacs
 
@@ -215,6 +214,7 @@ that key is pressed to begin a block literal."
   (modify-syntax-entry ?\[ "(]" yaml-mode-syntax-table)
   (modify-syntax-entry ?\] ")[" yaml-mode-syntax-table))
 
+;;;###autoload
 (define-derived-mode yaml-mode fundamental-mode "YAML"
   "Simple mode to edit YAML.
 
@@ -367,7 +367,7 @@ and indents appropriately."
   (interactive "*P")
   (self-insert-command (prefix-numeric-value arg))
   (let ((extra-chars
-         (assoc last-command-char
+         (assoc last-command-event
                 yaml-block-literal-electric-alist)))
     (cond
      ((and extra-chars (not arg) (eolp)
@@ -404,6 +404,9 @@ margin."
   (interactive)
   (message "yaml-mode %s" yaml-mode-version)
   yaml-mode-version)
+
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 (provide 'yaml-mode)
 

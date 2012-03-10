@@ -991,6 +991,10 @@ Disable slime for now
 
 #+end_src 
 
+*** YAML
+#+begin_src emacs-lisp
+  (add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
+#+end_src
 ** Other modes
 *** Gitolite configuration files
 #+begin_src emacs-lisp
