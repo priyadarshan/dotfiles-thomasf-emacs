@@ -29,6 +29,10 @@ installRepo() {
         --exclude="Rakefile" \
         --exclude="Makefile" \
         --exclude="TODO.txt" \
+        --exclude="ChangeLog" \
+        --exclude="*.spec" \
+        --exclude="*.spec.in" \
+        --exclude="*.texi" \
         --exclude="doc/" \
         --exclude="testing/" \
         --exclude=".gitmodules/" \
@@ -76,13 +80,20 @@ loadPath="${VENDOR}"
 #
 # And the "recipies", all async, all at once.
 #
+
+########################################################################
+# Misc
+
 (   name=org-mode; url=git://orgmode.org/org-mode.git
     getGit && inRepo make autoloads && installRepo ) &
 
-(   name=yasnippet; url=https://github.com/capitaomorte/yasnippet
+(   name=haskell-mode; url=https://github.com/pheaver/haskell-mode
     getGit && installRepo ) &
 
-(   name=auto-complete; url=https://github.com/m2ym/auto-complete
+(   name=haskell-mode-exts; url=https://github.com/pheaver/haskell-mode-exts
+    getGit && installRepo ) &
+
+(   name=yasnippet; url=https://github.com/capitaomorte/yasnippet
     getGit && installRepo ) &
 
 (   name=zencoding; url=https://github.com/rooney/zencoding
@@ -94,9 +105,6 @@ loadPath="${VENDOR}"
 (   name=emacs-eclim; url=https://github.com/senny/emacs-eclim
     getGit && installRepo ) &
 
-#(    name=solarized-bbatsov; loadPath=themes; url=https://github.com/bbatsov/solarized-emacs
-#     getGit && installRepo ) &
-
 (   name=asciidoc.el; url=https://raw.github.com/metaperl/asciidoc-el/master/asciidoc.el
     getFile && installFile ) &
 
@@ -106,17 +114,64 @@ loadPath="${VENDOR}"
 (   name=php-mode.el; url=https://github.com/ejmr/php-mode/raw/master/php-mode.el
     getFile && installFile ) &
 
+(   name=artbollocks-mode.el; url=https://gitorious.org/robmyers/scripts/blobs/raw/master/artbollocks-mode.el
+    getFile && installFile ) &
+
+(   name=yaml-mode.el; url=https://raw.github.com/yoshiki/yaml-mode/master/yaml-mode.el
+    getFile && installFile ) &
+
+(   name=pretty-mode.el; url=http://www.emacswiki.org/emacs/download/pretty-mode.el 
+    getFile && installFile ) &
+
+(   name=magit; url=https://github.com/magit/magit
+    getGit && inRepo make all && installRepo ) &
+
+(   name=django-mode; url=https://github.com/myfreeweb/django-mode
+    getGit && installRepo ) &
+
+########################################################################
+# Autocomplete
+
+(   name=auto-complete; url=https://github.com/m2ym/auto-complete
+    getGit && installRepo ) &
+
 (   name=auto-complete-yasnippet.el; url=http://www.cx4a.org/pub/auto-complete-yasnippet.el
+    getFile && installFile ) &
+
+(   name=auto-complete-ruby.el; url=http://www.cx4a.org/pub/auto-complete-ruby.el
     getFile && installFile ) &
 
 (   name=ac-python.el; url=http://chrispoole.com/downloads/ac-python.el
     getFile && installFile ) &
 
-(   name=artbollocks-mode.el; url=https://gitorious.org/robmyers/scripts/blobs/raw/master/artbollocks-mode.el
-    getFile && installFile ) &
+########################################################################
+# Themes
 
 (   name=zenburn-theme.el; loadPath=themes; url=https://raw.github.com/bbatsov/zenburn-emacs/master/zenburn-theme.el
     getFile && installFile ) &
+
+(    name=solarized-bbatsov; loadPath=themes; url=https://github.com/bbatsov/solarized-emacs
+     getGit && echo "current solarized-bbatsov git does not work for me" ) &
+#     getGit && installRepo ) &
+
+
+
+########################################################################
+# Possibly interesting but not used right now
+
+#(   name=fill-column-indicator.el; url=https://raw.github.com/alpaker/Fill-Column-Indicator/master/fill-column-indicator.el
+#    getFile ) &
+
+#(   name=mmm-mode; url=https://github.com/purcell/mmm-mode
+#    getGit ) &
+
+#(   name=markdown-mode; url=git://jblevins.org/git/markdown-mode.git
+#    getGit ) &
+
+
+
+
+
 
 echo "Verify changes using git + ./compile + maybe ./profile !"
 
