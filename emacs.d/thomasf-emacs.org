@@ -1,9 +1,9 @@
 #+title: Thomas Frössmans gnu emacs configuration
-#+TAGS: issue(i) 
+#+TAGS: issue(i)
 #+TODO: TODO DONE
 
-This is very very much a work in progress.. 
-I'm both quite new to org mode and have just 
+This is very very much a work in progress..
+I'm both quite new to org mode and have just
 recently started merging all my config files
 together using org-babel in this file.
 
@@ -113,34 +113,22 @@ Make sure that the init file is loaded.
 
 * Startup
 ** Path variables and load paths
-
-Other base paths used by this configuration
+Themes load paths
 #+begin_src emacs-lisp
-  (setq vendor-dir (concat dotfiles-dir "vendor/"))
-  (setq themes-dir (concat dotfiles-dir "themes/"))
-  (setq local-data-dir (concat dotfiles-dir "localdata/"))
-  (setq notes-dir (file-truename "~/notes/"))
-#+end_src
-
-Main block op load paths
-#+begin_src emacs-lisp
-
-  ;; themes-dir
-  (add-to-list 'load-path (concat themes-dir "solarized-bbatsov"))
-#+end_src
-
-Theme load paths
-#+begin_src emacs-lisp
-  (add-to-list 'custom-theme-load-path themes-dir)
-  (add-to-list 'custom-theme-load-path (concat themes-dir "solarized-bbatsov"))
+(setq themes-dir (concat dotfiles-dir "themes/"))
+(add-to-list 'load-path (concat themes-dir "solarized-bbatsov"))
+(add-to-list 'custom-theme-load-path themes-dir)
+(add-to-list 'custom-theme-load-path (concat themes-dir "solarized-bbatsov"))
 #+end_src
 ** Files that should not be version controlled should gather in their own directory
 #+begin_src emacs-lisp
+  (setq local-data-dir (concat dotfiles-dir "localdata/"))
+
   (make-directory local-data-dir t)
   (defvar backup-dir (concat  local-data-dir "backups/" (user-real-login-name) "/"))
   (defvar autosave-dir (concat local-data-dir  "autosaves/" (user-login-name) "/"))
   (make-directory autosave-dir t)
-  
+
   (setq save-place-file (concat local-data-dir "saveplace")
         savehist-file (concat local-data-dir "savehist")
         ac-comphist-file (concat local-data-dir "ac-comphist.dat")
@@ -182,14 +170,14 @@ Theme load paths
   (autoload 'zencoding-mode "zencoding-mode" "Zen coding mode" t)
   (autoload 'nyan-mode "nyan-mode" "Nyan mode" t)
   (autoload 'artbollocks-mode "artbollocks-mode" "Artbollocks mode" t)
-  
+
   (autoload 'haskell-align-imports "haskell-align-imports" "haskell-align-imports" t)
   (autoload 'haskell-navigate-imports "haskell-navigate-imports" "haskell-navigate-imports" t)
   (autoload 'haskell-sort-imports "haskell-sort-imports" "haskell-sort-imports" t)
 
-  (load "haskell-site-file")
-  (load "50magit")
-      
+  ;;(load "haskell-site-file")
+  ::(load "50magit")
+
 #+end_src
 ** Require whats always wanted
 #+begin_src emacs-lisp
@@ -211,7 +199,7 @@ Theme load paths
 ;(require 'sclang nil 'noerror)
 #+end_src
 
-* Common 
+* Common
 ** Use UTF8 as much as possible
 #+begin_src emacs-lisp
 (setq locale-coding-system 'utf-8)
@@ -224,80 +212,79 @@ Theme load paths
 (setq read-quoted-char-radix 10)         ; use decimal, not octal
 #+end_src
 
-
 ** UI related settings
 #+begin_src emacs-lisp
 (global-font-lock-mode t)
-
 #+end_src
 ** TODO Misc settings
 What is what?
 #+begin_src emacs-lisp
-(setq ring-bell-function 'ignore
-      visible-bell nil
-      column-number-mode t
-      font-lock-maximum-decoration t
+  (setq vc-follow-symlinks t
+        ring-bell-function 'ignore
+        visible-bell nil
+        column-number-mode t
+        font-lock-maximum-decoration t
 
-      transient-mark-mode t
-      shift-select-mode nil
-      delete-selection-mode nil
-      set-mark-even-if-inactive t
-      
-      delete-by-moving-to-trash t
-      truncate-partial-width-windows nil
-      uniquify-buffer-name-style 'forward
- 
-      ;; whitespace-mode
-      whitespace-line-column 100
-      whitespace-style '(face
-                         trailing
-                         lines
-                         space-before-tab
-                         indentation
-                         space-after-tab)
+        transient-mark-mode t
+        shift-select-mode nil
+        delete-selection-mode nil
+        set-mark-even-if-inactive t
 
-      ediff-window-setup-function 'ediff-setup-windows-plain
-      x-select-enable-clipboard t
-      interprogram-paste-function 'x-cut-buffer-or-selection-value
+        delete-by-moving-to-trash t
+        truncate-partial-width-windows nil
+        uniquify-buffer-name-style 'forward
 
-      browse-url-browser-function 'browse-url-generic
-      browse-url-generic-program "sensible-browser"
+        ;; whitespace-mode
+        whitespace-line-column 100
+        whitespace-style '(face
+                           trailing
+                           lines
+                           space-before-tab
+                           indentation
+                           space-after-tab)
 
-      
+        ediff-window-setup-function 'ediff-setup-windows-plain
+        x-select-enable-clipboard t
+        interprogram-paste-function 'x-cut-buffer-or-selection-value
 
-      tramp-default-method "ssh"
-      anything-command-map-prefix-key "C-<f5>"
+        browse-url-browser-function 'browse-url-generic
+        browse-url-generic-program "sensible-browser"
 
-      ;;glasses-separator "␣"
-      lexical-illusions nil
-      )
 
-(setq-default tab-width 3
-              indent-tabs-mode nil
-              indicate-empty-lines nil
-              imenu-auto-rescan t
-              save-place t
-              )
 
-(ansi-color-for-comint-mode-on)
-(auto-compression-mode t)
-(recentf-mode 1)
-(savehist-mode 1)
-(show-paren-mode 1)
+        tramp-default-method "ssh"
+        anything-command-map-prefix-key "C-<f5>"
 
-(nyan-mode 1)
+        ;;glasses-separator "␣"
+        lexical-illusions nil
+        )
 
-(electric-pair-mode t)
-(electric-indent-mode -1)
-(electric-layout-mode t)
+  (setq-default tab-width 3
+                indent-tabs-mode nil
+                indicate-empty-lines nil
+                imenu-auto-rescan t
+                save-place t
+                )
 
-(setq show-paren-style 'parenthesis)
+  (ansi-color-for-comint-mode-on)
+  (auto-compression-mode t)
+  (recentf-mode 1)
+  (savehist-mode 1)
+  (show-paren-mode 1)
 
-;; init random seed
-(random t)
+  (nyan-mode 1)
 
-;; use y/n prompts instead of yes/no
-(defalias 'yes-or-no-p 'y-or-n-p)
+  (electric-pair-mode t)
+  (electric-indent-mode -1)
+  (electric-layout-mode t)
+
+  (setq show-paren-style 'parenthesis)
+
+  ;; init random seed
+  (random t)
+
+  ;; use y/n prompts instead of yes/no
+  (defalias 'yes-or-no-p 'y-or-n-p)
 
 
 #+end_src
@@ -321,78 +308,95 @@ Current:
 #+begin_src emacs-lisp
   (require 'auto-complete)
   (require 'auto-complete-config)
-  ;;(global-auto-complete-mode t)
-  (add-to-list 'ac-dictionary-directories (concat vendor-dir "auto-complete/dict/"))
+  (global-auto-complete-mode t)
+  (setq ac-auto-start nil)
+  (setq ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
+
+  ;; MOVE TO KEYB?
+  (define-key ac-completing-map (kbd "C-n") 'ac-next)
+  (define-key ac-completing-map (kbd "C-p") 'ac-previous)
+
+  ;;----------------------------------------------------------------------------
+  ;; Use Emacs' built-in TAB completion hooks to trigger AC (Emacs >= 23.2)
+  ;;
+  (setq tab-always-indent 'complete)  ;; use 'complete when auto-complete is disabled
+  (add-to-list 'completion-styles 'initials t)
+
+  ;; hook AC into completion-at-point
+  (defun set-auto-complete-as-completion-at-point-function ()
+    (setq completion-at-point-functions '(auto-complete)))
+  (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
+
   (set-default 'ac-sources
                '(ac-source-dictionary
                  ac-source-yasnippet
                  ac-source-words-in-buffer
                  ac-source-words-in-same-mode-buffers
                  ac-source-words-in-all-buffer))
-  
+
   (dolist (mode '(magit-log-edit-mode log-edit-mode org-mode text-mode haml-mode
                                       sass-mode yaml-mode csv-mode espresso-mode haskell-mode
                                       html-mode nxml-mode sh-mode smarty-mode clojure-mode
                                       lisp-mode textile-mode markdown-mode tuareg-mode
                                       css-mode less-css-mode))
     (add-to-list 'ac-modes mode))
-  
-#+end_src
 
-Recent:
-#+begin_src emacs-lisp :tangle no
-(require 'auto-complete)
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories (concat dotfiles-dir "elpa/auto-complete-1.4.20110207/dict/"))
-(ac-config-default)
+  ;; Exclude very large buffers from dabbrev
+  (defun smp-dabbrev-friend-buffer (other-buffer)
+    (< (buffer-size other-buffer) (* 1 1024 1024)))
+
+  (setq dabbrev-friend-buffer-function 'smp-dabbrev-friend-buffer)
+  (add-to-list 'ac-dictionary-directories (concat vendor-dir "auto-complete/dict/"))
+
+  (ac-config-default)
 #+end_src
 
 Somethings to be inspired by?
 #+begin_src emacs-lisp :tangle no
-  (require 'auto-complete)
-  (require 'auto-complete-config)
-  (global-auto-complete-mode t)
-  (setq ac-auto-start nil)
-  (setq ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
-  (define-key ac-completing-map (kbd "C-n") 'ac-next)
-  (define-key ac-completing-map (kbd "C-p") 'ac-previous)
-  
-  ;;----------------------------------------------------------------------------
-  ;; Use Emacs' built-in TAB completion hooks to trigger AC (Emacs >= 23.2)
-  ;;----------------------------------------------------------------------------
-  (setq tab-always-indent 'complete)  ;; use 'complete when auto-complete is disabled
-  (add-to-list 'completion-styles 'initials t)
-  
-  ;; hook AC into completion-at-point
-  (defun set-auto-complete-as-completion-at-point-function ()
-    (setq completion-at-point-functions '(auto-complete)))
-  (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
-  
-  
-  (set-default 'ac-sources
-               '(ac-source-dictionary
-                 ac-source-words-in-buffer
-                 ac-source-words-in-same-mode-buffers
-                 ac-source-words-in-all-buffer))
-  
-  (dolist (mode '(magit-log-edit-mode log-edit-mode org-mode text-mode haml-mode
-                                      sass-mode yaml-mode csv-mode espresso-mode haskell-mode
-                                      html-mode nxml-mode sh-mode smarty-mode clojure-mode
-                                      lisp-mode textile-mode markdown-mode tuareg-mode
-                                      css-mode less-css-mode))
-    (add-to-list 'ac-modes mode))
-  
-  
-  ;; Exclude very large buffers from dabbrev
-  (defun smp-dabbrev-friend-buffer (other-buffer)
-    (< (buffer-size other-buffer) (* 1 1024 1024)))
-  
-  (setq dabbrev-friend-buffer-function 'smp-dabbrev-friend-buffer)
-  (add-to-list 'ac-dictionary-directories (concat vendor-dir "auto-complete/dict/"))
-  
-  (ac-config-default)
-  
-  
+   (require 'auto-complete)
+   (require 'auto-complete-config)
+   (global-auto-complete-mode t)
+   (setq ac-auto-start nil)
+   (setq ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
+   (define-key ac-completing-map (kbd "C-n") 'ac-next)
+   (define-key ac-completing-map (kbd "C-p") 'ac-previous)
+
+   ;;----------------------------------------------------------------------------
+   ;; Use Emacs' built-in TAB completion hooks to trigger AC (Emacs >= 23.2)
+   ;;----------------------------------------------------------------------------
+   (setq tab-always-indent 'complete)  ;; use 'complete when auto-complete is disabled
+   (add-to-list 'completion-styles 'initials t)
+
+   ;; hook AC into completion-at-point
+   (defun set-auto-complete-as-completion-at-point-function ()
+     (setq completion-at-point-functions '(auto-complete)))
+   (add-hook 'auto-complete-mode-hook 'set-auto-complete-as-completion-at-point-function)
+
+
+   (set-default 'ac-sources
+                '(ac-source-dictionary
+                  ac-source-words-in-buffer
+                  ac-source-words-in-same-mode-buffers
+                  ac-source-words-in-all-buffer))
+
+   (dolist (mode '(magit-log-edit-mode log-edit-mode org-mode text-mode haml-mode
+                                       sass-mode yaml-mode csv-mode espresso-mode haskell-mode
+                                       html-mode nxml-mode sh-mode smarty-mode clojure-mode
+                                       lisp-mode textile-mode markdown-mode tuareg-mode
+                                       css-mode less-css-mode))
+  (add-to-list 'ac-modes mode))
+
+
+   ;; Exclude very large buffers from dabbrev
+   (defun smp-dabbrev-friend-buffer (other-buffer)
+     (< (buffer-size other-buffer) (* 1 1024 1024)))
+
+   (setq dabbrev-friend-buffer-function 'smp-dabbrev-friend-buffer)
+   (add-to-list 'ac-dictionary-directories (concat vendor-dir "auto-complete/dict/"))
+
+   (ac-config-default)
+
+
 #+end_src
 
 ** Load yasnippet
@@ -403,11 +407,11 @@ Somethings to be inspired by?
   (setq yas/snippet-dirs (list (concat dotfiles-dir "/snippets")
                                (concat dotfiles-dir "/snippets-imported"))
         yas/prompt-functions '(yas/dropdown-prompt))
-  
+
   (yas/global-mode 1)
 #+end_src
 
-** TODO Currently unused 
+** TODO Currently unused
 #+begin_src emacs-lisp :tangle no
  (setq mac-option-modifier nil
        mac-command-modifier 'meta
@@ -420,8 +424,6 @@ Somethings to be inspired by?
 ** TODO IDO
 #+begin_src emacs-lisp
   (setq  ido-enable-flex-matching t
-         ;;ido-create-new-buffer 'ways
-         ;;ido-enable-prefix nil
          ido-use-filename-at-point nil
          ido-auto-merge-work-directories-length 0
          ido-use-virtual-buffers t
@@ -429,7 +431,7 @@ Somethings to be inspired by?
   (ido-mode t)
   (ido-everywhere t)
   (ido-ubiquitous)
-  #+end_src
+#+end_src
 * Utility functions
 ** Insert file as org table at point
 #+begin_src emacs-lisp :tangle thomasf-org.el
@@ -449,14 +451,14 @@ Somethings to be inspired by?
       (load-theme night-mode-theme)
       (message "Night mode on")
       (set-frame-parameter nil 'night-mode-on t))
-    
+
     (defun day-mode ()
       "Switch to day mode (light color theme)"
       (interactive)
       (load-theme day-mode-theme)
       (message "Night mode off")
       (set-frame-parameter nil 'night-mode-on nil))
-  
+
     (defun toggle-night-mode ()
       "Toggle between day and night modes"
       (interactive)
@@ -474,7 +476,7 @@ Somethings to be inspired by?
           (if (eq mode major-mode)
               (add-to-list 'buffer-mode-matches buf))))
       buffer-mode-matches))
-  
+
   (defun multi-occur-in-this-mode ()
     "Show all lines matching REGEXP in buffers with this major mode."
     (interactive)
@@ -489,7 +491,7 @@ Somethings to be inspired by?
   (let ((langs '("svenska" "english")))
     (setq lang-ring (make-ring (length langs)))
     (dolist (elem langs) (ring-insert lang-ring elem)))
-  
+
   (defun cycle-ispell-languages ()
     "Cycle spelling dictionaries from a list"
     (interactive)
@@ -501,7 +503,7 @@ Somethings to be inspired by?
 #+begin_src emacs-lisp :tangle thomasf-gui.el
   (defun intelligent-close ()
     "quit a frame the same way no matter what kind of frame you are on.
-  
+
   This method, when bound to C-x C-c, allows you to close an emacs frame the
   same way, whether it's the sole window you have open, or whether it's
   a \"child\" frame of a \"parent\" frame.  If you're like me, and use emacs in
@@ -511,7 +513,7 @@ Somethings to be inspired by?
   not careful, doing so will take all the child frames away with it).  This
   is my solution to that: an intelligent close-frame operation that works in
   all cases (even in an emacs -nw session).
-  
+
   Stolen from http://www.dotemacs.de/dotfiles/BenjaminRutt.emacs.html."
     (interactive)
     (if (eq (car (visible-frame-list)) (selected-frame))
@@ -523,7 +525,7 @@ Somethings to be inspired by?
           (save-buffers-kill-emacs))
       ;;close a child frame
       (delete-frame (selected-frame))))
-  
+
 
 #+end_src
 ** Lorem ipsum paster
@@ -568,11 +570,11 @@ Somethings to be inspired by?
    (defun untabify-buffer ()
     (interactive)
     (untabify (point-min) (point-max)))
-  
+
   (defun indent-buffer ()
     (interactive)
     (indent-region (point-min) (point-max)))
-  
+
   (defun cleanup-buffer ()
     "Perform a bunch of operations on the whitespace content of a buffer."
     (interactive)
@@ -597,7 +599,7 @@ This is only for x, I would guess.
     (comment-or-uncomment-region
      (line-beginning-position)
      (line-end-position lines)))
-  
+
   (defun comment-or-uncomment-region-or-line (&optional lines)
     (interactive "P")
     (if mark-active
@@ -695,14 +697,14 @@ This is provided by other things I use
 #+begin_src emacs-lisp
   (eval-after-load "haskell-mode"
     '(progn
-  
+
        ;; (defun pretty-lambdas-haskell ()
        ;;   (font-lock-add-keywords
        ;;    nil `((,(concat "(?\\(" (regexp-quote "\\") "\\)")
        ;;           (0 (progn (compose-region (match-beginning 1) (match-end 1)
        ;;                                     ,(make-char 'greek-iso8859-7 107))
        ;;                     nil))))))
-  
+
        (defun my-haskell-mode-hook ()
          "My haskell-mode hook"
          (my-programming-hook)
@@ -712,24 +714,24 @@ This is provided by other things I use
          (turn-on-haskell-indentation)
          (rainbow-delimiters-mode)
          (eldoc-mode))
-       
-       (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)     
-       
+
+       (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
+
        ))
 #+end_src
 *** CoffeeScript
 #+begin_src emacs-lisp
   (autoload 'coffee-mode "coffee-mode" "Coffee Mode." t)
-  
+
   (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
   (add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))
-  
+
   (eval-after-load "coffee-mode"
     '(progn
        (setq coffee-cleanup-whitespace nil
              coffee-debug-mode t
              coffee-tab-width 3)
-       
+
        (defun my-coffee-mode-hook ()
          "My coffee-mode hook"
          (my-programming-hook)
@@ -787,11 +789,11 @@ TODO: maybe possible to do this in pretty-mode
 Most of this is just copied without ever read
 
 Disable slime for now
-#+begin_src emacs-lisp :tangle no 
+#+begin_src emacs-lisp :tangle no
   (require 'slime)
   (require 'geiser)
   (setq geiser-scheme-dir "/usr/local/share/geiser")
-  
+
   (eval-after-load "slime"
     '(progn
        (setq slime-lisp-implementations '((sbcl ("sbcl"))))
@@ -816,19 +818,19 @@ Disable slime for now
 
 
 #+begin_src emacs-lisp
-  
-  
+
+
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
   (add-hook 'emacs-lisp-mode-hook 'my-programming-hook)
   (add-hook 'lisp-mode-hook 'my-programming-hook)
-  
+
   (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-remove-elc-on-save)
   (add-hook 'emacs-lisp-mode-hook '(lambda () "rainbown-delimiters" (rainbow-delimiters-mode)))
-  
+
   (when (functionp 'paredit-mode)
     (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
     (add-hook 'lisp-mode-hook (lambda () (paredit-mode +1))))
-  
+
   (defun emacs-lisp-remove-elc-on-save ()
     "If you're saving an elisp file, likely the .elc is no longer valid."
     (make-local-variable 'after-save-hook)
@@ -836,28 +838,28 @@ Disable slime for now
               (lambda ()
                 (if (file-exists-p (concat buffer-file-name "c"))
                     (delete-file (concat buffer-file-name "c"))))))
-  
+
   (font-lock-add-keywords 'emacs-lisp-mode
                           '(("(\\|)" . 'paren-face)))
-  
+
   (font-lock-add-keywords 'scheme-mode
                           '(("(\\|)" . 'paren-face)))
-  
+
   (font-lock-add-keywords 'lisp-mode
                           '(("(\\|)" . 'paren-face)))
-  
+
   (font-lock-add-keywords 'lfe-mode
                           '(("(\\|)" . 'paren-face)))
-  
+
   (font-lock-add-keywords 'hen-mode
                           '(("(\\|)" . 'paren-face)))
-  
+
   (define-key lisp-mode-shared-map (kbd "C-c l") "lambda")
   (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
   (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
   (define-key lisp-mode-shared-map (kbd "C-\\") 'lisp-complete-symbol)
   (define-key lisp-mode-shared-map (kbd "C-c v") 'eval-buffer)
-  
+
   (defface paren-face
     '((((class color) (background dark))
        (:foreground "grey20"))
@@ -865,28 +867,28 @@ Disable slime for now
        (:foreground "grey55")))
     "Face used to dim parentheses."
     :group 'faces)
-  
+
   (autoload 'scheme-get-current-symbol-info "scheme-complete" nil t)
   (add-hook 'scheme-mode-hook
     (lambda ()
       (make-local-variable 'eldoc-documentation-function)
       (setq eldoc-documentation-function 'scheme-get-current-symbol-info)
       (eldoc-mode)))
-  
+
 #+end_src
 *** PHP
 #+begin_src emacs-lisp
   (autoload 'php-mode "php-mode" "PHP Mode." t)
-  
+
   (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
-  
+
   (eval-after-load "php-mode"
     '(progn
        (defun my-php-mode-hook ()
          "My php mode hook"
          (my-programming-hook)
          (flymake-php-load))
-       
+
        (add-hook 'php-mode-hook 'my-php-mode-hook)
        ))
 #+end_src
@@ -910,9 +912,9 @@ Disable slime for now
   (my-programming-hook)
   (electric-indent-mode -1)
   ;;(glasses-mode)
-  (auto-complete-mode)
-  (require 'ac-python)
-  (setq ac-sources '(ac-source-yasnippet ac-source-python))
+  ;(;auto-complete-mode)
+  ;;(require 'ac-python)
+  ;;(setq ac-sources '(ac-source-python ac-source-yasnippet))
   (whitespace-mode)
   )
 
@@ -927,24 +929,18 @@ Disable slime for now
   (add-to-list 'auto-mode-alist '("Gemfile$" . ruby-mode))
   (add-to-list 'auto-mode-alist '("Guardfile$" . ruby-mode))
   (add-to-list 'completion-ignored-extensions ".rbc")
-  
-  (eval-after-load 'ruby-mode 
+
+  (eval-after-load 'ruby-mode
     '(progn
        (require 'ruby-block)))
-  
-  
-  
-  
-  
+
   (defun my-ruby-hook ()
     "My ruby hook"
     (my-programming-hook)
     (ruby-block-mode t)
     (setq ac-sources '(ac-source-yasnippet ac-source-words-in-buffer))
-    (auto-complete-mode)
-    
-  )
-  
+    (auto-complete-mode))
+
   (add-hook 'ruby-mode-hook 'my-ruby-hook)
 #+end_src
 
@@ -973,14 +969,14 @@ Disable slime for now
 *** Markdown
 #+begin_src emacs-lisp
   (autoload 'markdown-mode "markdown-mode" "Markdown mode" t)
-  
+
   (add-to-list 'auto-mode-alist '("\\.markdown$" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.md$" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.mdwn$" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.mkd$" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.mkdown$" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.mdtext$" . markdown-mode))
-  
+
   (defun my-markdown-mode-hook ()
     "My markdown-mode hook"
     (setq markdown-command "pandoc -f markdown -t html")
@@ -989,7 +985,7 @@ Disable slime for now
     (undo-tree-mode)
     (artbollocks-mode)
     )
-  
+
   (add-hook 'markdown-mode-hook 'my-markdown-mode-hook)
 #+end_src
 *** HTML
@@ -1007,11 +1003,7 @@ Disable slime for now
   (auto-complete-mode))
 
 (add-hook 'html-mode-hook 'my-html-mode-hook)
-
-
-
-
-#+end_src 
+#+end_src
 
 *** YAML
 #+begin_src emacs-lisp
@@ -1037,16 +1029,6 @@ Disable slime for now
 
 #+end_src
 
-** TODO Deft                                                         :issue:
-not using it.. rigjht?
-#+begin_src emacs-lisp
-  ;; (require 'deft)
-  ;; (setq deft-extension "org")
-  ;; (setq deft-text-mode (quote org-mode))
-  ;; (setq deft-directory (concat notes-dir "/deft"))
-  ;; (setq deft-use-filename-as-title t)
-  ;; (setq deft-auto-save 900)
-#+end_src
 
 * ORGmode!
 ** TODO Orgmode
@@ -1062,7 +1044,6 @@ Inspirations:
 #+end_src
 ** Set up basic paths for org and org-agenda
 #+begin_src emacs-lisp :tangle thomasf-org.el
-;; Paths
   (setq org-directory notes-dir)
   (setq org-agenda-files (file-expand-wildcards (concat notes-dir "agenda/*.org")))
   (setq org-agenda-text-search-extra-files (file-expand-wildcards (concat notes-dir "org/*.org")))
@@ -1086,7 +1067,7 @@ Inspirations:
 **** Misc
 #+begin_src emacs-lisp :tangle thomasf-org.el
   (setq org-agenda-span 10
-        org-agenda-show-all-dates nil 
+        org-agenda-show-all-dates nil
         org-agenda-dim-blocked-tasks nil
         org-agenda-tags-todo-honor-ignore-options t)
 #+end_src
@@ -1096,11 +1077,11 @@ Inspirations:
         org-icalendar-include-sexps t
         org-icalendar-store-UID t)
 #+end_src
- 
+
 **** Agenda commands
 #+begin_src emacs-lisp :tangle thomasf-org.el
   (eval-after-load "org-agenda"
-    '(progn 
+    '(progn
        ;; Custom agenda command definitions
        (setq org-agenda-custom-commands
              (quote (("N" "Notes" tags "NOTE"
@@ -1205,7 +1186,7 @@ Inspirations:
                        next-headline
                      nil)) ; a stuck project, has subtasks but no next task
                next-headline))))
-  
+
        (defun bh/skip-non-projects ()
          "Skip trees that are not projects"
          (bh/list-sublevels-for-projects-indented)
@@ -1217,7 +1198,7 @@ Inspirations:
                      nil
                    subtree-end)))
            (org-end-of-subtree t)))
-  
+
        (defun bh/skip-project-trees-and-habits ()
          "Skip trees that are projects"
          (save-restriction
@@ -1230,7 +1211,7 @@ Inspirations:
                subtree-end)
               (t
                nil)))))
-  
+
        (defun bh/skip-projects-and-habits-and-single-tasks ()
          "Skip trees that are projects, tasks that are habits, single non-project tasks"
          (save-restriction
@@ -1245,7 +1226,7 @@ Inspirations:
                next-headline)
               (t
                nil)))))
-  
+
        (defun bh/skip-project-tasks-maybe ()
          "Show tasks related to the current restriction.
   When restricted to a project, skip project and sub project tasks, habits, NEXT tasks, and loose tasks.
@@ -1269,7 +1250,7 @@ Inspirations:
                subtree-end)
               (t
                nil)))))
-  
+
        (defun bh/skip-projects-and-habits ()
          "Skip trees that are projects and tasks that are habits"
          (save-restriction
@@ -1282,7 +1263,7 @@ Inspirations:
                subtree-end)
               (t
                nil)))))
-  
+
        (defun bh/skip-non-subprojects ()
          "Skip trees that are not projects"
          (let ((next-headline (save-excursion (outline-next-heading))))
@@ -1312,7 +1293,7 @@ Inspirations:
                 ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
                 ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
                 ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
-  
+
 #+end_src
 **** TODO Todo faces
 #+begin_src emacs-lisp :tangle no
@@ -1324,7 +1305,7 @@ Inspirations:
                 ("HOLD" :foreground "magenta" :weight bold)
                 ("CANCELLED" :foreground "forest green" :weight bold)
                 ("PHONE" :foreground "forest green" :weight bold))))
-  
+
 #+end_src
 *** Default tags
 #+begin_src emacs-lisp :tangle thomasf-org.el
@@ -1338,7 +1319,7 @@ Inspirations:
                               ("WAITING" . ?w)
                               ("HOLD" . ?h)
                               ("PERSONAL" . ?P)
-                              ("WORK" . ?W)                       
+                              ("WORK" . ?W)
                               ("NOTE" . ?n)
                               ("CANCELLED" . ?c)
                               ("FLAGGED" . ??))))
@@ -1365,14 +1346,14 @@ Inspirations:
 #+begin_src emacs-lisp :tangle thomasf-org.el
 ;;Resume clock when the agenda is loaded
  (eval-after-load "org-agenda"
-    '(progn 
+    '(progn
 
 (org-clock-persistence-insinuate)
 ))
   ;; Clocking
   ;;
   ;; Resume clocking task when emacs is restarted
-  
+
   ;;
   ;; Show lot sof clocking history so it's easy to pick items off the C-F11 list
   (setq org-clock-history-length 36)
@@ -1396,8 +1377,8 @@ Inspirations:
   (setq org-clock-auto-clock-resolution (quote when-no-clock-is-running))
   ;; Include current clocking task in clock reports
   (setq org-clock-report-include-clocking-task t)
-    
-  
+
+
 #+end_src
 ** Integrations
 *** yasnippet
@@ -1405,7 +1386,7 @@ Inspirations:
 
   (defun yas/org-very-safe-expand ()
     (let ((yas/fallback-behavior 'return-nil)) (yas/expand)))
-  
+
   (add-hook 'org-mode-hook
             (lambda ()
               (make-variable-buffer-local 'yas/trigger-key)
@@ -1425,7 +1406,7 @@ Inspirations:
           (sh . t)
           (python . t)
           (emacs-lisp . t)))))
-  
+
 #+end_src
 
 *** Don't confirm babel execution!
@@ -1434,7 +1415,7 @@ Inspirations:
 #+end_src
 *** TODO Use inline formatting with org-babel
 To me, the following feels a bit slow and/or confusing).. Use [C-c '] instead.
-#+begin_src emacs-lisp :tangle no 
+#+begin_src emacs-lisp :tangle no
   (setq org-src-fontify-natively t)
   (setq org-src-tab-acts-natively t)
 #+end_src
@@ -1458,55 +1439,55 @@ To me, the following feels a bit slow and/or confusing).. Use [C-c '] instead.
             (setq parent-task (point))))
         (goto-char parent-task)
         parent-task)))
-  
+
 
   ;; (define-key mode-specific-map [?a] 'org-agenda)
-  
+
   ;; (eval-after-load "org"
   ;;   '(progn
   ;;      (define-prefix-command 'org-todo-state-map)
   ;;      (define-key org-mode-map "\C-cx" 'org-todo-state-map)
-  
+
   ;;      (define-key org-todo-state-map "x"
   ;;        #'(lambda nil (interactive) (org-todo "CANCELLED")))
   ;;      )
   ;;   )
-  
-  
-  
-  
+
+
+
+
   ; Allow setting single tags without the menu
   ; (setq org-fast-tag-selection-single-key (quote expert))
-  
-  
+
+
   ; DIsable orgmode default stuck projects ist
   (setq org-stuck-projects (quote ("" nil nil "")))
-  
+
   ; Disable priorities
   ; (setq org-enable-priority-commands nil)
-  
-  
-  
-  
-  
+
+
+
+
+
   ;; enable flyspell for all org-mode buffers
   ;;(add-hook 'org-mode-hook 'turn-on-flyspell 'append)
   ;; enable auto revert for all org-mode buffers
   (add-hook 'org-mode-hook 'turn-on-auto-revert-mode 'append)
-  
+
   ;; Disable default key bindings for include/remove from org agenda
   (add-hook 'org-mode-hook
             (lambda ()
               (org-defkey org-mode-map "\C-c[" 'undefined)
               (org-defkey org-mode-map "\C-c]" 'undefined)))
-  
+
   ;; Make windmove work in org-mode:
   (add-hook 'org-shiftup-final-hook 'windmove-up)
   (add-hook 'org-shiftleft-final-hook 'windmove-left)
   (add-hook 'org-shiftdown-final-hook 'windmove-down)
   (add-hook 'org-shiftright-final-hook 'windmove-right)
-  
-    
+
+
   ;; support functions
   (defun bh/is-project-p ()
     "Any task with a todo keyword subtask"
@@ -1523,7 +1504,7 @@ To me, the following feels a bit slow and/or confusing).. Use [C-c '] instead.
             (when (member (org-get-todo-state) org-todo-keywords-1)
               (setq has-subtask t))))
         (and is-a-task has-subtask))))
-  
+
   (defun bh/is-project-subtree-p ()
     "Any task with a todo keyword that is in a project subtree.
   Callers of this function already widen the buffer view."
@@ -1534,7 +1515,7 @@ To me, the following feels a bit slow and/or confusing).. Use [C-c '] instead.
         (if (equal (point) task)
             nil
           t))))
-  
+
   (defun bh/is-task-p ()
     "Any task with a todo keyword and no subtask"
     (save-restriction
@@ -1550,7 +1531,7 @@ To me, the following feels a bit slow and/or confusing).. Use [C-c '] instead.
             (when (member (org-get-todo-state) org-todo-keywords-1)
               (setq has-subtask t))))
         (and is-a-task (not has-subtask)))))
-  
+
   (defun bh/is-subproject-p ()
     "Any task which is a subtask of another project"
     (let ((is-subproject)
@@ -1560,7 +1541,7 @@ To me, the following feels a bit slow and/or confusing).. Use [C-c '] instead.
           (when (member (nth 2 (org-heading-components)) org-todo-keywords-1)
             (setq is-subproject t))))
       (and is-a-task is-subproject)))
-  
+
   (defun bh/list-sublevels-for-projects-indented ()
     "Set org-tags-match-list-sublevels so when restricted to a subtree we list all subtasks.
     This is normally used by skipping functions where this variable is already local to the agenda."
@@ -1568,7 +1549,7 @@ To me, the following feels a bit slow and/or confusing).. Use [C-c '] instead.
         (setq org-tags-match-list-sublevels 'indented)
       (setq org-tags-match-list-sublevels nil))
     nil)
-  
+
   (defun bh/list-sublevels-for-projects ()
     "Set org-tags-match-list-sublevels so when restricted to a subtree we list all subtasks.
     This is normally used by skipping functions where this variable is already local to the agenda."
@@ -1576,16 +1557,16 @@ To me, the following feels a bit slow and/or confusing).. Use [C-c '] instead.
         (setq org-tags-match-list-sublevels t)
       (setq org-tags-match-list-sublevels nil))
     nil)
-  
-  
-  
+
+
+
 #+end_src
 
 ** TODO clocking
 leaving this untangeled for now, not sure if I even want clocking at all
 #+begin_src emacs-lisp :tangle no
   (setq bh/keep-clock-running nil)
-  
+
   (defun bh/clock-in-to-next (kw)
     "Switch a task from TODO to NEXT when clocking in.
   Skips capture tasks, projects, and subprojects.
@@ -1598,8 +1579,8 @@ leaving this untangeled for now, not sure if I even want clocking at all
        ((and (member (org-get-todo-state) (list "NEXT"))
              (bh/is-project-p))
         "TODO"))))
-  
-    
+
+
   (defun bh/punch-in (arg)
     "Start continuous clocking and set the default task to the
   selected task.  If no task is selected set the Organization task
@@ -1624,19 +1605,19 @@ leaving this untangeled for now, not sure if I even want clocking at all
         (if (and (equal major-mode 'org-mode) (not (org-before-first-heading-p)) (eq arg 4))
             (org-clock-in '(16))
           (bh/clock-in-organization-task-as-default)))))
-  
+
   (defun bh/punch-out ()
     (interactive)
     (setq bh/keep-clock-running nil)
     (when (org-clock-is-active)
       (org-clock-out))
     (org-agenda-remove-restriction-lock))
-  
+
   (defun bh/clock-in-default-task ()
     (save-excursion
       (org-with-point-at org-clock-default-task
         (org-clock-in))))
-  
+
   (defun bh/clock-in-parent-task ()
     "Move point to the parent (project) task if any and clock in"
     (let ((parent-task))
@@ -1651,23 +1632,23 @@ leaving this untangeled for now, not sure if I even want clocking at all
                 (org-clock-in))
             (when bh/keep-clock-running
               (bh/clock-in-default-task)))))))
-  
+
   (defvar bh/organization-task-id "eb155a82-92b2-4f25-a3c6-0304591af2f9")
-  
+
   (defun bh/clock-in-organization-task-as-default ()
     (interactive)
     (org-with-point-at (org-id-find bh/organization-task-id 'marker)
       (org-clock-in '(16))))
-  
+
   (defun bh/clock-out-maybe ()
     (when (and bh/keep-clock-running
                (not org-clock-clocking-in)
                (marker-buffer org-clock-default-task)
                (not org-clock-resolving-clocks-due-to-idleness))
       (bh/clock-in-parent-task)))
-  
+
   (add-hook 'org-clock-out-hook 'bh/clock-out-maybe 'append)
-  
+
 #+end_src
 
 * Key bindings
@@ -1682,7 +1663,7 @@ leaving this untangeled for now, not sure if I even want clocking at all
   (global-set-key [f5] 'anything)
   (global-set-key [f6] 'multi-occur-in-this-mode)
   (global-set-key [f7] 'cycle-ispell-languages)
-  
+
   (global-set-key [f8] 'org-search-view)
   (global-set-key [f12] 'menu-bar-mode)
 #+end_src
