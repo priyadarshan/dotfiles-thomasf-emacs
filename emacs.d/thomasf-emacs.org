@@ -78,11 +78,20 @@ To avoid momentary display
             (string< emacs-version "24.0"))
     (error (concat "emacs config requires Emacs 24.0 or later.")))
 #+end_src
-** Provide the org-mode environment at once
+** Set up load paths early Provide the org-mode environment at once
 Because babel should not have any chance to load from anywhere else
 #+begin_src emacs-lisp :tangle thomasf-init.el
-(setq load-path (cons (concat dotfiles-dir "vendor/org-mode/lisp") load-path))
-(setq load-path (cons (concat dotfiles-dir "vendor/org-mode/contrib/lisp") load-path))
+(setq vendor-dir (concat dotfiles-dir "vendor/"))
+(setq notes-dir (file-truename "~/notes/"))
+
+(let ((default-directory vendor-dir))
+  (setq load-path
+        (append
+         (let ((load-path (copy-sequence load-path)))
+           (append
+            (copy-sequence (normal-top-level-add-to-load-path '(".")))
+            (normal-top-level-add-subdirs-to-load-path)))
+         load-path)))
 (setq org-modules '(org-bibtex org-docview org-id org-info org-jsinfo org-habit org-mew org-mhe org-vm org-wl org-w3m org-git-link org-velocity))
 (require 'cl)
 (require 'org-install)
@@ -115,19 +124,6 @@ Other base paths used by this configuration
 
 Main block op load paths
 #+begin_src emacs-lisp
-  ;; vendor-dir
-  (add-to-list 'load-path vendor-dir)
-  (add-to-list 'load-path (concat vendor-dir "emacs-eclim"))
-  (add-to-list 'load-path (concat vendor-dir "emacs-eclim/vendor"))
-  (add-to-list 'load-path (concat vendor-dir "auto-complete"))
-  (add-to-list 'load-path (concat vendor-dir "anything"))
-  (add-to-list 'load-path (concat vendor-dir "zencoding"))
-  (add-to-list 'load-path (concat vendor-dir "nyan-mode"))
-  (add-to-list 'load-path (concat vendor-dir "yasnippet"))
-  (add-to-list 'load-path (concat vendor-dir "magit"))
-  (add-to-list 'load-path (concat vendor-dir "django-mode"))
-  (add-to-list 'load-path (concat vendor-dir "haskell-mode"))
-  (add-to-list 'load-path (concat vendor-dir "haskell-mode-exts"))
 
   ;; themes-dir
   (add-to-list 'load-path (concat themes-dir "solarized-bbatsov"))

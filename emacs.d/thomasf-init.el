@@ -21,8 +21,17 @@
           (string< emacs-version "24.0"))
   (error (concat "emacs config requires Emacs 24.0 or later.")))
 
-(setq load-path (cons (concat dotfiles-dir "vendor/org-mode/lisp") load-path))
-(setq load-path (cons (concat dotfiles-dir "vendor/org-mode/contrib/lisp") load-path))
+(setq vendor-dir (concat dotfiles-dir "vendor/"))
+(setq notes-dir (file-truename "~/notes/"))
+
+(let ((default-directory vendor-dir))
+  (setq load-path
+        (append
+         (let ((load-path (copy-sequence load-path)))
+           (append
+            (copy-sequence (normal-top-level-add-to-load-path '(".")))
+            (normal-top-level-add-subdirs-to-load-path)))
+         load-path)))
 (setq org-modules '(org-bibtex org-docview org-id org-info org-jsinfo org-habit org-mew org-mhe org-vm org-wl org-w3m org-git-link org-velocity))
 (require 'cl)
 (require 'org-install)
