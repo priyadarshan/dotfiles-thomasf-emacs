@@ -943,17 +943,13 @@ This will be use with `format', so use something like \"wmctrl -xa %s\"."
 (defun anything-set-anything-command-map-prefix-key (var key)
   "The customize set function for `anything-command-map-prefix-key'."
   (when (boundp var)
-    (define-key ctl-x-map (symbol-value var) nil))
+    (define-key global-map (read-kbd-macro (symbol-value var)) nil))
   (set var key)
-  (define-key ctl-x-map (symbol-value var) 'anything-command-map))
+  (define-key global-map
+      (read-kbd-macro (symbol-value var)) 'anything-command-map))
 
-(defcustom anything-command-map-prefix-key "c"
-  "The prefix key for all `anything-command-map' commands.
-It use `ctl-x-map', so when set, the prefix key will be 'C-x <prefix>'.
-
-!!WARNING!!
-This default value is very likely to be changed,
-because it is under discussion."
+(defcustom anything-command-map-prefix-key "C-x c"
+  "The prefix key for all `anything-command-map' commands."
   :type  'string
   :set   'anything-set-anything-command-map-prefix-key
   :group 'anything-config)
@@ -2061,7 +2057,13 @@ See Man locate for more infos.
 ;;
 (defvar anything-grep-help-message
   "== Anything Grep Map ==\
-\nSpecific commands for Grep and Etags:
+\nAnything Grep tips:
+You can start grep with a prefix arg to recurse in subdirectories.
+You can use wild card when selecting files (e.g *.el)
+You can grep in many differents directories by marking files or wild cards.
+You can save your results in a grep-mode buffer, see below.
+
+\nSpecific commands for Anything Grep:
 \\<anything-c-grep-map>
 \\[anything-c-goto-next-file]\t->Next File.
 \\[anything-c-goto-precedent-file]\t\t->Precedent File.
@@ -2069,6 +2071,7 @@ See Man locate for more infos.
 \\[anything-c-grep-run-other-window-action]\t\t->Jump other window.
 \\[anything-c-grep-run-persistent-action]\t\t->Run persistent action (Same as `C-z').
 \\[anything-c-grep-run-default-action]\t\t->Run default action (Same as RET).
+\\[anything-c-grep-run-save-buffer]\t\t->Save to a `grep-mode' enabled buffer.
 \\[anything-grep-help]\t\t->Show this help.
 \n== Anything Map ==
 \\{anything-map}")
@@ -5411,8 +5414,10 @@ WHERE can be one of other-window, elscreen, other-frame."
       (other-window (find-file-other-window fname))
       (elscreen     (anything-elscreen-find-file fname))
       (other-frame  (find-file-other-frame fname))
+      (grep         (anything-c-grep-save-results-1))
       (t (find-file fname)))
-    (anything-goto-line lineno)
+    (unless (eq where 'grep)
+      (anything-goto-line lineno))
     (when mark
       (set-marker (mark-marker) (point))
       (push-mark (point) 'nomsg))
@@ -5440,7 +5445,10 @@ WHERE can be one of other-window, elscreen, other-frame."
   "Jump to result in elscreen from anything grep."
   (anything-c-grep-action candidate 'elscreen))
 
-(defun anything-c-grep-save-results (candidate)
+(defun anything-c-grep-save-results (_candidate)
+  (anything-c-grep-action _candidate 'grep))
+
+(defun anything-c-grep-save-results-1 ()
   "Save anything grep result in a `grep-mode' buffer."
   (let ((buf "*grep*")
         new-buf)
@@ -5460,7 +5468,7 @@ WHERE can be one of other-window, elscreen, other-frame."
                 (format "Grep Results for `%s':\n\n" anything-pattern))
         (save-excursion
           (insert (with-current-buffer anything-buffer
-                    (forward-line 1)
+                    (goto-char (point-min)) (forward-line 1)
                     (buffer-substring (point) (point-max))))
           (grep-mode))))
     (message "Anything Grep Results saved in `%s' buffer" buf)))
@@ -8872,7 +8880,9 @@ See also `anything-create--actions'.")
                (mapcar 'prin1-to-string history)
                history))))
     (migemo)
-    (action . insert)))
+    (action . (lambda (candidate)
+                (delete-minibuffer-contents)
+                (insert candidate)))))
 
 
 ;;; Elscreen
