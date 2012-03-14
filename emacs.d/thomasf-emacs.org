@@ -175,8 +175,8 @@ Themes load paths
   (autoload 'haskell-navigate-imports "haskell-navigate-imports" "haskell-navigate-imports" t)
   (autoload 'haskell-sort-imports "haskell-sort-imports" "haskell-sort-imports" t)
 
-  ;;(load "haskell-site-file")
-  ::(load "50magit")
+  (load "haskell-site-file")
+  (load "50magit")
 
 #+end_src
 ** Require whats always wanted
