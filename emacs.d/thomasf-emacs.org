@@ -555,24 +555,26 @@ Somethings to be inspired by?
 #+end_src
 ** Recompile / cache everything that makes emacs faster
 #+begin_src emacs-lisp
- (defun recompile-dot-lisp ()
-    "Recompile emacs lisp code in emacs dotfiles directory"
-    (interactive)
-    (setq font-lock-verbose nil)
-    (setq byte-compile-verbose  nil)
-    (yas/compile-top-level-dir (concat dotfiles-dir "snippets"))
-    (yas/compile-top-level-dir (concat dotfiles-dir "snippets-imported"))
-    (byte-recompile-directory (concat dotfiles-dir "snippets") 0)
-    (byte-recompile-directory (concat dotfiles-dir "snippets-imported") 0)
-    (byte-recompile-directory (concat dotfiles-dir "vendor") 0)
-    (byte-recompile-directory (concat dotfiles-dir "elpa") 0)
-    (byte-recompile-directory (concat dotfiles-dir "themes") 0)
-    (byte-compile-file "~/.emacs-private.el")
-    (byte-compile-file (concat dotfiles-dir "init.el"))
-    (byte-compile-file (concat dotfiles-dir "thomasf-init.el"))
-    (byte-compile-file (concat dotfiles-dir "thomasf-org.el"))
-    (byte-compile-file (concat dotfiles-dir "thomasf-gui.el"))
-    (byte-compile-file (concat dotfiles-dir "thomasf-emacs.el")))
+  (defun recompile-dot-lisp ()
+     "Recompile emacs lisp code in emacs dotfiles directory"
+     (interactive)
+     (setq font-lock-verbose nil)
+     (setq byte-compile-verbose  nil)
+     (byte-recompile-directory (concat dotfiles-dir "vendor") 0)
+     (byte-recompile-directory (concat dotfiles-dir "elpa") 0)
+     (byte-recompile-directory (concat dotfiles-dir "themes") 0)
+     (byte-compile-file "~/.emacs-private.el")
+     (byte-compile-file (concat dotfiles-dir "init.el"))
+     (byte-compile-file (concat dotfiles-dir "thomasf-init.el"))
+     (byte-compile-file (concat dotfiles-dir "thomasf-org.el"))
+     (byte-compile-file (concat dotfiles-dir "thomasf-gui.el"))
+     (byte-compile-file (concat dotfiles-dir "thomasf-emacs.el"))
+     (yas/compile-top-level-dir (concat dotfiles-dir "snippets"))
+     (yas/compile-top-level-dir (concat dotfiles-dir "snippets-imported"))
+     (byte-recompile-directory (concat dotfiles-dir "snippets") 0)
+     (byte-recompile-directory (concat dotfiles-dir "snippets-imported") 0))
+  
+  
 #+end_src
 
 
