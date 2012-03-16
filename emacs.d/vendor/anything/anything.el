@@ -1303,19 +1303,28 @@ Attributes:
                 anything-sources anything-compile-source-functions))
        (anything-log-eval anything-compiled-sources)))))
 
-(defun* anything-get-selection (&optional (buffer nil buffer-s) (force-display-part))
+(defun* anything-get-selection (&optional (buffer nil buffer-s)
+                                          force-display-part)
   "Return the currently selected item or nil.
 if BUFFER is nil or unspecified, use anything-buffer as default value.
-If FORCE-DISPLAY-PART is non-nil, return the display string."
+If FORCE-DISPLAY-PART is non-nil, return the display string.
+If FORCE-DISPLAY-PART value is 'withprop the display string is returned
+with its properties."
   (setq buffer (if (and buffer buffer-s) buffer anything-buffer))
   (unless (anything-empty-buffer-p buffer)
     (with-current-buffer buffer
-      (let ((selection
+      (let* ((disp-fn (if (eq force-display-part 'withprop)
+                          'buffer-substring
+                          'buffer-substring-no-properties))
+             (selection
              (or (and (not force-display-part)
                       (get-text-property (overlay-start
                                           anything-selection-overlay)
                                          'anything-realvalue))
-                 (let ((disp (buffer-substring-no-properties
+                 ;; It is needed to return properties of DISP in some case,
+                 ;; e.g for `anything-confirm-and-exit-minibuffer',
+                 ;; so use `buffer-substring' here when 'withprop is specified.
+                 (let ((disp (funcall disp-fn
                               (overlay-start anything-selection-overlay)
                               (1- (overlay-end anything-selection-overlay))))
                        (source (anything-get-current-source)))
@@ -3056,19 +3065,22 @@ If `minibuffer-completion-confirm' value is t,
 don't exit and send message 'no match'."
   (interactive)
   (let ((empty-buffer-p (with-current-buffer anything-buffer
-                          (eq (point-min) (point-max)))))
-      (cond ((and empty-buffer-p
-                  (eq minibuffer-completion-confirm 'confirm))
-             (setq anything-minibuffer-confirm-state
-                   'confirm)
-             (setq minibuffer-completion-confirm nil)
-             (minibuffer-message " [confirm]"))
-            ((and empty-buffer-p
-                  (eq minibuffer-completion-confirm t))
-             (minibuffer-message " [No match]"))
-            (t
-             (setq anything-minibuffer-confirm-state nil)
-             (anything-exit-minibuffer)))))
+                          (eq (point-min) (point-max))))
+        (unknow (string= (get-text-property
+                          0 'display (anything-get-selection nil 'withprop))
+                         "[?]")))
+    (cond ((and (or empty-buffer-p unknow)
+                (eq minibuffer-completion-confirm 'confirm))
+           (setq anything-minibuffer-confirm-state
+                 'confirm)
+           (setq minibuffer-completion-confirm nil)
+           (minibuffer-message " [confirm]"))
+          ((and (or empty-buffer-p unknow)
+                (eq minibuffer-completion-confirm t))
+           (minibuffer-message " [No match]"))
+          (t
+           (setq anything-minibuffer-confirm-state nil)
+           (anything-exit-minibuffer)))))
 (add-hook 'anything-after-update-hook 'anything-confirm-and-exit-hook)
 
 (defun anything-confirm-and-exit-hook ()

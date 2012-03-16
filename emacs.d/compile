@@ -2,4 +2,5 @@
 
 rm -f *.elc
 rm -f thomasf-emacs.el thomasf-org.el thomasf-gui.el
+find . -name .yas-compiled-snippets.el\* -exec rm {} \;
 emacs --batch  -l init.el  -f recompile-dot-lisp
