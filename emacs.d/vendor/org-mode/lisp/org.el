@@ -76,6 +76,7 @@
   (require 'gnus-sum))
 
 (require 'calendar)
+(require 'format-spec)
 
 ;; Emacs 22 calendar compatibility:  Make sure the new variables are available
 (when (fboundp 'defvaralias)
@@ -4930,6 +4931,8 @@ sure that we are at the beginning of the line.")
   "Matches an headline, putting stars and text into groups.
 Stars are put in group 1 and the trimmed body in group 2.")
 
+(defvar bidi-paragraph-direction)
+
 ;;;###autoload
 (define-derived-mode org-mode outline-mode "Org"
   "Outline-based notes management and organizer, alias
@@ -8684,7 +8687,7 @@ For file links, arg negates `org-context-in-file-links'."
        (setq link (plist-get org-store-link-plist :link)
 	     desc (or (plist-get org-store-link-plist :description) link)))
 
-      ((equal (buffer-name) "*Org Edit Src Example*")
+      ((org-src-edit-buffer-p)
        (let (label gc)
 	 (while (or (not label)
 		    (save-excursion
@@ -12854,7 +12857,7 @@ headlines matching this string."
 				   (buffer-name (buffer-base-buffer)))))))
 	 (case-fold-search nil)
 	 (org-map-continue-from nil)
-         lspos tags
+         lspos tags tags-list
 	 (tags-alist (list (cons 0 org-file-tags)))
 	 (llast 0) rtn rtn1 level category i txt
 	 todo marker entry priority)
@@ -12906,7 +12909,8 @@ headlines matching this string."
 
 		 ;; eval matcher only when the todo condition is OK
 		 (and (or (not todo-only) (member todo org-not-done-keywords))
-		      (let ((case-fold-search t)) (eval matcher)))
+		      (let ((case-fold-search t) (org-trust-scanner-tags t))
+			   (eval matcher)))
 
 		 ;; Call the skipper, but return t if it does not skip,
 		 ;; so that the `and' form continues evaluating
@@ -14985,6 +14989,7 @@ So these are more for recording a certain time/date."
 (defvar org-read-date-final-answer nil)
 (defvar org-read-date-analyze-futurep nil)
 (defvar org-read-date-analyze-forced-year nil)
+(defvar org-read-date-inactive)
 
 (defun org-read-date (&optional with-time to-time from-string prompt
 				default-time default-input inactive)
@@ -15184,7 +15189,6 @@ user."
 (defvar def)
 (defvar defdecode)
 (defvar with-time)
-(defvar org-read-date-inactive)
 (defun org-read-date-display ()
   "Display the current date prompt interpretation in the minibuffer."
   (when org-read-date-display-live
@@ -17007,6 +17011,8 @@ Some of the options can be changed using the variable
 	      (error "Unknown conversion type %s for latex fragments"
 		     processing-type)))))))))
 
+(declare-function format-spec "format-spec" (format specification))
+
 (defun org-create-math-formula (latex-frag &optional mathml-file)
   "Convert LATEX-FRAG to MathML and store it in MATHML-FILE.
 Use `org-latex-to-mathml-convert-command'.  If the conversion is
@@ -17109,7 +17115,7 @@ inspection."
 	 (dvifile (concat texfilebase ".dvi"))
 	 (pngfile (concat texfilebase ".png"))
 	 (fnh (if (featurep 'xemacs)
-                  (font-height (get-face-font 'default))
+                  (font-height (face-font 'default))
                 (face-attribute 'default :height nil)))
 	 (scale (or (plist-get options (if buffer :scale :html-scale)) 1.0))
 	 (dpi (number-to-string (* scale (floor (* 0.9 (if buffer fnh 140.))))))
@@ -17138,13 +17144,19 @@ inspection."
     (if (not (file-exists-p dvifile))
 	(progn (message "Failed to create dvi file from %s" texfile) nil)
       (condition-case nil
-	  (call-process "dvipng" nil nil nil
+	  (if (featurep 'xemacs)
+	      	  (call-process "dvipng" nil nil nil
 			"-fg" fg "-bg" bg
-			"-D" dpi
-			;;"-x" scale "-y" scale
 			"-T" "tight"
 			"-o" pngfile
 			dvifile)
+	    (call-process "dvipng" nil nil nil
+			  "-fg" fg "-bg" bg
+			  "-D" dpi
+			  ;;"-x" scale "-y" scale
+			  "-T" "tight"
+			  "-o" pngfile
+			  dvifile))
 	(error nil))
       (if (not (file-exists-p pngfile))
 	  (if org-format-latex-signal-error
@@ -17220,7 +17232,12 @@ SNIPPETS-P indicates if this is run to create snippet images for HTML."
   "Return an rgb color specification for dvipng."
   (apply 'format "rgb %s %s %s"
 	 (mapcar 'org-normalize-color
-		 (color-values (face-attribute 'default attr nil)))))
+		 (if (featurep 'xemacs)
+		     (color-rgb-components
+		      (face-property 'default
+				     (cond ((eq attr :foreground) 'foreground)
+					   ((eq attr :background) 'background))))
+		   (color-values (face-attribute 'default attr nil))))))
 
 (defun org-normalize-color (value)
   "Return string to be used as color value for an RGB component."

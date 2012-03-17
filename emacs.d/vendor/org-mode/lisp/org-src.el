@@ -42,7 +42,7 @@
 (declare-function org-get-indentation "org" (&optional line))
 (declare-function org-switch-to-buffer-other-window "org" (&rest args))
 (declare-function org-strip-protective-commas "org" (beg end))
-(declare-function org-pop-to-buffer-same-window 
+(declare-function org-pop-to-buffer-same-window
 		  "org-compat" (&optional buffer-or-name norecord label))
 
 (defcustom org-edit-src-region-extra nil
@@ -375,6 +375,15 @@ buffer."
   "Construct the buffer name for a source editing buffer."
   (concat "*Org Src " org-buffer-name "[ " lang " ]*"))
 
+(defun org-src-edit-buffer-p (&optional buffer)
+  "Test whether BUFFER (or the current buffer if BUFFER is nil)
+is a source block editing buffer."
+  (let ((buffer (org-base-buffer (or buffer (current-buffer)))))
+    (and (buffer-name buffer)
+	 (string-match "\\`*Org Src " (buffer-name buffer))
+	 (local-variable-p 'org-edit-src-beg-marker buffer)
+	 (local-variable-p 'org-edit-src-end-marker buffer))))
+
 (defun org-edit-src-find-buffer (beg end)
   "Find a source editing buffer that is already editing the region BEG to END."
   (catch 'exit
@@ -685,6 +694,8 @@ the language, a switch telling if the content should be in a single line."
   "Save parent buffer with current state source-code buffer."
   (interactive)
   (org-src-in-org-buffer (save-buffer)))
+
+(declare-function org-babel-tangle "ob-tangle" (&optional only-this-block target-file lang))
 
 (defun org-src-tangle (arg)
   "Tangle the parent buffer."
