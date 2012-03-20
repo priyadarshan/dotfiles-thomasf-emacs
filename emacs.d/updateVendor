@@ -151,8 +151,7 @@ loadPath="${VENDOR}"
     getFile && installFile ) &
 
 (    name=solarized-bbatsov; loadPath=themes; url=https://github.com/bbatsov/solarized-emacs
-     getGit && echo "current solarized-bbatsov git does not work for me" ) &
-#     getGit && installRepo ) &
+     getGit && installRepo ) &
 
 
 
