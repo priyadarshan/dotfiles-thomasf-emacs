@@ -7,7 +7,7 @@
 ;; Maintainer: Bastien Guerry <bzg at gnu dot org>
 ;; Keywords: outlines, hypermedia, calendar, wp
 ;; Homepage: http://orgmode.org
-;; Version: 7.8.05
+;; Version: 7.8.06
 ;;
 ;; This file is part of GNU Emacs.
 ;;
@@ -209,7 +209,7 @@ identifier."
 
 ;;; Version
 
-(defconst org-version "7.8.05"
+(defconst org-version "7.8.06"
   "The version number of the file org.el.")
 
 ;;;###autoload
@@ -5256,7 +5256,8 @@ This should be called after the variable `org-link-types' has changed."
   "Regular expression for fast time stamp matching.")
 (defconst org-ts-regexp-both "[[<]\\([0-9]\\{4\\}-[0-9]\\{2\\}-[0-9]\\{2\\} ?[^]\r\n>]*?\\)[]>]"
   "Regular expression for fast time stamp matching.")
-(defconst org-ts-regexp0 "\\(\\([0-9]\\{4\\}\\)-\\([0-9]\\{2\\}\\)-\\([0-9]\\{2\\}\\) *\\([^]+0-9>\r\n -]*\\)\\( \\([0-9]\\{1,2\\}\\):\\([0-9]\\{2\\}\\)\\)?\\)"
+(defconst org-ts-regexp0
+ "\\(\\([0-9]\\{4\\}\\)-\\([0-9]\\{2\\}\\)-\\([0-9]\\{2\\}\\)\\( +[^]+0-9>\r\n -]+\\)?\\( +\\([0-9]\\{1,2\\}\\):\\([0-9]\\{2\\}\\)\\)?\\)"
   "Regular expression matching time strings for analysis.
 This one does not require the space after the date, so it can be used
 on a string that terminates immediately after the date.")
@@ -17011,8 +17012,6 @@ Some of the options can be changed using the variable
 	      (error "Unknown conversion type %s for latex fragments"
 		     processing-type)))))))))
 
-(declare-function format-spec "format-spec" (format specification))
-
 (defun org-create-math-formula (latex-frag &optional mathml-file)
   "Convert LATEX-FRAG to MathML and store it in MATHML-FILE.
 Use `org-latex-to-mathml-convert-command'.  If the conversion is
@@ -21267,8 +21266,8 @@ Show the heading too, if it is currently invisible."
 	(goto-char (point-max))
 	(while (re-search-backward re nil t)
 	  (setq level (org-reduced-level (funcall outline-level)))
-	  (when (<= level n)
-	    (looking-at org-complex-heading-regexp)
+	  (when (and (<= level n)
+		     (looking-at org-complex-heading-regexp))
 	    (setq head (org-link-display-format
 			(org-match-string-no-properties 4))
 		  m (org-imenu-new-marker))

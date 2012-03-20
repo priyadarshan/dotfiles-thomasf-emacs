@@ -671,6 +671,18 @@ This function should accept the file name as its single argument."
 		   "bibtex %b"
 		   "pdflatex -interaction nonstopmode -output-directory %o %f"
 		   "pdflatex -interaction nonstopmode -output-directory %o %f"))
+	  (const :tag "2 runs of xelatex"
+		 ("xelatex -interaction nonstopmode -output-directory %o %f"
+		   "xelatex -interaction nonstopmode -output-directory %o %f"))
+	  (const :tag "3 runs of xelatex"
+		 ("xelatex -interaction nonstopmode -output-directory %o %f"
+		   "xelatex -interaction nonstopmode -output-directory %o %f"
+		   "xelatex -interaction nonstopmode -output-directory %o %f"))
+	  (const :tag "xelatex,bibtex,xelatex,xelatex"
+		 ("xelatex -interaction nonstopmode -output-directory %o %f"
+		   "bibtex %b"
+		   "xelatex -interaction nonstopmode -output-directory %o %f"
+		   "xelatex -interaction nonstopmode -output-directory %o %f"))
 	  (const :tag "texi2dvi"
 		 ("texi2dvi -p -b -c -V %f"))
 	  (const :tag "rubber"
@@ -885,7 +897,6 @@ when PUB-DIR is set, use this as the publishing directory."
 		   (concat filename ".tex")
 		 filename)))
 	 (auto-insert nil); Avoid any auto-insert stuff for the new file
-	 (TeX-master t) ; Avoid the Query for TeX master from AUCTeX
 	 (buffer (if to-buffer
 		     (cond
 		      ((eq to-buffer 'string) (get-buffer-create
@@ -957,6 +968,9 @@ when PUB-DIR is set, use this as the publishing directory."
 	   :select-tags (plist-get opt-plist :select-tags)
 	   :exclude-tags (plist-get opt-plist :exclude-tags)
 	   :LaTeX-fragments nil)))
+
+    ;; Avoid the Query for TeX master from AUCTeX
+    (if (boundp 'TeX-master) (setq TeX-master t))
 
     (set-buffer buffer)
     (erase-buffer)
@@ -1917,10 +1931,14 @@ The conversion is made depending of STRING-BEFORE and STRING-AFTER."
                          'org-label raw-table)
                   longtblp (and attr (stringp attr)
                                 (string-match "\\<longtable\\>" attr))
-		  tblenv (if (and attr (stringp attr)
-				  (or (string-match (regexp-quote "table*") attr)
-				      (string-match "\\<multicolumn\\>" attr)))
-			     "table*" "table")
+		  tblenv (if (and attr (stringp attr))
+			     (cond ((string-match "\\<sidewaystable\\>" attr)
+				    "sidewaystable")
+				   ((or (string-match (regexp-quote "table*") attr)
+					(string-match "\\<multicolumn\\>" attr))
+				    "table*")
+				   (t "table"))
+			   "table")
 		  tabular-env
 		  (if (and attr (stringp attr)
 			   (string-match "\\(tabular.\\)" attr))
