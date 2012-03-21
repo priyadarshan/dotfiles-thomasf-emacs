@@ -2269,10 +2269,7 @@ TODO state changes
 Also, if a parent has an :ORDERED: property, switching an entry to DONE will
 be blocked if any prior sibling is not yet done.
 Finally, if the parent is blocked because of ordered siblings of its own,
-the child will also be blocked.
-This variable needs to be set before org.el is loaded, and you need to
-restart Emacs after a change to make the change effective.  The only way
-to change is while Emacs is running is through the customize interface."
+the child will also be blocked."
   :set (lambda (var val)
 	 (set var val)
 	 (if val
@@ -10700,7 +10697,8 @@ prefix argument (`C-u C-u C-u C-c C-w')."
 				       (t (concat "Refile subtree \""
 						  heading-text "\" to")))
 				 default-buffer
-				 org-refile-allow-creating-parent-nodes
+				 (and (not (equal '(4) goto))
+				      org-refile-allow-creating-parent-nodes)
 				 goto))))))
 	  (setq file (nth 1 it)
 		re (nth 2 it)

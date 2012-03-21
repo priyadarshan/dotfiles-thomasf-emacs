@@ -180,7 +180,7 @@
   '(emacs-lisp-mode lisp-mode lisp-interaction-mode
     slime-repl-mode
     c-mode cc-mode c++-mode
-    java-mode malabar-mode clojure-mode scala-mode
+    java-mode malabar-mode clojure-mode clojurescript-mode  scala-mode
     scheme-mode
     ocaml-mode tuareg-mode coq-mode haskell-mode agda-mode agda2-mode
     perl-mode cperl-mode python-mode ruby-mode
@@ -381,7 +381,9 @@ If there is no common part, this will be nil.")
 (defvar ac-completing-map
   (let ((map (make-sparse-keymap)))
     (define-key map "\t" 'ac-expand)
+    (define-key map [tab] 'ac-expand)
     (define-key map "\r" 'ac-complete)
+    (define-key map [return] 'ac-complete)
     (define-key map (kbd "M-TAB") 'auto-complete)
     (define-key map "\C-s" 'ac-isearch)
 

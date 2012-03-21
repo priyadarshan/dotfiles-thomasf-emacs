@@ -5,7 +5,7 @@
 ;;;;;;  org-insert-link-global org-store-link org-run-like-in-org-mode
 ;;;;;;  turn-on-orgstruct++ turn-on-orgstruct orgstruct-mode org-global-cycle
 ;;;;;;  org-mode org-version org-babel-do-load-languages) "org" "org.el"
-;;;;;;  (20328 31831))
+;;;;;;  (20329 53007))
 ;;; Generated autoloads from org.el
 
 (autoload 'org-babel-do-load-languages "org" "\
@@ -679,8 +679,8 @@ tree can be found.
 ;;;***
 
 ;;;### (autoloads (org-insert-export-options-template org-export-as-org
-;;;;;;  org-export-visible org-export) "org-exp" "org-exp.el" (20328
-;;;;;;  31831))
+;;;;;;  org-export-visible org-export) "org-exp" "org-exp.el" (20329
+;;;;;;  53007))
 ;;; Generated autoloads from org-exp.el
 
 (autoload 'org-export "org-exp" "\
@@ -1180,8 +1180,8 @@ Dispatch to the appropriate function to store a link to an IRC session.
 
 ;;;### (autoloads (org-export-as-pdf-and-open org-export-as-pdf org-export-as-latex
 ;;;;;;  org-export-region-as-latex org-replace-region-by-latex org-export-as-latex-to-buffer
-;;;;;;  org-export-as-latex-batch) "org-latex" "org-latex.el" (20328
-;;;;;;  31831))
+;;;;;;  org-export-as-latex-batch) "org-latex" "org-latex.el" (20329
+;;;;;;  53007))
 ;;; Generated autoloads from org-latex.el
 
 (autoload 'org-export-as-latex-batch "org-latex" "\
@@ -1319,7 +1319,7 @@ in a window.  A non-interactive call will only return the buffer.
 ;;;***
 
 ;;;### (autoloads (org-mobile-create-sumo-agenda org-mobile-pull
-;;;;;;  org-mobile-push) "org-mobile" "org-mobile.el" (20320 54654))
+;;;;;;  org-mobile-push) "org-mobile" "org-mobile.el" (20329 53007))
 ;;; Generated autoloads from org-mobile.el
 
 (autoload 'org-mobile-push "org-mobile" "\
@@ -1345,7 +1345,7 @@ Create a file that contains all custom agenda views.
 
 ;;;### (autoloads (org-export-as-odf-and-open org-export-as-odf org-export-odt-convert
 ;;;;;;  org-export-as-odt org-export-as-odt-batch org-export-as-odt-and-open)
-;;;;;;  "org-odt" "org-odt.el" (20328 31831))
+;;;;;;  "org-odt" "org-odt.el" (20329 53007))
 ;;; Generated autoloads from org-odt.el
 
 (autoload 'org-export-as-odt-and-open "org-odt" "\

@@ -3,7 +3,7 @@
 ;;; Code:
 
 
-;;;### (autoloads (magit-status) "magit" "magit.el" (20314 43373))
+;;;### (autoloads (magit-status) "magit" "magit.el" (20328 31827))
 ;;; Generated autoloads from magit.el
 
 (autoload 'magit-status "magit" "\
@@ -87,7 +87,7 @@ running 'man git-rebase' at the command line) for details.
 ;;;***
 
 ;;;### (autoloads nil nil ("magit-bisect.el" "magit-key-mode.el"
-;;;;;;  "magit-pkg.el" "magit-wip.el") (20314 43636 665247))
+;;;;;;  "magit-pkg.el" "magit-wip.el") (20328 31828 656951))
 
 ;;;***
 
