@@ -415,10 +415,11 @@ Somethings to be inspired by?
 #+begin_src emacs-lisp
   (require 'dropdown-list)
   (require 'yasnippet)
-  (setq yas/snippet-dirs (list (concat dotfiles-dir "/snippets")
+  (setq yas/verbosity 0
+        yas/snippet-dirs (list (concat dotfiles-dir "/snippets")
                                (concat dotfiles-dir "/snippets-imported"))
         yas/prompt-functions '(yas/dropdown-prompt))
-
+  
   (yas/global-mode 1)
 #+end_src
 
