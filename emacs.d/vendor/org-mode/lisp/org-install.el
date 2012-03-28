@@ -5,7 +5,7 @@
 ;;;;;;  org-insert-link-global org-store-link org-run-like-in-org-mode
 ;;;;;;  turn-on-orgstruct++ turn-on-orgstruct orgstruct-mode org-global-cycle
 ;;;;;;  org-mode org-version org-babel-do-load-languages) "org" "org.el"
-;;;;;;  (20336 41531))
+;;;;;;  (20339 1032))
 ;;; Generated autoloads from org.el
 
 (autoload 'org-babel-do-load-languages "org" "\
@@ -493,7 +493,7 @@ details and examples.
 ;;;### (autoloads (org-export-as-ascii org-export-region-as-ascii
 ;;;;;;  org-replace-region-by-ascii org-export-as-ascii-to-buffer
 ;;;;;;  org-export-as-utf8-to-buffer org-export-as-utf8 org-export-as-latin1-to-buffer
-;;;;;;  org-export-as-latin1) "org-ascii" "org-ascii.el" (20336 41531))
+;;;;;;  org-export-as-latin1) "org-ascii" "org-ascii.el" (20339 1032))
 ;;; Generated autoloads from org-ascii.el
 
 (autoload 'org-export-as-latin1 "org-ascii" "\
@@ -647,7 +647,7 @@ Set org-capture-templates to be similar to `org-remember-templates'.
 ;;;***
 
 ;;;### (autoloads (org-clock-persistence-insinuate org-get-clocktable)
-;;;;;;  "org-clock" "org-clock.el" (20336 41531))
+;;;;;;  "org-clock" "org-clock.el" (20339 1032))
 ;;; Generated autoloads from org-clock.el
 
 (autoload 'org-get-clocktable "org-clock" "\
@@ -1180,8 +1180,8 @@ Dispatch to the appropriate function to store a link to an IRC session.
 
 ;;;### (autoloads (org-export-as-pdf-and-open org-export-as-pdf org-export-as-latex
 ;;;;;;  org-export-region-as-latex org-replace-region-by-latex org-export-as-latex-to-buffer
-;;;;;;  org-export-as-latex-batch) "org-latex" "org-latex.el" (20336
-;;;;;;  41531))
+;;;;;;  org-export-as-latex-batch) "org-latex" "org-latex.el" (20339
+;;;;;;  1032))
 ;;; Generated autoloads from org-latex.el
 
 (autoload 'org-export-as-latex-batch "org-latex" "\
@@ -1539,7 +1539,7 @@ See also the variable `org-reverse-note-order'.
 ;;;***
 
 ;;;### (autoloads (org-table-to-lisp orgtbl-mode turn-on-orgtbl)
-;;;;;;  "org-table" "org-table.el" (20336 41531))
+;;;;;;  "org-table" "org-table.el" (20339 1032))
 ;;; Generated autoloads from org-table.el
 
 (autoload 'turn-on-orgtbl "org-table" "\
@@ -1675,7 +1675,7 @@ The XOXO buffer is named *xoxo-<source buffer name>*
 ;;;;;;  org-babel-pop-to-session-maybe org-babel-load-in-session-maybe
 ;;;;;;  org-babel-expand-src-block-maybe org-babel-view-src-block-info
 ;;;;;;  org-babel-execute-maybe org-babel-execute-safely-maybe) "ob"
-;;;;;;  "ob.el" (20336 41531))
+;;;;;;  "ob.el" (20339 1032))
 ;;; Generated autoloads from ob.el
 
 (autoload 'org-babel-execute-safely-maybe "ob" "\
@@ -1898,7 +1898,7 @@ Mark current src block
 ;;;***
 
 ;;;### (autoloads (org-babel-lob-get-info org-babel-lob-execute-maybe
-;;;;;;  org-babel-lob-ingest) "ob-lob" "ob-lob.el" (20336 41531))
+;;;;;;  org-babel-lob-ingest) "ob-lob" "ob-lob.el" (20339 1032))
 ;;; Generated autoloads from ob-lob.el
 
 (autoload 'org-babel-lob-ingest "ob-lob" "\

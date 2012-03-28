@@ -10859,6 +10859,7 @@ this is used for the GOTO interface."
 	      (org-refile-new-child parent-target child)))
 	(error "Invalid target location")))))
 
+(declare-function org-string-nw-p "org-macs.el" (s))
 (defun org-refile-check-position (refile-pointer)
   "Check if the refile pointer matches the readline to which it points."
   (let* ((file (nth 1 refile-pointer))
@@ -12832,7 +12833,7 @@ this case the return value is a list of all return values from these calls.
 MATCHER is a Lisp form to be evaluated, testing if a given set of tags
 qualifies a headline for inclusion.  When TODO-ONLY is non-nil,
 only lines with a not-done TODO keyword are included in the output.
-This should be the same variable that was scoped into 
+This should be the same variable that was scoped into
 and set by `org-make-tags-matcher' when it constructed MATCHER.
 
 START-LEVEL can be a string with asterisks, reducing the scope to
@@ -13446,7 +13447,8 @@ With prefix ARG, realign all tags in headings in the current buffer."
 	;; Get a new set of tags from the user
 	(save-excursion
 	  (setq table (append org-tag-persistent-alist
-			      (or org-tag-alist (org-get-buffer-tags))
+			      org-tag-alist
+			      (org-get-buffer-tags)
 			      (and
 			       org-complete-tags-always-offer-all-agenda-tags
 			       (org-global-tags-completion-table
@@ -13464,7 +13466,7 @@ With prefix ARG, realign all tags in headings in the current buffer."
 		     current-tags inherited-tags table
 		     (if org-fast-tag-selection-include-todo
 			 org-todo-key-alist))
-		  (let ((org-add-colon-after-tag-completion t))
+		  (let ((org-add-colon-after-tag-completion (< 1 (length table))))
 		    (org-trim
 		     (org-icompleting-read "Tags: "
 					   'org-tags-completion-function
@@ -13748,9 +13750,10 @@ Returns the new tags string, or nil to not change the current settings."
 		  (condition-case nil
 		      (setq tg (org-icompleting-read
 				"Tag: "
-				(or buffer-tags
-				    (with-current-buffer buf
-				      (org-get-buffer-tags)))))
+				(append (or buffer-tags
+					    (with-current-buffer buf
+					      (org-get-buffer-tags)))
+					(mapcar 'car table))))
 		    (quit (setq tg "")))
 		  (when (string-match "\\S-" tg)
 		    (add-to-list 'buffer-tags (list tg))
@@ -17302,7 +17305,7 @@ BEG and END default to the buffer boundaries."
     (save-restriction
       (widen)
       (setq beg (or beg (point-min)) end (or end (point-max)))
-      (goto-char (point-min))
+      (goto-char beg)
       (let ((re (concat "\\[\\[\\(\\(file:\\)\\|\\([./~]\\)\\)\\([^]\n]+?"
 			(substring (org-image-file-name-regexp) 0 -2)
 			"\\)\\]" (if include-linked "" "\\]")))
@@ -17752,7 +17755,7 @@ overwritten, and the table is not marked as requiring realignment."
      (looking-at "[^|\n]*  |"))
     (let (org-table-may-need-update)
       (goto-char (1- (match-end 0)))
-      (delete-char -1)
+      (backward-delete-char 1)
       (goto-char (match-beginning 0))
       (self-insert-command N)))
    (t
@@ -19213,7 +19216,8 @@ See the individual commands for more information."
       (org-inside-LaTeX-fragment-p)]
      ["Insert citation" org-reftex-citation t]
      "--"
-     ["Template for BEAMER" org-insert-beamer-options-template t])
+     ["Template for BEAMER" (progn (require 'org-beamer)
+				   (org-insert-beamer-options-template)) t])
     "--"
     ("MobileOrg"
      ["Push Files and Views" org-mobile-push t]
