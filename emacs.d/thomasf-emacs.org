@@ -417,7 +417,6 @@ Somethings to be inspired by?
   (require 'dropdown-list)
   (require 'yasnippet)
   (setq yas/verbosity 0
-        yas/loadmessage 'nomessage
         yas/snippet-dirs (list (concat dotfiles-dir "/snippets")
                                (concat dotfiles-dir "/snippets-imported"))
         yas/prompt-functions '(yas/dropdown-prompt))
