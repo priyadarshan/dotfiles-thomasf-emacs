@@ -166,11 +166,11 @@ Themes load paths
 #+end_src
 ** Try to load private settings
 #+begin_src emacs-lisp
-(load "~/.emacs-private" 'noerror)
+(load "~/.emacs-private" 'noerror 'nomessage)
 #+end_src
 ** Load customize set variables
 #+begin_src emacs-lisp
-(load custom-file 'noerror)
+(load custom-file 'noerror 'nomessage)
 #+end_src
 ** Set up autoloads
 #+begin_src emacs-lisp
@@ -202,7 +202,7 @@ Themes load paths
 (require 'undo-tree)
 (smex-initialize)
 ;;(require 'smex)
-(load "sv-kalender")
+(load "sv-kalender" 'noerror 'nomessage)
 
 ;; might want to auto load these instead
 (require 'table)
@@ -231,6 +231,7 @@ Themes load paths
 What is what?
 #+begin_src emacs-lisp
   (setq vc-follow-symlinks t
+        vc-handled-backends ()
         ring-bell-function 'ignore
         visible-bell nil
         column-number-mode t
