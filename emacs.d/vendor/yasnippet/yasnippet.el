@@ -1607,10 +1607,10 @@ TEMPLATES is a list of `yas/template'."
   (unless (file-exists-p (concat directory "/" ".yas-skip"))
     ;; Load .yas-setup.el files wherever we find them
     ;;
-    (load (expand-file-name ".yas-setup" directory) 'noerror)
+    (load (expand-file-name ".yas-setup" directory) 'noerror yas/loadmessage)
     (if (and (not no-compiled-snippets)
-             (load (expand-file-name ".yas-compiled-snippets" directory) 'noerror))
-        (message "Loading much faster .yas-compiled-snippets from %s" directory)
+             (load (expand-file-name ".yas-compiled-snippets" directory) 'noerror yas/loadmessage))
+        (yas/message 3 "Loading much faster .yas-compiled-snippets from %s" directory)
       (let* ((default-directory directory)
              (snippet-defs nil))
         ;; load the snippet files
@@ -1720,7 +1720,7 @@ Prompts for INPUT-DIR and OUTPUT-FILE if called-interactively"
   (interactive (let* ((input-dir (read-directory-name "Snippet dir "))
                       (output-file (let ((ido-everywhere nil))
                                      (read-file-name "Output file "
-                                                     input-dir nil nil
+                                                     (file-name-as-directory input-dir) nil nil
                                                      ".yas-compiled-snippets.el"
                                                      nil))))
                  (list input-dir output-file)))
@@ -1757,8 +1757,13 @@ Prompts for INPUT-DIR and OUTPUT-FILE if called-interactively"
                 (insert (format ";;; %s - automatically compiled snippets for `%s' end here\n"
                                 (file-name-nondirectory output-file) mode))
                 (insert ";;;"))))
-        (yas/load-directory-1 input-dir nil nil 'no-compiled-snippets))))
-  
+        (let ((major-mode-and-parents (yas/compute-major-mode-and-parents
+                                       (concat (file-name-as-directory input-dir) "dummy"))))
+          (yas/load-directory-1 input-dir
+                                (car major-mode-and-parents)
+                                (cdr major-mode-and-parents)
+                                'no-compiled-snippets)))))
+
   (if (and (called-interactively-p)
            (yes-or-no-p (format "Open the resulting file (%s)? "
                                 (expand-file-name output-file))))
@@ -4144,6 +4149,8 @@ Remaining args as in `yas/expand-snippet'."
 (defun yas/message (level message &rest args)
   (when (> yas/verbosity level)
     (message (apply #'yas/format message args))))
+(defvar yas/loadmessage 'nil	
+  "Show message when loading emacs lisp files. 'nil to show and 'nomessage to hide.")
 
 (defun yas/format (format-control &rest format-args)
   (apply #'format (concat "[yas] " format-control) format-args))
