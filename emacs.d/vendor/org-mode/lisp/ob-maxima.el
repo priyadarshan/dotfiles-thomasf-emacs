@@ -3,7 +3,7 @@
 ;; Copyright (C) 2009-2012  Free Software Foundation, Inc.
 
 ;; Author: Eric S Fraga
-;;	   Eric Schulte
+;;	Eric Schulte
 ;; Keywords: literate programming, reproducible research, maxima
 ;; Homepage: http://orgmode.org
 
@@ -42,7 +42,8 @@
 
 (defcustom org-babel-maxima-command
   (if (boundp 'maxima-command) maxima-command "maxima")
-  "Command used to call maxima on the shell.")
+  "Command used to call maxima on the shell."
+  :group 'org-babel)
 
 (defun org-babel-maxima-expand (body params)
   "Expand a block of Maxima code according to its header arguments."

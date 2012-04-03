@@ -88,7 +88,9 @@ or `org-babel-execute:C++'."
 			(cond
 			 ((equal org-babel-c-variant 'c) ".c")
 			 ((equal org-babel-c-variant 'cpp) ".cpp"))))
-         (tmp-bin-file (org-babel-temp-file "C-bin-"))
+         (tmp-bin-file (org-babel-temp-file
+			"C-bin-"
+			(if (equal system-type 'windows-nt) ".exe" "")))
          (cmdline (cdr (assoc :cmdline params)))
          (flags (cdr (assoc :flags params)))
          (full-body (org-babel-C-expand body params))
@@ -96,15 +98,14 @@ or `org-babel-execute:C++'."
 	  (progn
 	    (with-temp-file tmp-src-file (insert full-body))
 	    (org-babel-eval
-	     (format "%s -o %s %s %s -I \"%s\""
+	     (format "%s -o %s %s %s"
 		     (cond
 		      ((equal org-babel-c-variant 'c) org-babel-C-compiler)
 		      ((equal org-babel-c-variant 'cpp) org-babel-C++-compiler))
 		     (org-babel-process-file-name tmp-bin-file)
 		     (mapconcat 'identity
 				(if (listp flags) flags (list flags)) " ")
-		     (org-babel-process-file-name tmp-src-file)
-		     (file-name-directory (buffer-file-name))) ""))))
+		     (org-babel-process-file-name tmp-src-file)) ""))))
     ((lambda (results)
        (org-babel-reassemble-table
 	(if (member "vector" (cdr (assoc :result-params params)))
