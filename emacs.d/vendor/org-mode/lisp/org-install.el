@@ -5,7 +5,7 @@
 ;;;;;;  org-insert-link-global org-store-link org-run-like-in-org-mode
 ;;;;;;  turn-on-orgstruct++ turn-on-orgstruct orgstruct-mode org-global-cycle
 ;;;;;;  org-mode org-version org-babel-do-load-languages) "org" "org.el"
-;;;;;;  (20347 19237))
+;;;;;;  (20347 61399))
 ;;; Generated autoloads from org.el
 
 (autoload 'org-babel-do-load-languages "org" "\
