@@ -174,6 +174,7 @@ Themes load paths
 #+end_src
 ** Set up autoloads
 #+begin_src emacs-lisp
+  (autoload 'multi-web-mode "multi-web-mode" "Multi web mode" t)
   (autoload 'sws-mode "sws-mode" "Sws mode" t)
   (autoload 'jade-mode "jade-mode" "Jade mode" t)
   (autoload 'stylus-mode "stylus-mode" "Stylus mode" t)
@@ -420,7 +421,7 @@ Somethings to be inspired by?
         yas/snippet-dirs (list (concat dotfiles-dir "/snippets")
                                (concat dotfiles-dir "/snippets-imported"))
         yas/prompt-functions '(yas/dropdown-prompt))
-  
+
   (yas/global-mode 1)
 #+end_src
 
@@ -575,8 +576,8 @@ Somethings to be inspired by?
      (yas/compile-top-level-dir (concat dotfiles-dir "snippets-imported"))
      (byte-recompile-directory (concat dotfiles-dir "snippets") 0)
      (byte-recompile-directory (concat dotfiles-dir "snippets-imported") 0))
-  
-  
+
+
 #+end_src
 
 
@@ -697,7 +698,6 @@ This is provided by other things I use
     (if window-system (hl-line-mode +1)))
 #+end_src
 ** Programming languages
-*** TODO deft
 *** Erlang
 #+begin_src emacs-lisp
 (add-to-list 'auto-mode-alist '("\\.erl$" . erlang-mode))
@@ -967,6 +967,18 @@ Disable slime for now
        (require 'eclim)))
 #+end_src
 ** Markup/text languages
+*** Multi web mode
+
+#+begin_src emacs-lisp
+(require 'multi-web-mode)
+(setq mweb-default-major-mode 'html-mode)
+(setq mweb-tags '((php-mode "<\\?php\\|<\\? \\|<\\?=" "\\?>")
+                  (js-mode "<script +\\(type=\"text/javascript\"\\|language=\"javascript\"\\)[^>]*>" "</script>")
+                  (css-mode "<style +type=\"text/css\"[^>]*>" "</style>")))
+(setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))
+(multi-web-global-mode 1)
+#+end_src
+
 *** CSS
 #+begin_src emacs-lisp
 (defun my-css-mode-hook ()
@@ -1762,6 +1774,3 @@ leaving this untangeled for now, not sure if I even want clocking at all
                                           (backward-kill-sexp)
                                           (clear-whitespace)))
 #+end_src
-
-
-
