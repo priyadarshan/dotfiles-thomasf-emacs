@@ -3,7 +3,7 @@
 ;;
 ;;; Author: Steve Purcell <steve@sanityinc.com>
 ;;; URL: https://github.com/purcell/flymake-php
-;;; Version: 0.3
+;;; Version: 0.4
 ;;;
 ;;; Commentary:
 ;; Usage:
@@ -46,6 +46,11 @@ does not alter flymake's global configuration, so function
   (if (executable-find flymake-php-executable)
       (flymake-mode t)
     (message "Not enabling flymake: '%' command not found" flymake-php-executable)))
+
+
+(defadvice flymake-post-syntax-check (before flymake-force-check-was-interrupted)
+  (setq flymake-check-was-interrupted t))
+(ad-activate 'flymake-post-syntax-check)
 
 
 (provide 'flymake-php)

@@ -204,11 +204,16 @@ Themes load paths
 (smex-initialize)
 ;;(require 'smex)
 (load "sv-kalender" 'noerror 'nomessage)
-
 ;; might want to auto load these instead
 (require 'table)
-(require 'anything-config)
+;(require 'anything-config)
 ;(require 'sclang nil 'noerror)
+#+end_src
+
+New stuff, to want?
+#+begin_src emacs-lisp
+  (require 'nav)
+;;  (require 'find-file-in-project)
 #+end_src
 
 * Common
@@ -757,7 +762,7 @@ This is provided by other things I use
          ;;(paredit-mode)
          (whitespace-mode)
          ;;(glasses-mode)
-         ;;(flymake-coffee-load)
+         (flymake-coffee-load)
          )
 
        (add-hook 'coffee-mode-hook 'my-coffee-mode-hook)
@@ -1688,7 +1693,8 @@ leaving this untangeled for now, not sure if I even want clocking at all
   (global-set-key [f2] 'split-window-horizontally)
   (global-set-key [f3] 'split-window-vertically)
   (global-set-key [f4] 'delete-window)
-  (global-set-key [f5] 'anything)
+  ;;(global-set-key [f5] 'anything)
+  (global-set-key [f5] 'find-file-in-project)
   (global-set-key [f6] 'multi-occur-in-this-mode)
   (global-set-key [f7] 'cycle-ispell-languages)
 

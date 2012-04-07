@@ -4,7 +4,7 @@
 
 
 ;;;### (autoloads (flymake-coffee-load) "flymake-coffee" "flymake-coffee.el"
-;;;;;;  (20188 30588))
+;;;;;;  (20352 9060))
 ;;; Generated autoloads from flymake-coffee.el
 
 (autoload 'flymake-coffee-load "flymake-coffee" "\
@@ -18,8 +18,7 @@ does not alter flymake's global configuration, so function
 
 ;;;***
 
-;;;### (autoloads nil nil ("flymake-coffee-pkg.el") (20188 30588
-;;;;;;  777772))
+;;;### (autoloads nil nil ("flymake-coffee-pkg.el") (20352 9060 331116))
 
 ;;;***
 
