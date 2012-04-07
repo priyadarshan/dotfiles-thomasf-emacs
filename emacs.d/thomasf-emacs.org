@@ -750,7 +750,7 @@ This is provided by other things I use
     '(progn
        (setq coffee-cleanup-whitespace nil
              coffee-debug-mode t
-             coffee-tab-width 3)
+             coffee-tab-width 2)
 
        (defun my-coffee-mode-hook ()
          "My coffee-mode hook"
