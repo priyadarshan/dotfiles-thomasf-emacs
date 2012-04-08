@@ -135,6 +135,12 @@ loadPath="${VENDOR}"
 (   name=auto-complete; url=https://github.com/m2ym/auto-complete
     getGit && installRepo ) &
 
+(   name=fuzzy.el; url=https://raw.github.com/m2ym/fuzzy-el/master/fuzzy.el
+    getFile && installFile ) &
+
+(   name=popup.el; url=https://raw.github.com/m2ym/popup-el/master/popup.el
+    getFile && installFile ) &
+
 (   name=auto-complete-yasnippet.el; url=http://www.cx4a.org/pub/auto-complete-yasnippet.el
     getFile && installFile ) &
 
