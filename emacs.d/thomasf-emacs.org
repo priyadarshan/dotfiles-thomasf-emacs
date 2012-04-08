@@ -329,6 +329,8 @@ Current:
   (global-auto-complete-mode t)
   ;;(setq ac-auto-start nil)
   (setq ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
+  ;; Show 0.8 second later
+  (setq ac-auto-show-menu 0.8)
 
   ;; MOVE TO KEYB?
   (define-key ac-completing-map (kbd "C-n") 'ac-next)
@@ -1038,6 +1040,8 @@ Inspirations:
         org-startup-indented t
         ;; org-log-done t
         org-ellipsis "…"
+        org-columns-ellipses "…"
+        org-startup-with-inline-images t
         org-outline-path-complete-in-steps t
         org-tab-follows-link t
         org-completion-use-ido t)
