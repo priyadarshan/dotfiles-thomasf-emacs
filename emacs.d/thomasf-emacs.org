@@ -874,29 +874,41 @@ Disable slime for now
 #+end_src
 *** Python
 #+begin_src emacs-lisp
-;;(require 'python-mode)
-(add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
-(add-to-list 'interpreter-mode-alist '("python" . python-mode))
+  ;;(require 'python-mode)
+  (add-to-list 'auto-mode-alist '("\\.py\\'" . python-mode))
+  (add-to-list 'interpreter-mode-alist '("python" . python-mode))
 
-;; if ipythonm use ipython
-(when (executable-find "ipython")
+  ;; if ipythonm use ipython
+  ;;(when (executable-find "ipython")
   ;;(require 'ipython)
-  (setq org-babel-python-mode 'python-mode))
+  ;;(setq org-babel-python-mode 'python-mode))
 
-;;(require 'cython-mode)
-;;(add-to-list 'auto-mode-alist '("\\.pyx\\'" . cython-mode))
-;;(add-to-list 'auto-mode-alist '("\\.pxd\\'" . cython-mode))
-;;(add-to-list 'auto-mode-alist '("\\.pxi\\'" . cython-mode))
+  (defun my-python-mode-hook ()
+    (my-programming-hook)
+    (electric-indent-mode -1)
+    ;;(glasses-mode)
+    (require 'ac-python)
+    (setq ac-sources '(ac-source-yasnippet))
+    (whitespace-mode)
+    )
 
-(defun my-python-mode-hook ()
-  (my-programming-hook)
-  (electric-indent-mode -1)
-  ;;(glasses-mode)
-  ;(;auto-complete-mode)
-  (whitespace-mode)
-  )
+  (add-hook 'python-mode-hook 'my-python-mode-hook)
+#+end_src
 
-(add-hook 'python-mode-hook 'my-python-mode-hook)
+#+begin_src emacs-lisp
+    (when (load "flymake" t)
+      (defun flymake-pylint-init (&optional trigger-type)      
+        (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                           'flymake-create-temp-with-folder-structure))
+               (local-file (file-relative-name
+                            temp-file
+                            (file-name-directory buffer-file-name)))
+               (options (when trigger-type (list "--trigger-type" trigger-type))))
+          (list  (concat vendor-dir "flymake-python/pyflymake.py") (append options (list local-file)))))
+  
+      (add-to-list 'flymake-allowed-file-name-masks
+                   '("\\.py\\'" flymake-pylint-init)))
+  
 #+end_src
 *** Ruby
 #+begin_src emacs-lisp
