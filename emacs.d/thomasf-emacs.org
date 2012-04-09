@@ -626,6 +626,14 @@ This is provided by other things I use
     (paredit-mode 1))
 #+end_src
 
+** Invoke  occur from inside isearch
+#+begin_src emacs-lisp
+  (defun isearch-occur ()
+    "Invoke `occur' from within Isearch."
+    (interactive)
+    (let ((case-fold-search isearch-case-fold-search))
+      (occur (if isearch-regexp isearch-string (regexp-quote isearch-string)))))
+#+end_src
 * Modes, modules and hooks
 ** Generic hooks
 *** All modes hook
@@ -1699,9 +1707,8 @@ This is very specific to how and what I do to my caps-lock key.
 (global-set-key "\C-x\C-c" 'intelligent-close)
 #+end_src
 
-*** Isearch
+*** Isearch opccur
 #+begin_src emacs-lisp
-;; Activate occur easily inside isearch
 (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
 #+end_src
 
@@ -1714,26 +1721,3 @@ This is very specific to how and what I do to my caps-lock key.
 
 
 
-* TODO O DET SOM ÄR PÅGÅENDE
-#+begin_src emacs-lisp
-;; Activate occur easily inside isearch
-(define-key isearch-mode-map (kbd "C-o")
-  (lambda () (interactive)
-    (let ((case-fold-search isearch-case-fold-search))
-      (occur (if isearch-regexp isearch-string (regexp-quote isearch-string))))))
-
-;; sexp+whitespace deletion quickies
-(defun clear-whitespace ()
-  (interactive)
-  (set-mark-command nil)
-  (search-backward-regexp "[^[:space:]
-]")
-  (forward-char)
-  (kill-region (point) (mark)))
-
-(global-set-key (kbd "s-<backspace>") 'clear-whitespace)
-(global-set-key (kbd "C-M-<backspace>") (lambda ()
-                                          (interactive)
-                                          (backward-kill-sexp)
-                                          (clear-whitespace)))
-#+end_src
