@@ -1636,6 +1636,12 @@ leaving this untangeled for now, not sure if I even want clocking at all
 
 * Key bindings
 ** Global
+*** Unbind keys
+This is very specific to how and what I do to my caps-lock key.
+#+begin_src emacs-lisp
+(define-key special-event-map (kbd "<key-17>") 'ignore)
+(define-key special-event-map (kbd "<M-key-17>") 'ignore)
+#+end_src
 *** Common
 #+begin_src emacs-lisp
   (global-set-key (kbd "<C-f1>") 'open-index-notes)
