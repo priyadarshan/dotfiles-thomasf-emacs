@@ -5,7 +5,7 @@
 ;;;;;;  org-insert-link-global org-store-link org-run-like-in-org-mode
 ;;;;;;  turn-on-orgstruct++ turn-on-orgstruct orgstruct-mode org-global-cycle
 ;;;;;;  org-mode org-version org-babel-do-load-languages) "org" "org.el"
-;;;;;;  (20347 61399))
+;;;;;;  (20355 17011))
 ;;; Generated autoloads from org.el
 
 (autoload 'org-babel-do-load-languages "org" "\
@@ -598,7 +598,7 @@ This command is set with the variable `org-archive-default-command'.
 ;;;***
 
 ;;;### (autoloads (org-bbdb-anniversaries) "org-bbdb" "org-bbdb.el"
-;;;;;;  (20347 19237))
+;;;;;;  (20355 17011))
 ;;; Generated autoloads from org-bbdb.el
 
 (autoload 'org-bbdb-anniversaries "org-bbdb" "\
@@ -847,7 +847,7 @@ Show the raw feed buffer of a feed.
 ;;;***
 
 ;;;### (autoloads (org-footnote-normalize org-footnote-action) "org-footnote"
-;;;;;;  "org-footnote.el" (20353 52476))
+;;;;;;  "org-footnote.el" (20355 17011))
 ;;; Generated autoloads from org-footnote.el
 
 (autoload 'org-footnote-action "org-footnote" "\
@@ -1538,9 +1538,20 @@ See also the variable `org-reverse-note-order'.
 
 ;;;***
 
-;;;### (autoloads (org-table-to-lisp orgtbl-mode turn-on-orgtbl)
-;;;;;;  "org-table" "org-table.el" (20347 19237))
+;;;### (autoloads (org-table-to-lisp orgtbl-mode turn-on-orgtbl org-table-iterate-buffer-tables
+;;;;;;  org-table-recalculate-buffer-tables) "org-table" "org-table.el"
+;;;;;;  (20355 17011))
 ;;; Generated autoloads from org-table.el
+
+(autoload 'org-table-recalculate-buffer-tables "org-table" "\
+Recalculate all tables in the current buffer.
+
+\(fn)" t nil)
+
+(autoload 'org-table-iterate-buffer-tables "org-table" "\
+Iterate all tables in the buffer, to converge inter-table dependencies.
+
+\(fn)" t nil)
 
 (autoload 'turn-on-orgtbl "org-table" "\
 Unconditionally turn on `orgtbl-mode'.
