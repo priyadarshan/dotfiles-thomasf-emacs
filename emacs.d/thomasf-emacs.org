@@ -947,7 +947,7 @@ Disable slime for now
 ** Markup/text languages
 *** Multi web mode
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (require 'multi-web-mode)
   (setq mweb-default-major-mode 'html-mode)
   (setq mweb-tags '((php-mode "<\\?php\\|<\\? \\|<\\?=" "\\?>")
