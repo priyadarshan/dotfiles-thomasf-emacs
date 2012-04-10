@@ -233,6 +233,10 @@ New stuff, to want?
 #+begin_src emacs-lisp
 (global-font-lock-mode t)
 #+end_src
+** Basic editing Settings
+#+begin_src emacs-lisp
+(setq  next-line-add-newlines t  )
+#+end_src
 ** TODO Misc settings
 What is what?
 #+begin_src emacs-lisp
