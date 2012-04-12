@@ -156,6 +156,15 @@ loadPath="${VENDOR}"
 (   name=zenburn-theme.el; loadPath=themes; url=https://raw.github.com/bbatsov/zenburn-emacs/master/zenburn-theme.el
     getFile && installFile ) &
 
+(   name=solarized-theme.el; url=https://raw.github.com/bbatsov/solarized-emacs/master/solarized-theme.el
+    getFile && installFile ) &
+
+(   name=solarized-dark-theme.el; loadPath=themes; url=https://raw.github.com/bbatsov/solarized-emacs/master/solarized-dark-theme.el
+    getFile && installFile ) &
+
+(   name=solarized-light-theme.el; loadPath=themes; url=https://raw.github.com/bbatsov/solarized-emacs/master/solarized-light-theme.el
+    getFile && installFile ) &
+
 (    name=solarized-bbatsov; loadPath=themes; url=https://github.com/bbatsov/solarized-emacs
      getGit && installRepo ) &
 
