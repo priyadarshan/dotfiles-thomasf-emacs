@@ -201,12 +201,13 @@ Themes load paths
 (require 'recentf)
 (require 'undo-tree)
 (smex-initialize)
-;;(require 'smex)
-(load "sv-kalender" 'noerror 'nomessage)
+;; (require 'smex)
 ;; might want to auto load these instead
-(require 'table)
+;; (require 'table)
+(require 'ace-jump-mode)
 ;(require 'anything-config)
 ;(require 'sclang nil 'noerror)
+(load "sv-kalender" 'noerror 'nomessage)
 #+end_src
 
 New stuff, to want?
@@ -311,6 +312,7 @@ What is what?
 #+end_src
 ** Setup themes and gui stuff
 #+begin_src emacs-lisp :tangle thomasf-gui.el
+
 (setq day-mode-theme 'solarized-light
       night-mode-theme 'solarized-dark)
 
@@ -1680,6 +1682,7 @@ This is very specific to how and what I do to my caps-lock key.
 
   (global-set-key [f8] 'org-search-view)
   (global-set-key [f12] 'menu-bar-mode)
+  (define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
 #+end_src
 
 #+begin_src emacs-lisp :tangle thomasf-gui.el
@@ -1734,6 +1737,5 @@ This is very specific to how and what I do to my caps-lock key.
 (define-key global-map "\C-ca" 'org-agenda)
 (global-set-key (kbd "C-M-r") 'org-capture)
 #+end_src
-
 
 
