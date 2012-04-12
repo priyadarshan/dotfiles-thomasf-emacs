@@ -1305,17 +1305,16 @@ Inspirations:
                 ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 
 #+end_src
-**** TODO Todo faces
-#+begin_src emacs-lisp :tangle no
+**** Todo faces
+#+begin_src emacs-lisp :tangle thomasf-org.el
   (setq org-todo-keyword-faces
-        (quote (("TODO" :foreground "red" :weight bold)
-                ("NEXT" :foreground "blue" :weight bold)
-                ("DONE" :foreground "forest green" :weight bold)
-                ("WAITING" :foreground "orange" :weight bold)
-                ("HOLD" :foreground "magenta" :weight bold)
-                ("CANCELLED" :foreground "forest green" :weight bold)
-                ("PHONE" :foreground "forest green" :weight bold))))
-
+        (quote (("TODO" :foreground "#dc322f" :weight bold)
+                ("NEXT" :foreground "#268bd2" :weight bold)
+                ("DONE" :foreground "#859900" :weight bold)
+                ("WAITING" :foreground "#cb4b16" :weight bold)
+                ("HOLD" :foreground "#d33682" :weight bold)
+                ("CANCELLED" :foreground "#859900" :weight bold)
+                ("PHONE" :foreground "#859900" :weight bold))))
 #+end_src
 *** Default tags
 #+begin_src emacs-lisp :tangle thomasf-org.el
