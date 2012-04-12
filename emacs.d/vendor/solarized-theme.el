@@ -1,4 +1,4 @@
-;;; solarized-core.el --- Solarized for Emacs.
+;;; solarized-theme.el --- Solarized for Emacs.
 
 ;; Copyright (C) 2011 Bozhidar Batsov
 
@@ -25,7 +25,7 @@
 ;;
 ;;; Installation:
 ;;
-;;   Drop the `colarized-core.el` somewhere in your `load-path` and
+;;   Drop the `solarized-theme.el` somewhere in your `load-path` and
 ;; the two themes in a folder that is on `custom-theme-load-path'
 ;; and enjoy!
 ;;
@@ -124,7 +124,7 @@
        ((,class (:foreground ,solarized-fg
                              :background ,solarized-bg
                              :box (:line-width -1 :style released-button)))))
-     `(region ((,class (:background ,solarized-hl))))
+     `(region ((,class (:foreground ,solarized-bg :background ,solarized-emph))))
      `(secondary-selection ((,class (:background ,solarized-bg))))
      `(trailing-whitespace ((,class (:background ,red))))
      `(vertical-border ((,class (:foreground ,solarized-fg))))
@@ -326,10 +326,15 @@
      `(nav-face-hfile ((,class (:foreground ,red))))
 
      ;; org-mode
-     `(org-agenda-date-today
-       ((,class (:foreground ,solarized-fg :slant italic :weight bold))) t)
      `(org-agenda-structure
-       ((,class (:inherit font-lock-comment-face))))
+       ((,class (:inherit font-lock-comment-face :foreground ,magenta :inverse-video t))))
+     `(org-agenda-date
+       ((,class (:foreground ,solarized-fg :background ,solarized-hl :weight bold
+                             :box (:line-width 4 :color ,solarized-hl) ))) t)
+     `(org-agenda-date-weekend ((,class (:inherit org-agenda-date :slant italic))) t)
+     `(org-agenda-date-today
+       ((,class (:inherit org-agenda-date :slant italic underline: t))) t)
+     `(org-agenda-done ((,class (:foreground ,green))) t)
      `(org-archived ((,class (:foreground ,solarized-fg :weight bold))))
      `(org-checkbox ((,class (:background ,solarized-bg :foreground ,solarized-fg
                                           :box (:line-width 1 :style released-button)))))
@@ -477,4 +482,4 @@
 
 (provide 'solarized-theme)
 
-;;; solarized-core.el ends here.
+;;; solarized-theme.el ends here.

@@ -127,9 +127,7 @@ Make sure that the init file is loaded.
 Themes load paths
 #+begin_src emacs-lisp
 (setq themes-dir (concat dotfiles-dir "themes/"))
-(add-to-list 'load-path (concat themes-dir "solarized-bbatsov"))
 (add-to-list 'custom-theme-load-path themes-dir)
-(add-to-list 'custom-theme-load-path (concat themes-dir "solarized-bbatsov"))
 #+end_src
 ** Files that should not be version controlled should gather in their own directory
 #+begin_src emacs-lisp
@@ -1308,11 +1306,11 @@ Inspirations:
 **** Todo faces
 #+begin_src emacs-lisp :tangle thomasf-org.el
   (setq org-todo-keyword-faces
-        (quote (("TODO" :foreground "#dc322f" :weight bold)
-                ("NEXT" :foreground "#268bd2" :weight bold)
+        (quote (("TODO" :foreground "#dc322f" :weight bold :inverse-video t)
+                ("NEXT" :foreground "#268bd2" :weight bold :inverse-video t)
                 ("DONE" :foreground "#859900" :weight bold)
-                ("WAITING" :foreground "#cb4b16" :weight bold)
-                ("HOLD" :foreground "#d33682" :weight bold)
+                ("WAITING" :foreground "#cb4b16" :weight bold :inverse-video t)
+                ("HOLD" :foreground "#d33682" :weight bold :inverse-video t)
                 ("CANCELLED" :foreground "#859900" :weight bold)
                 ("PHONE" :foreground "#859900" :weight bold))))
 #+end_src
