@@ -321,6 +321,8 @@ What is what?
 (require 'pretty-mode)
 (global-pretty-mode 1)
 
+(custom-set-faces
+  '(region ((t (:background "#d33682" :foreground "#fdf6e3")))))
 #+end_src
 
 ** TODO Auto-complete
