@@ -1091,7 +1091,10 @@ Inspirations:
 #+begin_src emacs-lisp :tangle thomasf-org.el
   (setq org-icalendar-include-body t
         org-icalendar-include-sexps t
-        org-icalendar-store-UID t)
+        org-icalendar-store-UID t
+        org-icalendar-include-todo 'all
+        org-icalendar-use-scheduled '(todo-due event-if-todo event-if-not-todo)
+        org-icalendar-use-deadline '(todo-due event-if-todo event-if-not-todo))
 #+end_src
 
 **** Agenda commands
@@ -1458,6 +1461,7 @@ To me, the following feels a bit slow and/or confusing).. Use [C-c '] instead.
     (find-file-read-only "~/notes/index.org"))
 #+end_src
 ** MAJOR block'o'code
+
 #+begin_src emacs-lisp :tangle thomasf-org.el
 (defun bh/find-project-task ()
     "Move point to the parent (project) task if any"
