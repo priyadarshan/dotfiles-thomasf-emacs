@@ -233,6 +233,12 @@ New stuff, to want?
 #+begin_src emacs-lisp
 (global-font-lock-mode t)
 #+end_src
+** Geographical settings
+#+begin_src emacs-lisp
+(setq calendar-latitude 59.3
+      calendar-longitude 18.0
+      calendar-location-name "Stockholm, SE")
+#+end_src
 ** Basic editing Settings
 #+begin_src emacs-lisp
 (setq  next-line-add-newlines t  )
