@@ -1305,7 +1305,7 @@ Inspirations:
                 ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
 
 #+end_src
-**** Todo faces
+**** Todo/Tag faces
 #+begin_src emacs-lisp :tangle thomasf-org.el
   (setq org-todo-keyword-faces
         (quote (("TODO" :foreground "#dc322f" :weight bold :inverse-video t)
@@ -1315,6 +1315,20 @@ Inspirations:
                 ("HOLD" :foreground "#d33682" :weight bold :inverse-video t)
                 ("CANCELLED" :foreground "#859900" :weight bold)
                 ("PHONE" :foreground "#859900" :weight bold))))
+
+  (setq org-tag-faces
+        (quote (("@home" :foreground "#2aa198" :weight bold :inverse-video t)
+                ("@office" :foreground "#2aa198" :weight bold :inverse-video t)
+                ("@errand" :foreground "#2aa198" :weight bold :inverse-video t)
+                ("WORK" :foreground "#b58900" :weight bold)
+                ("PERSONAL" :foreground "#b58900" :weight bold)
+                ("HOLD" :foreground "#859900" :weight bold)
+                ("NOTE" :foreground "#d33682" :weight bold)
+                ("WAITING" :foreground "#cb4b16" :weight bold :inverse-video t)
+                ("CANCELLED" :foreground "#859900" :weight bold)
+                ("FLAGGED" :foreground "#dc322f" :weight bold :inverse-video t))))
+
+
 #+end_src
 *** Default tags
 #+begin_src emacs-lisp :tangle thomasf-org.el
