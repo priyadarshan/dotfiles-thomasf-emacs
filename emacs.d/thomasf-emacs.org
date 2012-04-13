@@ -1418,9 +1418,10 @@ Inspirations:
 
 #+end_src
 
-*** Don't confirm babel execution!
+*** Configure babel execution!
 #+begin_src emacs-lisp :tangle thomasf-org.el
-  (setq org-confirm-babel-evaluate nil)
+  (setq org-confirm-babel-evaluate nil
+        org-export-babel-evaluate nil)
 #+end_src
 *** TODO Use inline formatting with org-babel
 To me, the following feels a bit slow and/or confusing).. Use [C-c '] instead.
