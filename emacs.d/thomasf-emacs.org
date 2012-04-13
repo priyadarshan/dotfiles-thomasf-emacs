@@ -904,7 +904,7 @@ Disable slime for now
 
 #+begin_src emacs-lisp
     (when (load "flymake" t)
-      (defun flymake-pylint-init (&optional trigger-type)      
+      (defun flymake-pylint-init (&optional trigger-type)
         (let* ((temp-file (flymake-init-create-temp-buffer-copy
                            'flymake-create-temp-with-folder-structure))
                (local-file (file-relative-name
@@ -912,10 +912,10 @@ Disable slime for now
                             (file-name-directory buffer-file-name)))
                (options (when trigger-type (list "--trigger-type" trigger-type))))
           (list  (concat vendor-dir "flymake-python/pyflymake.py") (append options (list local-file)))))
-  
+
       (add-to-list 'flymake-allowed-file-name-masks
                    '("\\.py\\'" flymake-pylint-init)))
-  
+
 #+end_src
 *** Ruby
 #+begin_src emacs-lisp
@@ -1752,5 +1752,3 @@ This is very specific to how and what I do to my caps-lock key.
 (define-key global-map "\C-ca" 'org-agenda)
 (global-set-key (kbd "C-M-r") 'org-capture)
 #+end_src
-
-
