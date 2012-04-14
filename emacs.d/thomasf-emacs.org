@@ -1103,7 +1103,7 @@ Inspirations:
     '(progn
        ;; Custom agenda command definitions
        (setq org-agenda-custom-commands
-             (quote (("N" "Notes" tags "NOTE"
+             (quote (("N" "Notes" tags "note"
                       ((org-agenda-overriding-header "Notes")
                        (org-tags-match-list-sublevels t)))
                      ("h" "Habits" tags-todo "STYLE=\"habit\""
@@ -1112,14 +1112,14 @@ Inspirations:
                         '(todo-state-down effort-up category-keep))))
                      (" " "Agenda"
                       ((agenda "" nil)
-                       (tags "REFILE"
+                       (tags "refile"
                              ((org-agenda-overriding-header "Tasks to Refile")
                               (org-tags-match-list-sublevels nil)))
-                       (tags-todo "-CANCELLED/!"
+                       (tags-todo "-cancelled/!"
                                   ((org-agenda-overriding-header "Stuck Projects")
                                    (org-tags-match-list-sublevels 'indented)
                                    (org-agenda-skip-function 'bh/skip-non-stuck-projects)))
-                       (tags-todo "-WAITING-CANCELLED/!NEXT"
+                       (tags-todo "-waiting-cancelled/!next"
                                   ((org-agenda-overriding-header "Next Tasks")
                                    (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
                                    (org-agenda-todo-ignore-scheduled t)
@@ -1127,7 +1127,7 @@ Inspirations:
                                    (org-tags-match-list-sublevels t)
                                    (org-agenda-sorting-strategy
                                     '(todo-state-down effort-up category-keep))))
-                       (tags-todo "-REFILE-CANCELLED/!-HOLD-WAITING"
+                       (tags-todo "-refile-cancelled/!-hold-waiting"
                                   ((org-agenda-overriding-header "Tasks")
                                    (org-agenda-skip-function 'bh/skip-project-tasks-maybe)
                                    (org-agenda-todo-ignore-scheduled t)
@@ -1141,7 +1141,7 @@ Inspirations:
                                    (org-agenda-todo-ignore-deadlines 'future)
                                    (org-agenda-sorting-strategy
                                     '(category-keep))))
-                       (tags-todo "-CANCELLED/!WAITING|HOLD"
+                       (tags-todo "-cancelled//!waiting|hold"
                                   ((org-agenda-overriding-header "Waiting and Postponed Tasks")
                                    (org-agenda-skip-function 'bh/skip-projects-and-habits)
                                    (org-agenda-todo-ignore-scheduled t)
@@ -1153,10 +1153,10 @@ Inspirations:
                      ("r" "Tasks to Refile" tags "REFILE"
                       ((org-agenda-overriding-header "Tasks to Refile")
                        (org-tags-match-list-sublevels nil)))
-                     ("#" "Stuck Projects" tags-todo "-CANCELLED/!"
+                     ("#" "Stuck Projects" tags-todo "-cancelled/!"
                       ((org-agenda-overriding-header "Stuck Projects")
                        (org-agenda-skip-function 'bh/skip-non-stuck-projects)))
-                     ("n" "Next Tasks" tags-todo "-WAITING-CANCELLED/!NEXT"
+                     ("n" "Next Tasks" tags-todo "-waiting-cancelled/!next"
                       ((org-agenda-overriding-header "Next Tasks")
                        (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
                        (org-agenda-todo-ignore-scheduled t)
@@ -1164,24 +1164,24 @@ Inspirations:
                        (org-tags-match-list-sublevels t)
                        (org-agenda-sorting-strategy
                         '(todo-state-down effort-up category-keep))))
-                     ("R" "Tasks" tags-todo "-REFILE-CANCELLED/!-HOLD-WAITING"
+                     ("R" "Tasks" tags-todo "-refile-cancelled/!-hold-waiting"
                       ((org-agenda-overriding-header "Tasks")
                        (org-agenda-skip-function 'bh/skip-project-tasks-maybe)
                        (org-agenda-sorting-strategy
                         '(category-keep))))
-                     ("p" "Projects" tags-todo "-CANCELLED/!"
+                     ("p" "Projects" tags-todo "-cancelled/!"
                       ((org-agenda-overriding-header "Projects")
                        (org-agenda-skip-function 'bh/skip-non-projects)
                        (org-agenda-todo-ignore-scheduled 'future)
                        (org-agenda-todo-ignore-deadlines 'future)
                        (org-agenda-sorting-strategy
                         '(category-keep))))
-                     ("w" "Waiting Tasks" tags-todo "-CANCELLED/!WAITING|HOLD"
+                     ("w" "Waiting Tasks" tags-todo "-cancelled/!waiting|hold"
                       ((org-agenda-overriding-header "Waiting and Postponed tasks"))
                       (org-agenda-skip-function 'bh/skip-projects-and-habits)
                       (org-agenda-todo-ignore-scheduled 'future)
                       (org-agenda-todo-ignore-deadlines 'future))
-                     ("A" "Tasks to Archive" tags "-REFILE/"
+                     ("A" "Tasks to Archive" tags "-refile/"
                       ((org-agenda-overriding-header "Tasks to Archive")
                        (org-agenda-skip-function 'bh/skip-non-archivable-tasks))))))))
 #+end_src
@@ -1316,28 +1316,26 @@ Inspirations:
 #+end_src
 **** Todo/Tag faces
 #+begin_src emacs-lisp :tangle thomasf-org.el
-  (setq org-todo-keyword-faces
-        (quote (("TODO" :foreground "#dc322f" :weight bold :inverse-video t)
-                ("NEXT" :foreground "#268bd2" :weight bold :inverse-video t)
-                ("DONE" :foreground "#859900" :weight bold)
-                ("WAITING" :foreground "#cb4b16" :weight bold :inverse-video t)
-                ("HOLD" :foreground "#d33682" :weight bold :inverse-video t)
-                ("CANCELLED" :foreground "#859900" :weight bold)
-                ("PHONE" :foreground "#859900" :weight bold))))
+    (setq org-todo-keyword-faces
+          (quote (("TODO" :foreground "#dc322f" :weight bold :inverse-video t)
+                  ("NEXT" :foreground "#268bd2" :weight bold :inverse-video t)
+                  ("DONE" :foreground "#859900" :weight bold)
+                  ("WAITING" :foreground "#cb4b16" :weight bold :inverse-video t)
+                  ("HOLD" :foreground "#d33682" :weight bold :inverse-video t)
+                  ("CANCELLED" :foreground "#859900" :weight bold)
+                  ("PHONE" :foreground "#859900" :weight bold))))
 
-  (setq org-tag-faces
-        (quote (("@home" :foreground "#2aa198" :weight bold :inverse-video t)
-                ("@office" :foreground "#2aa198" :weight bold :inverse-video t)
-                ("@errand" :foreground "#2aa198" :weight bold :inverse-video t)
-                ("WORK" :foreground "#b58900" :weight bold :inverse-video t)
-                ("PERSONAL" :foreground "#b58900" :weight bold :inverse-video t)
-                ("HOLD" :foreground "#859900" :weight bold :inverse-video t)
-                ("NOTE" :foreground "#d33682" :weight bold)
-                ("WAITING" :foreground "#cb4b16" :weight bold :inverse-video t)
-                ("CANCELLED" :foreground "#859900" :weight bold)
-                ("FLAGGED" :foreground "#dc322f" :weight bold :inverse-video t))))
-
-
+    (setq org-tag-faces
+          (quote (("@home" :slant italic)
+                  ("@office" :slant italic)
+                  ("@errand" :slant italic :inverse-video t)
+                  ("work" :slant italic)
+                  ("personal" :slant italic)
+                  ("hold" :foreground "#859900" :slant italic)
+                  ("note" :foreground "#d33682" :slant italic)
+                  ("waiting" :foreground "#cb4b16" :slant italic :inverse-video t)
+                  ("cancelled" :foreground "#859900" :slant italic :slant italic)
+                  ("flagged" :foreground "#dc322f" :slant italic :inverse-video t))))
 #+end_src
 *** Default tags
 #+begin_src emacs-lisp :tangle thomasf-org.el
@@ -1347,14 +1345,14 @@ Inspirations:
                               ("@office" . ?o)
                               ("@home" . ?H)
                               (:endgroup)
-                              ("PHONE" . ?p)
-                              ("WAITING" . ?w)
-                              ("HOLD" . ?h)
-                              ("PERSONAL" . ?P)
-                              ("WORK" . ?W)
-                              ("NOTE" . ?n)
-                              ("CANCELLED" . ?c)
-                              ("FLAGGED" . ??))))
+                              ("phone" . ?p)
+                              ("waiting" . ?w)
+                              ("hold" . ?h)
+                              ("personal" . ?P)
+                              ("work" . ?W)
+                              ("note" . ?n)
+                              ("cancelled" . ?c)
+                              ("flagged" . ??))))
 
 #+end_src
 *** Capture templates
@@ -1364,13 +1362,13 @@ Inspirations:
         (quote (("t" "todo" entry (file org-default-notes-file)
                  "* TODO %?\n%U\n%a\n  %i" :clock-in t :clock-resume t)
                 ("n" "note" entry (file org-default-notes-file)
-                 "* %? :NOTE:\n%U\n%a\n  %i" :clock-in t :clock-resume t)
+                 "* %? :note:\n%U\n%a\n  %i" :clock-in t :clock-resume t)
                 ("j" "Journal" entry (file+datetree (concat notes-dir "org/diary.org"))
                  "* %?\n%U\n  %i" :clock-in t :clock-resume t)
                 ("w" "org-protocol" entry (file org-default-notes-file)
                  "* TODO Review %c\n%U\n  %i" :immediate-finish t)
                 ("p" "Phone call" entry (file org-default-notes-file)
-                 "* PHONE %? :PHONE:\n%U" :clock-in t :clock-resume t)
+                 "* PHONE %? :phone:\n%U" :clock-in t :clock-resume t)
                 ("h" "Habit" entry (file org-default-notes-file)
                  "* NEXT %?\n%U\n%a\nSCHEDULED: %t .+1d/3d\n:PROPERTIES:\n:STYLE: habit\n:REPEAT_TO_STATE: NEXT\n:END:\n  %i"))))
 #+end_src
