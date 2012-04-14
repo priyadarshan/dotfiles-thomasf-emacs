@@ -1134,19 +1134,19 @@ Inspirations:
                                    (org-agenda-todo-ignore-deadlines t)
                                    (org-agenda-sorting-strategy
                                     '(category-keep))))
-                       (tags-todo "-CANCELLED/!"
+                       (tags-todo "-cancelled/!"
                                   ((org-agenda-overriding-header "Projects")
                                    (org-agenda-skip-function 'bh/skip-non-projects)
                                    (org-agenda-todo-ignore-scheduled 'future)
                                    (org-agenda-todo-ignore-deadlines 'future)
                                    (org-agenda-sorting-strategy
                                     '(category-keep))))
-                       (tags-todo "-cancelled//!waiting|hold"
+                       (tags-todo "-cancelled/!waiting|hold"
                                   ((org-agenda-overriding-header "Waiting and Postponed Tasks")
                                    (org-agenda-skip-function 'bh/skip-projects-and-habits)
                                    (org-agenda-todo-ignore-scheduled t)
                                    (org-agenda-todo-ignore-deadlines t)))
-                       (tags "-REFILE/"
+                       (tags "-refile/"
                              ((org-agenda-overriding-header "Tasks to Archive")
                               (org-agenda-skip-function 'bh/skip-non-archivable-tasks))))
                       nil)
