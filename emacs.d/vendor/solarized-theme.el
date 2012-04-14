@@ -357,7 +357,7 @@
      `(org-link ((,class (:foreground ,yellow :underline t))))
      `(org-scheduled ((,class (:foreground ,green))))
      `(org-scheduled-previously
-       ((,class (:bold t :foreground ,orange :weight bold))))
+       ((,class (:foreground ,orange))))
      `(org-scheduled-today ((,class (:bold t :foreground ,blue :weight bold))))
      `(org-special-keyword ((,class (:foreground ,yellow))))
      `(org-table ((,class (:foreground ,green))))
