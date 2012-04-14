@@ -1729,6 +1729,9 @@ This is very specific to how and what I do to my caps-lock key.
 (global-set-key (kbd "C-r")      'isearch-backward-regexp)
 (global-set-key (kbd "C-M-s")    'isearch-forward)
 (global-set-key (kbd "C-M-r")    'isearch-backward)
+; This navigates search results and error
+(global-set-key (kbd "<M-prior>") 'previous-error)
+(global-set-key (kbd "<M-next>")  'next-error)
 #+end_src
 *** TODO Proper delete functionality
 #+begin_src emacs-lisp :tangle no
