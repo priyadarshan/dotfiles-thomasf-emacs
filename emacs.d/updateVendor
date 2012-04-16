@@ -165,11 +165,6 @@ loadPath="${VENDOR}"
 (   name=solarized-light-theme.el; loadPath=themes; url=https://raw.github.com/bbatsov/solarized-emacs/master/solarized-light-theme.el
     getFile && installFile ) &
 
-(    name=solarized-bbatsov; loadPath=themes; url=https://github.com/bbatsov/solarized-emacs
-     getGit && installRepo ) &
-
-
-
 ########################################################################
 # Possibly interesting but not used right now
 
