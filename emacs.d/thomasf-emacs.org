@@ -1305,13 +1305,13 @@ Inspirations:
 **** Todo state triggers
 #+begin_src emacs-lisp :tangle thomasf-org.el
   (setq org-todo-state-tags-triggers
-        (quote (("CANCELLED" ("CANCELLED" . t))
-                ("WAITING" ("WAITING" . t))
-                ("HOLD" ("WAITING" . t) ("HOLD" . t))
-                (done ("WAITING") ("HOLD"))
-                ("TODO" ("WAITING") ("CANCELLED") ("HOLD"))
-                ("NEXT" ("WAITING") ("CANCELLED") ("HOLD"))
-                ("DONE" ("WAITING") ("CANCELLED") ("HOLD")))))
+        (quote (("CANCELLED" ("cancelled" . t))
+                ("WAITING" ("waiting" . t))
+                ("HOLD" ("waiting" . t) ("hold" . t))
+                (done ("waiting") ("hold"))
+                ("TODO" ("waiting") ("cancelled") ("hold"))
+                ("NEXT" ("waiting") ("cancelled") ("hold"))
+                ("DONE" ("waiting") ("cancelled") ("hold")))))
 
 #+end_src
 **** Todo/Tag faces
