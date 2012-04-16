@@ -238,7 +238,7 @@ Call the customize function with org as argument.
 ;;;;;;  org-diary org-agenda-list-stuck-projects org-tags-view org-todo-list
 ;;;;;;  org-search-view org-agenda-list org-batch-store-agenda-views
 ;;;;;;  org-store-agenda-views org-batch-agenda-csv org-batch-agenda
-;;;;;;  org-agenda) "org-agenda" "org-agenda.el" (20358 48572))
+;;;;;;  org-agenda) "org-agenda" "org-agenda.el" (20364 39428))
 ;;; Generated autoloads from org-agenda.el
 
 (autoload 'org-agenda "org-agenda" "\
@@ -1686,7 +1686,7 @@ The XOXO buffer is named *xoxo-<source buffer name>*
 ;;;;;;  org-babel-pop-to-session-maybe org-babel-load-in-session-maybe
 ;;;;;;  org-babel-expand-src-block-maybe org-babel-view-src-block-info
 ;;;;;;  org-babel-execute-maybe org-babel-execute-safely-maybe) "ob"
-;;;;;;  "ob.el" (20361 21788))
+;;;;;;  "ob.el" (20364 39428))
 ;;; Generated autoloads from ob.el
 
 (autoload 'org-babel-execute-safely-maybe "ob" "\
