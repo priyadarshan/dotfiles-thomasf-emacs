@@ -272,6 +272,8 @@ What is what?
                            indentation
                            space-after-tab)
 
+        cua-enable-cua-keys nil
+
         ediff-window-setup-function 'ediff-setup-windows-plain
         x-select-enable-clipboard t
         interprogram-paste-function 'x-cut-buffer-or-selection-value
@@ -279,10 +281,8 @@ What is what?
         browse-url-browser-function 'browse-url-generic
         browse-url-generic-program "sensible-browser"
 
-
-
         tramp-default-method "ssh"
-        anything-command-map-prefix-key "C-<f5>"
+        ;;anything-command-map-prefix-key "C-<f5>"
 
         ;;glasses-separator "␣"
         lexical-illusions nil
@@ -301,12 +301,14 @@ What is what?
   (savehist-mode 1)
   (show-paren-mode 1)
 
-
-  (electric-pair-mode t)
+  (require 'autopair)
+  (autopair-global-mode)
+  ;;(electric-pair-mode t)
   (electric-indent-mode -1)
   (electric-layout-mode t)
 
   (setq show-paren-style 'parenthesis)
+  (cua-mode t)
 
   ;; init random seed
   (random t)
@@ -329,6 +331,7 @@ What is what?
 
 ;(nyan-mode 1)
 (global-yascroll-bar-mode 1)
+
 
 (custom-set-faces
   '(region ((t (:background "#d33682" :foreground "#fdf6e3")))))
@@ -774,7 +777,7 @@ TODO: maybe possible to do this in pretty-mode
   ;; rainbow-delemiters-mode does not seem to work very well with js-mode
   ;; (rainbow-delimiters-mode)
 
-  (paredit-mode)
+  ;;(paredit-mode)
   )
 
 (add-hook 'js-mode-hook 'my-js-mode-hook)
@@ -816,60 +819,52 @@ Disable slime for now
 #+begin_src emacs-lisp
 
 
-  (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-  (add-hook 'emacs-lisp-mode-hook 'my-programming-hook)
-  (add-hook 'lisp-mode-hook 'my-programming-hook)
+    (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
+    (add-hook 'emacs-lisp-mode-hook 'my-programming-hook)
+    (add-hook 'lisp-mode-hook 'my-programming-hook)
 
-  (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-remove-elc-on-save)
-  (add-hook 'emacs-lisp-mode-hook '(lambda () "rainbown-delimiters" (rainbow-delimiters-mode)))
+    (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-remove-elc-on-save)
+    (add-hook 'emacs-lisp-mode-hook '(lambda () "rainbown-delimiters" (rainbow-delimiters-mode)))
 
-  (when (functionp 'paredit-mode)
-    (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
-    (add-hook 'lisp-mode-hook (lambda () (paredit-mode +1))))
+  ;;  (when (functionp 'paredit-mode)
+  ;;    (add-hook 'emacs-lisp-mode-hook (lambda () (paredit-mode +1)))
+  ;;    (add-hook 'lisp-mode-hook (lambda () (paredit-mode +1))))
 
-  (defun emacs-lisp-remove-elc-on-save ()
-    "If you're saving an elisp file, likely the .elc is no longer valid."
-    (make-local-variable 'after-save-hook)
-    (add-hook 'after-save-hook
-              (lambda ()
-                (if (file-exists-p (concat buffer-file-name "c"))
-                    (delete-file (concat buffer-file-name "c"))))))
+    (defun emacs-lisp-remove-elc-on-save ()
+      "If you're saving an elisp file, likely the .elc is no longer valid."
+      (make-local-variable 'after-save-hook)
+      (add-hook 'after-save-hook
+                (lambda ()
+                  (if (file-exists-p (concat buffer-file-name "c"))
+                      (delete-file (concat buffer-file-name "c"))))))
 
-  (font-lock-add-keywords 'emacs-lisp-mode
-                          '(("(\\|)" . 'paren-face)))
+    (font-lock-add-keywords 'emacs-lisp-mode
+                            '(("(\\|)" . 'paren-face)))
 
-  (font-lock-add-keywords 'scheme-mode
-                          '(("(\\|)" . 'paren-face)))
+    (font-lock-add-keywords 'scheme-mode
+                            '(("(\\|)" . 'paren-face)))
 
-  (font-lock-add-keywords 'lisp-mode
-                          '(("(\\|)" . 'paren-face)))
+    (font-lock-add-keywords 'lisp-mode
+                            '(("(\\|)" . 'paren-face)))
 
-  (font-lock-add-keywords 'lfe-mode
-                          '(("(\\|)" . 'paren-face)))
+    (font-lock-add-keywords 'lfe-mode
+                            '(("(\\|)" . 'paren-face)))
 
-  (font-lock-add-keywords 'hen-mode
-                          '(("(\\|)" . 'paren-face)))
+    (font-lock-add-keywords 'hen-mode
+                            '(("(\\|)" . 'paren-face)))
 
-  (define-key lisp-mode-shared-map (kbd "C-c l") "lambda")
-  (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
-  (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
-  (define-key lisp-mode-shared-map (kbd "C-\\") 'lisp-complete-symbol)
-  (define-key lisp-mode-shared-map (kbd "C-c v") 'eval-buffer)
+    (define-key lisp-mode-shared-map (kbd "C-c l") "lambda")
+    (define-key read-expression-map (kbd "TAB") 'lisp-complete-symbol)
+    (define-key lisp-mode-shared-map (kbd "RET") 'reindent-then-newline-and-indent)
+    (define-key lisp-mode-shared-map (kbd "C-\\") 'lisp-complete-symbol)
+    (define-key lisp-mode-shared-map (kbd "C-c v") 'eval-buffer)
 
-  (defface paren-face
-    '((((class color) (background dark))
-       (:foreground "grey20"))
-      (((class color) (background light))
-       (:foreground "grey55")))
-    "Face used to dim parentheses."
-    :group 'faces)
-
-  (autoload 'scheme-get-current-symbol-info "scheme-complete" nil t)
-  (add-hook 'scheme-mode-hook
-    (lambda ()
-      (make-local-variable 'eldoc-documentation-function)
-      (setq eldoc-documentation-function 'scheme-get-current-symbol-info)
-      (eldoc-mode)))
+    (autoload 'scheme-get-current-symbol-info "scheme-complete" nil t)
+    (add-hook 'scheme-mode-hook
+      (lambda ()
+        (make-local-variable 'eldoc-documentation-function)
+        (setq eldoc-documentation-function 'scheme-get-current-symbol-info)
+        (eldoc-mode)))
 
 #+end_src
 *** PHP
