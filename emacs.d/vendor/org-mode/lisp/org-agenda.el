@@ -1818,6 +1818,17 @@ works you probably want to add it to `org-agenda-custom-commands' for good."
 
 ;;; Multiple agenda buffers support
 
+(defcustom org-agenda-sticky nil
+  "Non-nil means agenda q key will bury agenda buffers.
+Agenda commands will then show existing buffer instead of generating new ones.
+When nil, `q' will kill the single agenda buffer."
+  :group 'org-agenda
+  :type 'boolean
+  :set (lambda (var val)
+	 (if (boundp var)
+	     (org-toggle-sticky-agenda (if val 1 0))
+	   (set var val))))
+
 (defun org-toggle-sticky-agenda (&optional arg)
   "Toggle `org-agenda-sticky'."
   (interactive "P")
@@ -1831,17 +1842,6 @@ works you probably want to add it to `org-agenda-custom-commands' for good."
       (org-agenda-kill-all-agenda-buffers)
       (message "Sticky agenda was %s"
 	       (if org-agenda-sticky "enabled" "disabled")))))
-
-(defcustom org-agenda-sticky nil
-  "Non-nil means agenda q key will bury agenda buffers.
-Agenda commands will then show existing buffer instead of generating new ones.
-When nil, `q' will kill the single agenda buffer."
-  :group 'org-agenda
-  :type 'boolean
-  :set (lambda (var val)
-	 (if (boundp var)
-	     (org-toggle-sticky-agenda (if val 1 0))
-	   (set var val))))
 
 (defvar org-agenda-buffer nil
   "Agenda buffer currently being generated.")
@@ -1890,7 +1890,7 @@ The following commands are available:
   (interactive)
   (cond (org-agenda-doing-sticky-redo
 	 ;; Refreshing sticky agenda-buffer
-	 ;; 
+	 ;;
 	 ;; Preserve the value of `org-agenda-local-vars' variables,
 	 ;; while letting `kill-all-local-variables' kill the rest
 	 (let ((save (buffer-local-variables)))
@@ -2076,6 +2076,7 @@ The following commands are available:
 (org-defkey org-agenda-mode-map "/" 'org-agenda-filter-by-tag)
 (org-defkey org-agenda-mode-map "\\" 'org-agenda-filter-by-tag-refine)
 (org-defkey org-agenda-mode-map "<" 'org-agenda-filter-by-category)
+(org-defkey org-agenda-mode-map "^" 'org-agenda-filter-by-top-category)
 (org-defkey org-agenda-mode-map ";" 'org-timer-set-timer)
 (define-key org-agenda-mode-map "?" 'org-agenda-show-the-flagging-note)
 (org-defkey org-agenda-mode-map "\C-c\C-x\C-mg"    'org-mobile-pull)
@@ -3476,7 +3477,9 @@ Org-mode keeps a list of these markers and resets them when they are
 no longer in use."
   (let ((m (copy-marker (or pos (point)))))
     (setq org-agenda-last-marker-time (org-float-time))
-    (with-current-buffer org-agenda-buffer
+    (if org-agenda-buffer
+	(with-current-buffer org-agenda-buffer
+	  (push m org-agenda-markers))
       (push m org-agenda-markers))
     m))
 
@@ -5134,6 +5137,7 @@ please use `org-class' instead."
      dayname skip-weeks)))
 (make-obsolete 'org-diary-class 'org-class "")
 
+(defvar org-agenda-show-log-scoped) ;; dynamically scope in ̀org-timeline' or`org-agenda-list'
 (defalias 'org-get-closed 'org-agenda-get-progress)
 (defun org-agenda-get-progress ()
   "Return the logged TODO entries for agenda display."
@@ -5975,9 +5979,9 @@ and stored in the variable `org-prefix-format-compiled'."
       (setq org-prefix-format-compiled
 	    (list
 	     `((org-prefix-has-time ,org-prefix-has-time)
-	       (org-prefix-has-tag ,org-prefix-has-tag) 
-	       (org-prefix-category-length ,org-prefix-category-length) 
-	       (org-prefix-has-effort ,org-prefix-has-effort)) 
+	       (org-prefix-has-tag ,org-prefix-has-tag)
+	       (org-prefix-category-length ,org-prefix-category-length)
+	       (org-prefix-has-effort ,org-prefix-has-effort))
 	     `(format ,s ,@vars))))))
 
 (defun org-set-sorting-strategy (key)
@@ -8873,7 +8877,8 @@ details and examples."
 	 (today (org-date-to-gregorian
 		 (time-to-days (current-time))))
 	 (org-agenda-restrict nil)
-	 (files (org-agenda-files 'unrestricted)) entries file)
+	 (files (org-agenda-files 'unrestricted)) entries file
+	 (org-agenda-buffer nil))
     ;; Get all entries which may contain an appt
     (org-prepare-agenda-buffers files)
     (while (setq file (pop files))
