@@ -357,8 +357,7 @@
      `(org-level-8 ((,class (:foreground ,blue))))
      `(org-link ((,class (:foreground ,yellow :underline t))))
      `(org-scheduled ((,class (:foreground ,green))))
-     `(org-scheduled-previously
-       ((,class (:foreground ,orange))))
+     `(org-scheduled-previously ((,class (:foreground ,orange))))
      `(org-scheduled-today ((,class (:bold t :foreground ,blue :weight bold))))
      `(org-special-keyword ((,class (:foreground ,yellow))))
      `(org-table ((,class (:foreground ,green))))
@@ -465,7 +464,12 @@
      `(wl-highlight-summary-displaying-face ((,class (:underline t :weight bold))))
 
      ;; which-func-mode
-     `(which-func ((,class (:foreground ,green)))))
+     `(which-func ((,class (:foreground ,green))))
+
+     ;; yascroll
+     `(yascroll:thumb-text-area ((,class (:foreground ,solarized-comments :background ,solarized-comments))))
+     `(yascroll:thumb-fringe ((,class (:foreground ,solarized-comments :background ,solarized-comments)))))
+
 
     (custom-theme-set-variables
      (if (eq variant 'light) 'solarized-light 'solarized-dark)

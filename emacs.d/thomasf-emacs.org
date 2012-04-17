@@ -180,6 +180,7 @@ Themes load paths
   (autoload 'describe-unbound-keys "unbound" "Find unbound keys" t)
   (autoload 'zencoding-mode "zencoding-mode" "Zen coding mode" t)
   (autoload 'nyan-mode "nyan-mode" "Nyan mode" t)
+  (autoload 'global-yascroll-bar-mode "yascroll" "Yascroll" t)
   (autoload 'artbollocks-mode "artbollocks-mode" "Artbollocks mode" t)
 
   (autoload 'haskell-align-imports "haskell-align-imports" "haskell-align-imports" t)
@@ -300,7 +301,6 @@ What is what?
   (savehist-mode 1)
   (show-paren-mode 1)
 
-  (nyan-mode 1)
 
   (electric-pair-mode t)
   (electric-indent-mode -1)
@@ -326,6 +326,9 @@ What is what?
 
 (require 'pretty-mode)
 (global-pretty-mode 1)
+
+;(nyan-mode 1)
+(global-yascroll-bar-mode 1)
 
 (custom-set-faces
   '(region ((t (:background "#d33682" :foreground "#fdf6e3")))))
