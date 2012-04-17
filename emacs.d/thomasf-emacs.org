@@ -1004,7 +1004,7 @@ Disable slime for now
   (add-hook 'markdown-mode-hook 'my-markdown-mode-hook)
 #+end_src
 *** HTML
-#+begin_src emacs-lis
+#+begin_src emacs-lisp
 (add-to-list 'auto-mode-alist '("\\.html$" . html-mode))
 (add-to-list 'auto-mode-alist '("\\.rhtml$" . html-mode))
 (add-to-list 'auto-mode-alist '("\\.mustache$" . html-mode))
@@ -1014,7 +1014,7 @@ Disable slime for now
   "My html-mode-hook"
   (my-programming-hook)
   (zencoding-mode)
-  (setq ac-sources '(ac-source-yasnippet))
+  (setq ac-sources '(ac-source-yasnippet)))
 
 (add-hook 'html-mode-hook 'my-html-mode-hook)
 #+end_src
