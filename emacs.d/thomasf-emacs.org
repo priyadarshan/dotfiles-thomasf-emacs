@@ -332,11 +332,6 @@ What is what?
 ;(nyan-mode 1)
 (global-yascroll-bar-mode 1)
 
-
-;;(custom-set-faces
-;;  '(region ((t (:background "#d33682" :foreground "#fdf6e3")))))
-#+end_src
-
 ** TODO Auto-complete
 Have to creae a default autocomplete conf thats better
 
