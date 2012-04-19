@@ -58,6 +58,8 @@
          (base2     "#eee8d5")
          ;; background light
          (base3     "#fdf6e3")
+
+         ;; Solarized accented colors
          (yellow    "#b58900")
          (orange    "#cb4b16")
          (red       "#dc322f")
@@ -67,11 +69,50 @@
          (cyan      "#2aa198")
          (green     "#859900")
 
+         ;; Darker and lighter accented colors
+         ;; Only use these in exceptional circumstances!
+         (yellow-d  "#7B5800")
+         (yellow-l  "#F1BE46")
+         (orange-d  "#8D0F00")
+         (orange-l  "#FF8149")
+         (red-d     "#9C0001")
+         (red-l     "#FF6F5E")
+         (magenta-d "#970051")
+         (magenta-l "#FF72B7")
+         (violet-d  "#34418E")
+         (violet-l  "#A3A5FD")
+         (blue-d    "#00599B")
+         (blue-l    "#70C0FF")
+         (cyan-d    "#006D65")
+         (cyan-l    "#6BD8CE")
+         (green-d   "#4F6600")
+         (green-l   "#BECF48")
+
+         ;; Light/Dark adaptive solarized colors
          (solarized-fg (if (eq variant 'light) base00 base0))
          (solarized-bg (if (eq variant 'light) base3 base03))
          (solarized-hl (if (eq variant 'light) base2 base02))
          (solarized-emph (if (eq variant 'light) base01 base1))
-         (solarized-comments (if (eq variant 'light) base1 base01)))
+         (solarized-comments (if (eq variant 'light) base1 base01))
+
+         ;; Light/Dark adaptive higher/lower contrast accented colors
+         ;; Only use these in exceptional cirmumstances!
+         (yellow-hc (if (eq variant 'light) yellow-d yellow-l))
+         (yellow-lc (if (eq variant 'light) yellow-l yellow-d))
+         (orange-hc (if (eq variant 'light) orange-d orange-l))
+         (orange-lc (if (eq variant 'light) orange-l orange-d))
+         (red-hc (if (eq variant 'light) red-d red-l))
+         (red-lc (if (eq variant 'light) red-l red-d))
+         (magenta-hc (if (eq variant 'light) magenta-d magenta-l))
+         (magenta-lc (if (eq variant 'light) magenta-l magenta-d))
+         (violet-hc (if (eq variant 'light) violet-d violet-l))
+         (violet-lc (if (eq variant 'light) violet-l violet-d))
+         (blue-hc (if (eq variant 'light) blue-d blue-l))
+         (blue-lc (if (eq variant 'light) blue-l blue-d))
+         (cyan-hc (if (eq variant 'light) cyan-d cyan-l))
+         (cyan-lc (if (eq variant 'light) cyan-l cyan-d))
+         (green-hc (if (eq variant 'light) green-d green-l))
+         (green-lc (if (eq variant 'light) green-l green-d)))
     (custom-theme-set-faces
      (if (eq variant 'light) 'solarized-light 'solarized-dark)
      '(button ((t (:underline t))))
@@ -106,7 +147,7 @@
      `(grep-error-face ((,class (:foreground ,red :weight bold :underline t))))
      `(grep-hit-face ((,class (:foreground ,blue))))
      `(grep-match-face ((,class (:foreground ,orange :weight bold))))
-     `(match ((,class (:background ,solarized-hl :foreground ,orange :weight bold))))
+     `(match ((,class (:background ,solarized-hl :foreground ,solarized-emph :weight bold))))
 
      ;; faces used by isearch
      `(isearch ((,class (:foreground ,yellow :background ,solarized-hl))))
@@ -149,6 +190,12 @@
 
      ;;; external
 
+     ;; ace-jump-mode
+     `(ace-jump-face-background
+       ((,class (:foreground ,solarized-comments :background ,solarized-bg :inverse-video nil))))
+     `(ace-jump-face-foreground
+       ((,class (:foreground ,red :background ,solarized-bg :inverse-video nil))))
+
      ;; diff
      `(diff-added ((,class (:foreground ,green))))
      `(diff-changed ((,class (:foreground ,yellow))))
@@ -171,8 +218,9 @@
      `(eshell-ls-symlink ((,class (:foreground ,cyan :weight bold))))
 
      ;; flymake
-     `(flymake-errline ((,class (:foreground ,red :weight bold :underline t))))
-     `(flymake-warnline ((,class (:foreground ,yellow :weight bold :underline t))))
+     `(flymake-errline ((,class (:foreground ,red-hc :background ,red-lc  :weight bold :underline t))))
+     `(flymake-infoline ((,class (:foreground ,green-hc :background ,green-lc))))
+     `(flymake-warnline ((,class (:foreground ,yellow-hc :background ,yellow-lc :weight bold :underline t))))
 
      ;; flyspell
      `(flyspell-duplicate ((,class (:foreground ,yellow :weight bold :underline t))))
@@ -260,6 +308,17 @@
      `(gnus-group-news-low-empty-face ((,class (:foreground ,solarized-bg))))
      `(gnus-signature-face ((,class (:foreground ,yellow))))
      `(gnus-x-face ((,class (:background ,solarized-fg :foreground ,solarized-bg))))
+
+     ;; hi-lock-mode
+     `(hi-yellow ((,class (:foreground ,yellow-lc :background ,yellow-hc))))
+     `(hi-pink ((,class (:foreground ,magenta-lc :background ,magenta-hc))))
+     `(hi-green ((,class (:foreground ,green-lc :background ,green-hc))))
+     `(hi-blue ((,class (:foreground ,blue-lc :background ,blue-hc))))
+     `(hi-black-b ((,class (:foreground ,solarized-emph :background ,solarized-bg :weight bold))))
+     `(hi-blue-b ((,class (:foreground ,blue-lc :weight bold))))
+     `(hi-green-b ((,class (:foreground ,green-lc :weight bold))))
+     `(hi-red-b ((,class (:foreground ,red :weight bold))))
+     `(hi-black-hb ((,class (:foreground ,solarized-emph :background ,solarized-bg :weight bold))))
 
      ;; hl-line-mode
      `(hl-line-face ((,class (:background ,solarized-bg))))
@@ -366,19 +425,15 @@
      `(org-todo ((,class (:bold t :foreground ,red :weight bold))))
      `(org-upcoming-deadline ((,class (:bold t :foreground ,yellow ))))
      `(org-warning ((,class (:bold t :foreground ,orange :weight bold :underline t))))
-     ;; org-habit
-     `(org-habit-clear-face ((,class ,(if (eq variant 'light)
-                                       `(:foreground ,base02 :background "#bbbbff")
-                                       `(:foreground ,base01 :background "blue")))))
-     `(org-habit-clear-future-face ((,class (:foreground ,(if (eq variant 'light) base02 base00)))))
-     `(org-habit-ready-face ((,class ,(if (eq variant 'light)
-                                        `(:foreground ,base02 :background "#aaffbb")
-                                        `(:foreground ,base02 :background "forestgreen")))))
-     `(org-habit-ready-future-face ((,class (:foreground ,base01))))
-     `(org-habit-alert-face ((,class (:foreground ,base01))))
-     `(org-habit-alert-future-face ((,class (:foreground ,base02))))
-     `(org-habit-overdue-face ((,class (:foreground ,base01))))
-     `(org-habit-overdue-future-face ((,class (:foreground ,base01))))
+     ;; org-habit (clear=blue, ready=green, alert=yellow, overdue=red. future=lower contrast)
+     `(org-habit-clear-face ((,class (:background ,blue-lc, :foreground ,blue-hc))))
+     `(org-habit-clear-future-face ((,class (:background ,blue-lc))))
+     `(org-habit-ready-face ((,class (:background ,green-lc :foreground ,green))))
+     `(org-habit-ready-future-face ((,class (:background ,green-lc))))
+     `(org-habit-alert-face ((,class (:background ,yellow-hc :foreground ,yellow-lc))))
+     `(org-habit-alert-future-face ((,class (:background ,yellow-lc))))
+     `(org-habit-overdue-face ((,class (:background ,red-hc :foreground ,red-lc))))
+     `(org-habit-overdue-future-face ((,class (:background ,red-lc))))
 
      ;; outline
      `(outline-8 ((,class (:inherit default))))
