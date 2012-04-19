@@ -478,8 +478,8 @@
      `(rpm-spec-var-face ((,class (:foreground ,red))))
 
      ;; show-paren
-     `(show-paren-mismatch ((,class (:foreground ,red :background ,solarized-bg :weight bold))))
-     `(show-paren-match ((,class (:foreground ,blue :background ,solarized-bg :weight bold))))
+     `(show-paren-mismatch ((,class (:foreground ,red :background ,red-lc :weight bold))))
+     `(show-paren-match ((,class (:foreground ,solarized-emph :background ,solarized-bg :weight bold))))
 
      ;; SLIME
      `(slime-repl-inputed-output-face ((,class (:foreground ,red))))
