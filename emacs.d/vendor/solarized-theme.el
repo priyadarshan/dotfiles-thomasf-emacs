@@ -1,8 +1,8 @@
 ;;; solarized-theme.el --- Solarized for Emacs.
 
-;; Copyright (C) 2011 Bozhidar Batsov
+;; Copyright (C) 2011,2012 Bozhidar Batsov
 
-;; Author: Bozhidar Batsov <bozhidar.batsov@gmail.com>
+;; Authors: Bozhidar Batsov <bozhidar.batsov@gmail.com>, Thomas Frössman <thomasf@jossystem.se>
 ;; URL: http://github.com/bbatsov/solarized-emacs
 ;; Version: 0.3.0
 
@@ -71,22 +71,22 @@
 
          ;; Darker and lighter accented colors
          ;; Only use these in exceptional circumstances!
-         (yellow-d  "#7B5800")
-         (yellow-l  "#F1BE46")
-         (orange-d  "#8D0F00")
-         (orange-l  "#FF8149")
-         (red-d     "#9C0001")
-         (red-l     "#FF6F5E")
-         (magenta-d "#970051")
-         (magenta-l "#FF72B7")
-         (violet-d  "#34418E")
-         (violet-l  "#A3A5FD")
-         (blue-d    "#00599B")
-         (blue-l    "#70C0FF")
-         (cyan-d    "#006D65")
-         (cyan-l    "#6BD8CE")
-         (green-d   "#4F6600")
-         (green-l   "#BECF48")
+         (yellow-d  "#7B6000")
+         (yellow-l  "#DEB542")
+         (orange-d  "#8B2C02")
+         (orange-l  "#F2804F")
+         (red-d     "#990A1B")
+         (red-l     "#FF6E64")
+         (magenta-d "#93115C")
+         (magenta-l "#F771AC")
+         (violet-d  "#3F4D91")
+         (violet-l  "#9EA0E5")
+         (blue-d    "#00629D")
+         (blue-l    "#69B7F0")
+         (cyan-d    "#00736F")
+         (cyan-l    "#69CABF")
+         (green-d   "#546E00")
+         (green-l   "#B4C342")
 
          ;; Light/Dark adaptive solarized colors
          (solarized-fg (if (eq variant 'light) base00 base0))
@@ -195,6 +195,12 @@
        ((,class (:foreground ,solarized-comments :background ,solarized-bg :inverse-video nil))))
      `(ace-jump-face-foreground
        ((,class (:foreground ,red :background ,solarized-bg :inverse-video nil))))
+
+     ;; custom
+     `(custom-variable-tag ((,class (:foreground ,cyan))))
+     `(custom-comment-tag ((,class (:foreground ,solarized-comments))))
+     `(custom-group-tag ((,class (:foreground ,blue))))
+     `(custom-state ((,class (:foreground ,green))))
 
      ;; diff
      `(diff-added ((,class (:foreground ,green))))
@@ -415,6 +421,7 @@
      `(org-level-7 ((,class (:foreground ,red))))
      `(org-level-8 ((,class (:foreground ,blue))))
      `(org-link ((,class (:foreground ,yellow :underline t))))
+     `(org-sexp-date ((,class (:foreground ,violet))))
      `(org-scheduled ((,class (:foreground ,green))))
      `(org-scheduled-previously ((,class (:foreground ,orange))))
      `(org-scheduled-today ((,class (:bold t :foreground ,blue :weight bold))))
@@ -430,9 +437,9 @@
      `(org-habit-clear-future-face ((,class (:background ,blue-lc))))
      `(org-habit-ready-face ((,class (:background ,green-lc :foreground ,green))))
      `(org-habit-ready-future-face ((,class (:background ,green-lc))))
-     `(org-habit-alert-face ((,class (:background ,yellow-hc :foreground ,yellow-lc))))
+     `(org-habit-alert-face ((,class (:background ,yellow :foreground ,yellow-lc))))
      `(org-habit-alert-future-face ((,class (:background ,yellow-lc))))
-     `(org-habit-overdue-face ((,class (:background ,red-hc :foreground ,red-lc))))
+     `(org-habit-overdue-face ((,class (:background ,red :foreground ,red-lc))))
      `(org-habit-overdue-future-face ((,class (:background ,red-lc))))
 
      ;; outline
