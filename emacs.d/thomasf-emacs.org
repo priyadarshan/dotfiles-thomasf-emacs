@@ -733,7 +733,7 @@ This is provided by other things I use
          (my-programming-hook)
          (electric-indent-mode -1)
          (electric-layout-mode -1)
-         ;;(paredit-mode)
+         (rainbow-delimiters-mode 1)
          (whitespace-mode)
          ;;(glasses-mode)
          (flymake-coffee-load)
