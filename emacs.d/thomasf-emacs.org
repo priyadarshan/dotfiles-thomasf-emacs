@@ -304,9 +304,9 @@ What is what?
   (defun thomasf-solarized-childtheme ()
     "My solarized child theme"
 
-  (custom-theme-set-faces
-   theme-name
-   `(show-paren-match ((,class (:foreground ,blue-hc :background ,blue-lc :weight bold)))))
+    (custom-theme-set-faces
+     theme-name
+     `(show-paren-match ((,class (:foreground ,cyan-hc :background ,cyan-lc :weight bold)))))
 
     (custom-theme-set-variables
      theme-name
@@ -332,17 +332,13 @@ What is what?
                ("cancelled" :foreground ,green :slant italic :slant italic)
                ("flagged" :foreground ,red :slant italic :inverse-video t))))))
 
-
-    (setq day-mode-theme 'thomasf-solarized-light
-          night-mode-theme 'thomasf-solarized-dark)
-
-    (load-theme day-mode-theme)
-
-    (require 'pretty-mode)
-    (global-pretty-mode 1)
-
-    ;(nyan-mode 1)
-    (global-yascroll-bar-mode 1)
+  (setq day-mode-theme 'thomasf-solarized-light
+        night-mode-theme 'thomasf-solarized-dark)
+  (load-theme day-mode-theme)
+  (require 'pretty-mode)
+  (global-pretty-mode 1)
+  ;;(nyan-mode 1)
+  (global-yascroll-bar-mode 1)
 #+end_src
 
 ** TODO Auto-complete
@@ -822,7 +818,6 @@ Disable slime for now
 
 
 #+begin_src emacs-lisp
-
 
     (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
     (add-hook 'emacs-lisp-mode-hook 'my-programming-hook)
