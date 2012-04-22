@@ -574,12 +574,11 @@ Current:
      (byte-compile-file (concat dotfiles-dir "thomasf-org.el"))
      (byte-compile-file (concat dotfiles-dir "thomasf-gui.el"))
      (byte-compile-file (concat dotfiles-dir "thomasf-emacs.el"))
-     (yas/compile-top-level-dir (concat dotfiles-dir "snippets"))
-     (yas/compile-top-level-dir (concat dotfiles-dir "snippets-imported"))
+     ;;(yas/compile-top-level-dir (concat dotfiles-dir "snippets"))
+     ;;(yas/compile-top-level-dir (concat dotfiles-dir "snippets-imported"))
+     (yas/recompile-all)
      (byte-recompile-directory (concat dotfiles-dir "snippets") 0)
      (byte-recompile-directory (concat dotfiles-dir "snippets-imported") 0))
-
-
 #+end_src
 
 
