@@ -14,8 +14,7 @@
       inhibit-splash-screen t
       inhibit-startup-buffer-menu t
       inhibit-startup-echo-area-message t
-      initial-scratch-message ";; scratch buffer -- remember to be happy, maybe, etc. \n\n"
-      )
+      initial-scratch-message ";; scratch buffer -- remember to be happy, maybe, etc. \n\n")
 
 (when (or (not (boundp 'emacs-version))
           (string< emacs-version "24.0"))

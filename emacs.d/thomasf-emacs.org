@@ -80,8 +80,7 @@ To avoid momentary display
       inhibit-splash-screen t
       inhibit-startup-buffer-menu t
       inhibit-startup-echo-area-message t
-      initial-scratch-message ";; scratch buffer -- remember to be happy, maybe, etc. \n\n"
-      )
+      initial-scratch-message ";; scratch buffer -- remember to be happy, maybe, etc. \n\n")
 #+end_src
 ** Emacs24 version check
 #+begin_src emacs-lisp :tangle thomasf-init.el
@@ -201,14 +200,13 @@ Themes load paths
 (require 'ansi-color)
 (require 'recentf)
 (require 'undo-tree)
+(require 'autopair)
+(require 'ace-jump-mode)
+(require 'sclang nil 'noerror)
+(load "sv-kalender" 'noerror 'nomessage)
 (smex-initialize)
-;; (require 'smex)
 ;; might want to auto load these instead
 ;; (require 'table)
-(require 'ace-jump-mode)
-;(require 'anything-config)
-;(require 'sclang nil 'noerror)
-(load "sv-kalender" 'noerror 'nomessage)
 #+end_src
 
 New stuff, to want?
@@ -253,16 +251,13 @@ What is what?
         visible-bell nil
         column-number-mode t
         font-lock-maximum-decoration t
-
         transient-mark-mode t
         shift-select-mode nil
         delete-selection-mode nil
         set-mark-even-if-inactive t
-
         delete-by-moving-to-trash t
         truncate-partial-width-windows nil
         uniquify-buffer-name-style 'forward
-
         ;; whitespace-mode
         whitespace-line-column 100
         whitespace-style '(face
@@ -271,57 +266,48 @@ What is what?
                            space-before-tab
                            indentation
                            space-after-tab)
-
         cua-enable-cua-keys nil
-
         ediff-window-setup-function 'ediff-setup-windows-plain
         x-select-enable-clipboard t
         interprogram-paste-function 'x-cut-buffer-or-selection-value
-
         browse-url-browser-function 'browse-url-generic
         browse-url-generic-program "sensible-browser"
-
         tramp-default-method "ssh"
         ;;anything-command-map-prefix-key "C-<f5>"
-
         ;;glasses-separator "␣"
-        lexical-illusions nil
-        )
+        lexical-illusions nil)
 
   (setq-default tab-width 3
                 indent-tabs-mode nil
                 indicate-empty-lines nil
                 imenu-auto-rescan t
-                save-place t
-                )
+                save-place t )
 
   (ansi-color-for-comint-mode-on)
   (auto-compression-mode t)
   (recentf-mode 1)
   (savehist-mode 1)
   (show-paren-mode 1)
-
-  (require 'autopair)
   (autopair-global-mode)
-  ;;(electric-pair-mode t)
   (electric-indent-mode -1)
   (electric-layout-mode t)
-
   (setq show-paren-style 'parenthesis)
   (cua-mode t)
-
   ;; init random seed
   (random t)
 
-  ;; use y/n prompts instead of yes/no
-  (defalias 'yes-or-no-p 'y-or-n-p)
-
+  (defalias 'yes-or-no-p 'y-or-n-p) ; use y/n prompts instead of yes/no
 
 #+end_src
 ** Setup themes and gui stuff
 #+begin_src emacs-lisp :tangle thomasf-gui.el
   (defun thomasf-solarized-childtheme ()
     "My solarized child theme"
+
+  (custom-theme-set-faces
+   theme-name
+   `(show-paren-match ((,class (:foreground ,blue-hc :background ,blue-lc :weight bold)))))
+
     (custom-theme-set-variables
      theme-name
      `(org-todo-keyword-faces
@@ -758,9 +744,8 @@ This is provided by other things I use
          (my-programming-hook)
          (electric-indent-mode -1)
          (electric-layout-mode -1)
-         (rainbow-delimiters-mode 1)
-         (whitespace-mode)
-         ;;(glasses-mode)
+         (whitespace-mode 1)
+         ;;(glasses-mode 1)
          (flymake-coffee-load)
          )
 
@@ -917,7 +902,6 @@ Disable slime for now
   (defun my-python-mode-hook ()
     (my-programming-hook)
     (electric-indent-mode -1)
-    ;;(glasses-mode)
     (require 'ac-python)
     (setq ac-sources '(ac-source-yasnippet))
     (whitespace-mode)
@@ -927,18 +911,18 @@ Disable slime for now
 #+end_src
 
 #+begin_src emacs-lisp
-    (when (load "flymake" t)
-      (defun flymake-pylint-init (&optional trigger-type)
-        (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                           'flymake-create-temp-with-folder-structure))
-               (local-file (file-relative-name
-                            temp-file
-                            (file-name-directory buffer-file-name)))
-               (options (when trigger-type (list "--trigger-type" trigger-type))))
-          (list  (concat vendor-dir "flymake-python/pyflymake.py") (append options (list local-file)))))
+  (when (load "flymake" t)
+    (defun flymake-pylint-init (&optional trigger-type)
+      (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                         'flymake-create-temp-with-folder-structure))
+             (local-file (file-relative-name
+                          temp-file
+                          (file-name-directory buffer-file-name)))
+             (options (when trigger-type (list "--trigger-type" trigger-type))))
+        (list  (concat vendor-dir "flymake-python/pyflymake.py") (append options (list local-file)))))
 
-      (add-to-list 'flymake-allowed-file-name-masks
-                   '("\\.py\\'" flymake-pylint-init)))
+    (add-to-list 'flymake-allowed-file-name-masks
+                 '("\\.py\\'" flymake-pylint-init)))
 
 #+end_src
 *** Ruby
