@@ -183,6 +183,14 @@ properties are:
                      before and after the new item.  Default 0, only common
                      other value is 1.
 
+ :empty-lines-before Set this to the number of lines the should be inserted
+                     before the new item. Overrides :empty-lines for the
+                     number lines inserted before.
+
+ :empty-lines-after  Set this to the number of lines the should be inserted
+                     after the new item. Overrides :empty-lines for the
+                     number of lines inserted after.
+
  :clock-in           Start the clock in this item.
 
  :clock-keep         Keep the clock running when filing the captured entry.
@@ -496,7 +504,7 @@ bypassed."
 	     (error "Capture template `%s': %s"
 		    (org-capture-get :key)
 		    (nth 1 error))))
-	  (if (and (eq major-mode 'org-mode)
+	  (if (and (derived-mode-p 'org-mode)
 		   (org-capture-get :clock-in))
 	      (condition-case nil
 		  (progn
@@ -586,9 +594,10 @@ captured item after finalizing."
 	  (goto-char end)
 	  (or (bolp) (newline))
 	  (org-capture-empty-lines-after
-	   (or (org-capture-get :empty-lines 'local) 0))))
+	   (or (org-capture-get :empty-lines-after 'local)
+	       (org-capture-get :empty-lines 'local) 0))))
       ;; Postprocessing:  Update Statistics cookies, do the sorting
-      (when (eq major-mode 'org-mode)
+      (when (derived-mode-p 'org-mode)
 	(save-excursion
 	  (when (ignore-errors (org-back-to-heading))
 	    (org-update-parent-todo-statistics)
@@ -736,7 +745,7 @@ already gone.  Any prefix argument will be passed to the refile command."
 	(widen)
 	(let ((hd (nth 2 target)))
 	  (goto-char (point-min))
-	  (unless (eq major-mode 'org-mode)
+	  (unless (derived-mode-p 'org-mode)
 	    (error
 	     "Target buffer \"%s\" for file+headline should be in Org mode"
 	     (current-buffer)))
@@ -768,7 +777,7 @@ already gone.  Any prefix argument will be passed to the refile command."
 	      (goto-char (if (org-capture-get :prepend)
 			     (match-beginning 0) (match-end 0)))
 	      (org-capture-put :exact-position (point))
-	      (setq target-entry-p (and (eq major-mode 'org-mode) (org-at-heading-p))))
+	      (setq target-entry-p (and (derived-mode-p 'org-mode) (org-at-heading-p))))
 	  (error "No match for target regexp in file %s" (nth 1 target))))
 
        ((memq (car target) '(file+datetree file+datetree+prompt))
@@ -803,12 +812,12 @@ already gone.  Any prefix argument will be passed to the refile command."
 	(widen)
 	(funcall (nth 2 target))
 	(org-capture-put :exact-position (point))
-	(setq target-entry-p (and (eq major-mode 'org-mode) (org-at-heading-p))))
+	(setq target-entry-p (and (derived-mode-p 'org-mode) (org-at-heading-p))))
 
        ((eq (car target) 'function)
 	(funcall (nth 1 target))
 	(org-capture-put :exact-position (point))
-	(setq target-entry-p (and (eq major-mode 'org-mode) (org-at-heading-p))))
+	(setq target-entry-p (and (derived-mode-p 'org-mode) (org-at-heading-p))))
 
        ((eq (car target) 'clock)
 	(if (and (markerp org-clock-hd-marker)
@@ -902,7 +911,7 @@ it.  When it is a variable, retrieve the value.  Return whatever we get."
 	  (progn
 	    (outline-next-heading)
 	    (or (bolp) (insert "\n")))
-	(org-end-of-subtree t t)
+	(org-end-of-subtree t nil)
 	(or (bolp) (insert "\n")))))
     (org-capture-empty-lines-before)
     (setq beg (point))
@@ -1137,7 +1146,8 @@ Of course, if exact position has been required, just put it there."
 (defun org-capture-empty-lines-before (&optional n)
   "Arrange for the correct number of empty lines before the insertion point.
 Point will be after the empty lines, so insertion can directly be done."
-  (setq n (or n (org-capture-get :empty-lines) 0))
+  (setq n (or n (org-capture-get :empty-lines-before)
+	      (org-capture-get :empty-lines) 0))
   (let ((pos (point)))
     (org-back-over-empty-lines)
     (delete-region (point) pos)
@@ -1146,7 +1156,8 @@ Point will be after the empty lines, so insertion can directly be done."
 (defun org-capture-empty-lines-after (&optional n)
   "Arrange for the correct number of empty lines after the inserted string.
 Point will remain at the first line after the inserted text."
-  (setq n (or n (org-capture-get :empty-lines) 0))
+  (setq n (or n (org-capture-get :empty-lines-after)
+	      (org-capture-get :empty-lines) 0))
   (org-back-over-empty-lines)
   (while (looking-at "[ \t]*\n") (replace-match ""))
   (let ((pos (point)))
@@ -1162,11 +1173,11 @@ Point will remain at the first line after the inserted text."
     (or (bolp) (newline))
     (setq beg (point))
     (cond
-     ((and (eq type 'entry) (eq major-mode 'org-mode))
+     ((and (eq type 'entry) (derived-mode-p 'org-mode))
       (org-capture-verify-tree (org-capture-get :template))
       (org-paste-subtree nil template t))
      ((and (memq type '(item checkitem))
-	   (eq major-mode 'org-mode)
+	   (derived-mode-p 'org-mode)
 	   (save-excursion (skip-chars-backward " \t\n")
 			   (setq pp (point))
 			   (org-in-item-p)))

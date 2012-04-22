@@ -2460,7 +2460,7 @@ Pressing `<' twice means to restrict to the current subtree or region
 			       nil 'face 'org-warning)))))))
 	 t t))
        ((equal keys "L")
-	(unless (eq major-mode 'org-mode)
+	(unless (derived-mode-p 'org-mode)
 	  (error "This is not an Org-mode file"))
 	(unless restriction
 	  (put 'org-agenda-files 'org-restrict (list bfn))
@@ -2495,7 +2495,7 @@ Agenda views are separated by `org-agenda-block-separator'."
   "The user interface for selecting an agenda command."
   (catch 'exit
     (let* ((bfn (buffer-file-name (buffer-base-buffer)))
-	   (restrict-ok (and bfn (eq major-mode 'org-mode)))
+	   (restrict-ok (and bfn (derived-mode-p 'org-mode)))
 	   (region-p (org-region-active-p))
 	   (custom org-agenda-custom-commands)
 	   (selstring "")
@@ -3041,7 +3041,7 @@ removed from the entry content.  Currently only `planning' is allowed here."
   (let (txt drawer-re kwd-time-re ind)
     (save-excursion
       (with-current-buffer (marker-buffer marker)
-	(if (not (eq major-mode 'org-mode))
+	(if (not (derived-mode-p 'org-mode))
 	    (setq txt "")
 	  (save-excursion
 	    (save-restriction
@@ -3157,7 +3157,7 @@ removed from the entry content.  Currently only `planning' is allowed here."
 
 (defun org-check-for-org-mode ()
   "Make sure current buffer is in org-mode.  Error if not."
-  (or (eq major-mode 'org-mode)
+  (or (derived-mode-p 'org-mode)
       (error "Cannot execute org-mode agenda command on buffer in %s"
 	     major-mode)))
 
@@ -3179,6 +3179,7 @@ removed from the entry content.  Currently only `planning' is allowed here."
 (defvar org-agenda-name nil)
 (defvar org-agenda-tag-filter nil)
 (defvar org-agenda-category-filter nil)
+(defvar org-agenda-top-category-filter nil)
 (defvar org-agenda-tag-filter-while-redo nil)
 (defvar org-agenda-tag-filter-preset nil
   "A preset of the tags filter used for secondary agenda filtering.
@@ -4109,7 +4110,7 @@ in `org-agenda-text-search-extra-files'."
 				    file))))
 	(with-current-buffer buffer
 	  (with-syntax-table (org-search-syntax-table)
-	    (unless (eq major-mode 'org-mode)
+	    (unless (derived-mode-p 'org-mode)
 	      (error "Agenda file %s is not in `org-mode'" file))
 	    (let ((case-fold-search t))
 	      (save-excursion
@@ -4302,7 +4303,7 @@ The prefix arg TODO-ONLY limits the search to TODO entries."
 		       (format "ORG-AGENDA-ERROR: No such org-file %s" file))
 		  rtnall (append rtnall rtn))
 	  (with-current-buffer buffer
-	    (unless (eq major-mode 'org-mode)
+	    (unless (derived-mode-p 'org-mode)
 	      (error "Agenda file %s is not in `org-mode'" file))
 	    (save-excursion
 	      (save-restriction
@@ -4463,15 +4464,18 @@ that can be put into `org-agenda-skip-function' for the duration of a command."
 	   (not (re-search-forward (nth 1 m) end t)))
       (and (or
 	    (setq m (memq 'nottodo conditions))
+	    (setq m (memq 'todo-unblocked conditions))
+	    (setq m (memq 'nottodo-unblocked conditions))
 	    (setq m (memq 'todo conditions)))
 	   (org-agenda-skip-if-todo m end)))
      end)))
 
 (defun org-agenda-skip-if-todo (args end)
   "Helper function for `org-agenda-skip-if', do not use it directly.
-ARGS is a list with first element either `todo' or `nottodo'.
-The remainder is either a list of TODO keywords, or a state symbol
-`todo' or `done' or `any'."
+ARGS is a list with first element either `todo', `nottodo',
+`todo-unblocked' or `nottodo-unblocked'. The remainder is either
+a list of TODO keywords, or a state symbol `todo' or `done' or
+`any'."
   (let ((kw (car args))
 	(arg (cadr args))
 	todo-wds todo-re)
@@ -4495,9 +4499,20 @@ The remainder is either a list of TODO keywords, or a state symbol
 	  (concat "^\\*+[ \t]+\\<\\("
 		  (mapconcat 'identity todo-wds  "\\|")
 		  "\\)\\>"))
-    (if (eq kw 'todo)
-	(re-search-forward todo-re end t)
-      (not (re-search-forward todo-re end t)))))
+    (cond
+     ((eq kw 'todo) (re-search-forward todo-re end t))
+     ((eq kw 'nottodo) (not (re-search-forward todo-re end t)))
+     ((eq kw 'todo-unblocked)
+      (catch 'unblocked
+	(while (re-search-forward todo-re end t)
+	  (or (org-entry-blocked-p) (throw 'unblocked t)))
+	nil))
+     ((eq kw 'nottodo-unblocked)
+      (catch 'unblocked
+	(while (re-search-forward todo-re end t)
+	  (or (org-entry-blocked-p) (throw 'unblocked nil)))
+	t))
+     )))
 
 ;;;###autoload
 (defun org-agenda-list-stuck-projects (&rest ignore)
@@ -4748,7 +4763,7 @@ the documentation of `org-diary'."
 	;; If file does not exist, make sure an error message ends up in diary
 	(list (format "ORG-AGENDA-ERROR: No such org-file %s" file))
       (with-current-buffer buffer
-	(unless (eq major-mode 'org-mode)
+	(unless (derived-mode-p 'org-mode)
 	  (error "Agenda file %s is not in `org-mode'" file))
 	(let ((case-fold-search nil))
 	  (save-excursion
@@ -4948,7 +4963,7 @@ This function is invoked if `org-agenda-todo-ignore-deadlines',
 	      (apply 'encode-time  ; DATE bound by calendar
 		     (list 0 0 0 (nth 1 date) (car date) (nth 2 date))))
 	     1 11))
-	   "\\|\\(<[0-9]+-[0-9]+-[0-9]+[^>\n]+?\\+[0-9]+[dwmy]>\\)"
+	   "\\|\\(<[0-9]+-[0-9]+-[0-9]+[^>\n]+?\\+[0-9]+[hdwmy]>\\)"
 	   "\\|\\(<%%\\(([^>\n]+)\\)>\\)"))
 	 marker hdmarker deadlinep scheduledp clockp closedp inactivep
 	 donep tmp priority category org-category-pos ee txt timestr tags
@@ -5730,7 +5745,7 @@ Any match of REMOVE-RE will be removed from TXT."
 	     (time-of-day (and dotime (org-get-time-of-day ts)))
 	     stamp plain s0 s1 s2 rtn srp l
 	     duration thecategory)
-	(and (eq major-mode 'org-mode) buffer-file-name
+	(and (derived-mode-p 'org-mode) buffer-file-name
 	     (add-to-list 'org-agenda-contributing-files buffer-file-name))
 	(when (and dotime time-of-day)
 	  ;; Extract starting and ending time and move them to prefix
@@ -5778,7 +5793,7 @@ Any match of REMOVE-RE will be removed from TXT."
 		       (concat (make-string (max (- 50 (length txt)) 1) ?\ )
 			       (match-string 2 txt))
 		       t t txt))))
-	(when (eq major-mode 'org-mode)
+	(when (derived-mode-p 'org-mode)
 	  (setq effort
 		(condition-case nil
 		    (org-get-effort
@@ -6358,7 +6373,12 @@ If ERROR is non-nil, throw an error, otherwise just return nil."
 		 (not (one-window-p))
 		 (delete-window)))
 	  (with-current-buffer buf
-	    (bury-buffer)))
+	    (bury-buffer) 
+	    ;; Maybe restore the pre-agenda window configuration.
+	    (and org-agenda-restore-windows-after-quit
+		 (not (eq org-agenda-window-setup 'other-frame))
+		 org-pre-agenda-window-conf
+		 (set-window-configuration org-pre-agenda-window-conf)))) 
       (org-agenda-Quit))))
 
 (defun org-agenda-exit ()
@@ -6400,6 +6420,7 @@ When this is the global TODO list, a prefix argument will be interpreted."
 	 (org-agenda-keep-modes t)
 	 (tag-filter org-agenda-tag-filter)
 	 (tag-preset (get 'org-agenda-tag-filter :preset-filter))
+	 (top-cat-filter org-agenda-top-category-filter)
 	 (cat-filter org-agenda-category-filter)
 	 (cat-preset (get 'org-agenda-category-filter :preset-filter))
 	 (org-agenda-tag-filter-while-redo (or tag-filter tag-preset))
@@ -6419,6 +6440,7 @@ When this is the global TODO list, a prefix argument will be interpreted."
     (put 'org-agenda-category-filter :preset-filter cat-preset)
     (and (or tag-filter tag-preset) (org-agenda-filter-apply tag-filter 'tag))
     (and (or cat-filter cat-preset) (org-agenda-filter-apply cat-filter 'category))
+    (and top-cat-filter (org-agenda-filter-top-category-apply top-cat-filter))
     (and cols (org-called-interactively-p 'any) (org-agenda-columns))
     (org-goto-line line)
     (recenter window-line)))
@@ -6455,7 +6477,8 @@ The category is that of the current line."
   (interactive "P")
   (if org-agenda-filtered-by-top-category
       (progn
-        (setq org-agenda-filtered-by-top-category nil)
+        (setq org-agenda-filtered-by-top-category nil
+	      org-agenda-top-category-filter nil)
         (org-agenda-filter-show-all-cat))
     (let ((cat (org-find-top-category (org-get-at-bol 'org-hd-marker))))
       (if cat (org-agenda-filter-top-category-apply cat strip)
@@ -6670,7 +6693,8 @@ If the line does not have an effort defined, return nil."
       (beginning-of-line 2)))
   (if (get-char-property (point) 'invisible)
       (org-agenda-previous-line))
-  (setq org-agenda-filtered-by-top-category t))
+  (setq org-agenda-top-category-filter category
+	org-agenda-filtered-by-top-category t))
 
 (defun org-agenda-filter-hide-line (type)
   (let (ov)
@@ -7216,7 +7240,7 @@ and by additional input from the age of a schedules or deadline entry."
     (widen)
     (push-mark)
     (goto-char pos)
-    (when (eq major-mode 'org-mode)
+    (when (derived-mode-p 'org-mode)
       (org-show-context 'agenda)
       (save-excursion
 	(and (outline-next-heading)
@@ -7245,7 +7269,7 @@ Point is in the buffer where the item originated.")
      (with-current-buffer buffer
        (save-excursion
 	 (goto-char pos)
-	 (if (and (eq major-mode 'org-mode) (not (member type '("sexp"))))
+	 (if (and (derived-mode-p 'org-mode) (not (member type '("sexp"))))
 	     (setq dbeg (progn (org-back-to-heading t) (point))
 		   dend (org-end-of-subtree t t))
 	   (setq dbeg (point-at-bol)
@@ -7297,7 +7321,7 @@ Point is in the buffer where the item originated.")
 	 (pos (marker-position marker)))
     (org-with-remote-undo buffer
       (with-current-buffer buffer
-	(if (eq major-mode 'org-mode)
+	(if (derived-mode-p 'org-mode)
 	    (if (and confirm
 		     (not (y-or-n-p "Archive this subtree or entry? ")))
 		(error "Abort")
@@ -7402,7 +7426,7 @@ at the text of the entry itself."
       (and delete-other-windows (delete-other-windows))
       (widen)
       (goto-char pos)
-      (when (eq major-mode 'org-mode)
+      (when (derived-mode-p 'org-mode)
 	(org-show-context 'agenda)
 	(save-excursion
 	  (and (outline-next-heading)
@@ -8550,7 +8574,7 @@ This is a command that has to be installed in `calendar-mode-map'."
 (defun org-agenda-bulk-mark (&optional arg)
   "Mark the entry at point for future bulk action."
   (interactive "p")
-  (dotimes (i (max arg 1))
+  (dotimes (i (or arg 1))
     (unless (org-get-at-bol 'org-agenda-diary-link)
       (let* ((m (org-get-at-bol 'org-hd-marker))
 	     ov)

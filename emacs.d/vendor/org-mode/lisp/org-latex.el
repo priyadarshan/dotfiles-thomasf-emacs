@@ -632,11 +632,24 @@ allowed.  The default we use here encompasses both."
   '("pdflatex -interaction nonstopmode -output-directory %o %f"
     "pdflatex -interaction nonstopmode -output-directory %o %f"
     "pdflatex -interaction nonstopmode -output-directory %o %f")
-  "Commands to process a LaTeX file to a PDF file.
-This is a list of strings, each of them will be given to the shell
-as a command.  %f in the command will be replaced by the full file name, %b
-by the file base name (i.e. without extension) and %o by the base directory
-of the file.
+  "Commands to process a LaTeX file to a PDF file and process latex
+fragments to pdf files.By default,this is a list of strings,and each of
+strings will be given to the shell as a command. %f in the command will
+be replaced by the full file name, %b by the file base name (i.e. without
+extension) and %o by the base directory of the file.
+
+If you set `org-create-formula-image-program'
+`org-export-with-LaTeX-fragments' to 'imagemagick, you can add a
+sublist which contains your own command(s) for LaTeX fragments
+previewing, like this:
+
+   '(\"xelatex -interaction nonstopmode -output-directory %o %f\"
+     \"xelatex -interaction nonstopmode -output-directory %o %f\"
+     ;; use below command(s) to convert latex fragments
+     (\"xelatex %f\"))
+
+With no such sublist, the default command used to convert LaTeX
+fragments will be the first string in the list.
 
 The reason why this is a list is that it usually takes several runs of
 `pdflatex', maybe mixed with a call to `bibtex'.  Org does not have a clever
@@ -750,7 +763,7 @@ then use this command to convert it."
   (interactive "r")
   (let (reg latex buf)
     (save-window-excursion
-      (if (eq major-mode 'org-mode)
+      (if (derived-mode-p 'org-mode)
 	  (setq latex (org-export-region-as-latex
 		       beg end t 'string))
 	(setq reg (buffer-substring beg end)
@@ -1034,6 +1047,11 @@ when PUB-DIR is set, use this as the publishing directory."
       (if (looking-at "[\n \t]+")
 	  (replace-match "\n")))
 
+    ;; Ensure we have a final newline
+    (goto-char (point-max))
+    (or (eq (char-before) ?\n)
+	(insert ?\n))
+
     (run-hooks 'org-export-latex-final-hook)
     (if to-buffer
 	(unless (eq major-mode 'latex-mode) (latex-mode))
@@ -1084,22 +1102,24 @@ when PUB-DIR is set, use this as the publishing directory."
 	    (funcall cmds (shell-quote-argument file))
 	  (while cmds
 	    (setq cmd (pop cmds))
-	    (while (string-match "%b" cmd)
-	      (setq cmd (replace-match
-			 (save-match-data
-			   (shell-quote-argument base))
-			 t t cmd)))
-	    (while (string-match "%f" cmd)
-	      (setq cmd (replace-match
-			 (save-match-data
-			   (shell-quote-argument file))
-			 t t cmd)))
-	    (while (string-match "%o" cmd)
-	      (setq cmd (replace-match
-			 (save-match-data
-			   (shell-quote-argument output-dir))
-			 t t cmd)))
-	    (shell-command cmd outbuf)))))
+	    (cond
+	     ((not (listp cmd))
+	      (while (string-match "%b" cmd)
+		(setq cmd (replace-match
+			   (save-match-data
+			     (shell-quote-argument base))
+			   t t cmd)))
+	      (while (string-match "%f" cmd)
+		(setq cmd (replace-match
+			   (save-match-data
+			     (shell-quote-argument file))
+			   t t cmd)))
+	      (while (string-match "%o" cmd)
+		(setq cmd (replace-match
+			   (save-match-data
+			     (shell-quote-argument output-dir))
+			   t t cmd)))
+	      (shell-command cmd outbuf)))))))
     (message (concat "Processing LaTeX file " file "...done"))
     (setq errors (org-export-latex-get-error outbuf))
     (if (not (file-exists-p pdffile))
@@ -1723,8 +1743,7 @@ See the `org-export-latex.el' code for a complete conversion table."
 	  (goto-char (point-min))
 	  (while (re-search-forward c nil t)
 	    ;; Put the point where to check for org-protected
-	    (unless (or (get-text-property (match-beginning 2) 'org-protected)
-			(save-match-data (org-at-table.el-p)))
+	    (unless (get-text-property (match-beginning 2) 'org-protected)
 	      (cond ((member (match-string 2) '("\\$" "$"))
 		     (if (equal (match-string 2) "\\$")
 			 nil
@@ -1752,7 +1771,7 @@ See the `org-export-latex.el' code for a complete conversion table."
 			   (replace-match (match-string 2) t t)
 			 (replace-match (concat (match-string 1) "\\"
 						(match-string 2)) t t)))))
-	      (unless (save-match-data (org-inside-latex-math-p))
+	      (unless (save-match-data (or (org-inside-latex-math-p) (org-at-table-p)))
 		(cond ((equal (match-string 2) "\\")
 		       (replace-match (or (save-match-data
 					    (org-export-latex-treat-backslash-char
