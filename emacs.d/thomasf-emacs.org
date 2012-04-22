@@ -306,7 +306,23 @@ What is what?
 
     (custom-theme-set-faces
      theme-name
-     `(show-paren-match ((,class (:foreground ,cyan-hc :background ,cyan-lc :weight bold)))))
+     `(show-paren-match ((,class (:foreground ,cyan-hc :background ,cyan-lc :weight bold))))
+
+     ;; maybe...
+     `(font-lock-builtin-face ((,class (:foreground ,blue))))
+     `(font-lock-comment-face ((,class (:foreground ,solarized-comments))))
+     `(font-lock-comment-delimiter-face ((,class (:foreground ,solarized-comments))))
+     `(font-lock-constant-face ((,class (:foreground ,blue :weight bold))))
+     `(font-lock-doc-face ((,class (:foreground ,cyan))))
+     `(font-lock-doc-string-face ((,class (:foreground ,blue))))
+     `(font-lock-function-name-face ((,class (:foreground ,blue))))
+     `(font-lock-keyword-face ((,class (:foreground ,magenta :weight bold))))
+     `(font-lock-negation-char-face ((,class (:foreground ,solarized-fg))))
+     `(font-lock-preprocessor-face ((,class (:foreground ,blue))))
+     `(font-lock-string-face ((,class (:foreground ,cyan))))
+     `(font-lock-type-face ((,class (:foreground ,yellow))))
+     `(font-lock-variable-name-face ((,class (:foreground ,green))))
+     `(font-lock-warning-face ((,class (:foreground ,yellow :weight bold :underline t)))))
 
     (custom-theme-set-variables
      theme-name
@@ -331,6 +347,7 @@ What is what?
                ("waiting" :foreground ,orange :slant italic :inverse-video t)
                ("cancelled" :foreground ,green :slant italic :slant italic)
                ("flagged" :foreground ,red :slant italic :inverse-video t))))))
+
 
   (setq day-mode-theme 'thomasf-solarized-light
         night-mode-theme 'thomasf-solarized-dark)
