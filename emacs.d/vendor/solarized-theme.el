@@ -465,6 +465,7 @@
      `(rainbow-delimiters-depth-10-face ((,class (:foreground ,green))))
      `(rainbow-delimiters-depth-11-face ((,class (:foreground ,blue))))
      `(rainbow-delimiters-depth-12-face ((,class (:foreground ,red))))
+     `(rainbow-delimiters-unmatched-face ((,class (:foreground ,red :background ,red-lc))))
 
      ;; rpm-mode
      `(rpm-spec-dir-face ((,class (:foreground ,green))))
