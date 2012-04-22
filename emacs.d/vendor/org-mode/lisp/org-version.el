@@ -6,7 +6,7 @@
   "The release version of org-mode.
   Inserted by installing org-mode or when a release is made.")
 ;;;###autoload
-(defconst org-git-version "release_7.8.09-342-g0a9c29"
+(defconst org-git-version "release_7.8.09-362-gac5d8c"
   "The Git version of org-mode.
   Inserted by installing org-mode or when a release is made.")
 ;;;###autoload

@@ -318,7 +318,7 @@ exported source code blocks by language.
 ;;;;;;  org-diary org-agenda-list-stuck-projects org-tags-view org-todo-list
 ;;;;;;  org-search-view org-agenda-list org-batch-store-agenda-views
 ;;;;;;  org-store-agenda-views org-batch-agenda-csv org-batch-agenda
-;;;;;;  org-agenda) "org-agenda" "org-agenda.el" (20371 62510))
+;;;;;;  org-agenda) "org-agenda" "org-agenda.el" (20372 23353))
 ;;; Generated autoloads from org-agenda.el
 
 (autoload 'org-agenda "org-agenda" "\
@@ -1666,7 +1666,7 @@ Create a file that contains all custom agenda views.
 
 ;;;### (autoloads (org-export-as-odf-and-open org-export-as-odf org-export-odt-convert
 ;;;;;;  org-export-as-odt org-export-as-odt-batch org-export-as-odt-and-open)
-;;;;;;  "org-odt" "org-odt.el" (20371 62510))
+;;;;;;  "org-odt" "org-odt.el" (20372 23353))
 ;;; Generated autoloads from org-odt.el
 
 (autoload 'org-export-as-odt-and-open "org-odt" "\
@@ -1995,14 +1995,14 @@ The XOXO buffer is named *xoxo-<source buffer name>*
 
 ;;;***
 
-;;;### (autoloads nil "org-version" "org-version.el" (20371 62510))
+;;;### (autoloads nil "org-version" "org-version.el" (20372 23354))
 ;;; Generated autoloads from org-version.el
 
 (defconst org-release "7.8.09" "\
 The release version of org-mode.
   Inserted by installing org-mode or when a release is made.")
 
-(defconst org-git-version "release_7.8.09-342-g0a9c29" "\
+(defconst org-git-version "release_7.8.09-362-gac5d8c" "\
 The Git version of org-mode.
   Inserted by installing org-mode or when a release is made.")
 
