@@ -320,17 +320,43 @@ What is what?
 #+end_src
 ** Setup themes and gui stuff
 #+begin_src emacs-lisp :tangle thomasf-gui.el
+  (defun thomasf-solarized-childtheme ()
+    "My solarized child theme"
+    (custom-theme-set-variables
+     theme-name
+     `(org-todo-keyword-faces
+       (quote (("TODO" :foreground ,red :weight bold :inverse-video t)
+               ("NEXT" :foreground ,blue :weight bold :inverse-video t)
+               ("DONE" :foreground ,green :weight bold)
+               ("WAITING" :foreground ,orange :weight bold :inverse-video t)
+               ("HOLD" :foreground ,magenta :weight bold :inverse-video t)
+               ("CANCELLED" :foreground ,green :weight bold)
+               ("PHONE" :foreground ,green :weight bold))))
 
-(setq day-mode-theme 'solarized-light
-      night-mode-theme 'solarized-dark)
+     `(org-tag-faces
+       (quote (("@home" :slant italic)
+               ("@office" :slant italic)
+               ("@errand" :slant italic :inverse-video t)
+               ("work" :slant italic)
+               ("personal" :slant italic)
+               ("bulk" :foreground ,solarized-comments)
+               ("hold" :foreground ,green :slant italic)
+               ("note" :foreground ,magenta :slant italic)
+               ("waiting" :foreground ,orange :slant italic :inverse-video t)
+               ("cancelled" :foreground ,green :slant italic :slant italic)
+               ("flagged" :foreground ,red :slant italic :inverse-video t))))))
 
-(load-theme day-mode-theme)
 
-(require 'pretty-mode)
-(global-pretty-mode 1)
+    (setq day-mode-theme 'thomasf-solarized-light
+          night-mode-theme 'thomasf-solarized-dark)
 
-;(nyan-mode 1)
-(global-yascroll-bar-mode 1)
+    (load-theme day-mode-theme)
+
+    (require 'pretty-mode)
+    (global-pretty-mode 1)
+
+    ;(nyan-mode 1)
+    (global-yascroll-bar-mode 1)
 #+end_src
 
 ** TODO Auto-complete
@@ -437,14 +463,12 @@ Current:
       "Switch to night mode (dark color theme)"
       (interactive)
       (load-theme night-mode-theme)
-      (message "Night mode on")
       (set-frame-parameter nil 'night-mode-on t))
 
     (defun day-mode ()
       "Switch to day mode (light color theme)"
       (interactive)
       (load-theme day-mode-theme)
-      (message "Night mode off")
       (set-frame-parameter nil 'night-mode-on nil))
 
     (defun toggle-night-mode ()
@@ -1307,29 +1331,6 @@ Inspirations:
                 ("NEXT" ("waiting") ("cancelled") ("hold"))
                 ("DONE" ("waiting") ("cancelled") ("hold")))))
 
-#+end_src
-**** Todo/Tag faces
-#+begin_src emacs-lisp :tangle thomasf-org.el
-    (setq org-todo-keyword-faces
-          (quote (("TODO" :foreground "#dc322f" :weight bold :inverse-video t)
-                  ("NEXT" :foreground "#268bd2" :weight bold :inverse-video t)
-                  ("DONE" :foreground "#859900" :weight bold)
-                  ("WAITING" :foreground "#cb4b16" :weight bold :inverse-video t)
-                  ("HOLD" :foreground "#d33682" :weight bold :inverse-video t)
-                  ("CANCELLED" :foreground "#859900" :weight bold)
-                  ("PHONE" :foreground "#859900" :weight bold))))
-
-    (setq org-tag-faces
-          (quote (("@home" :slant italic)
-                  ("@office" :slant italic)
-                  ("@errand" :slant italic :inverse-video t)
-                  ("work" :slant italic)
-                  ("personal" :slant italic)
-                  ("hold" :foreground "#859900" :slant italic)
-                  ("note" :foreground "#d33682" :slant italic)
-                  ("waiting" :foreground "#cb4b16" :slant italic :inverse-video t)
-                  ("cancelled" :foreground "#859900" :slant italic :slant italic)
-                  ("flagged" :foreground "#dc322f" :slant italic :inverse-video t))))
 #+end_src
 *** Default tags
 #+begin_src emacs-lisp :tangle thomasf-org.el
