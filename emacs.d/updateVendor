@@ -70,7 +70,7 @@ installFile() {
 }
 
 #
-# Unset or set all manifest variables to default 
+# Unset or set all manifest variables to default
 #
 #
 unset name # local file/dir name for vendor lib
@@ -93,8 +93,8 @@ loadPath="${VENDOR}"
 (   name=haskell-mode-exts; url=https://github.com/pheaver/haskell-mode-exts
     getGit && installRepo ) &
 
-(   name=yasnippet; url=https://github.com/capitaomorte/yasnippet
-    getGit && installRepo ) &
+#(   name=yasnippet; url=https://github.com/capitaomorte/yasnippet
+#    getGit && installRepo )
 
 (   name=zencoding; url=https://github.com/rooney/zencoding
     getGit && installRepo ) &
@@ -108,8 +108,8 @@ loadPath="${VENDOR}"
 (   name=asciidoc.el; url=https://raw.github.com/metaperl/asciidoc-el/master/asciidoc.el
     getFile && installFile ) &
 
-(   name=coffee-mode.el; url=https://raw.github.com/defunkt/coffee-mode/master/coffee-mode.el
-    getFile && installFile ) & 
+#(   name=coffee-mode.el; url=https://raw.github.com/defunkt/coffee-mode/master/coffee-mode.el
+#    getFile && installFile )
 
 (   name=php-mode.el; url=https://github.com/ejmr/php-mode/raw/master/php-mode.el
     getFile && installFile ) &
@@ -120,7 +120,7 @@ loadPath="${VENDOR}"
 (   name=yaml-mode.el; url=https://raw.github.com/yoshiki/yaml-mode/master/yaml-mode.el
     getFile && installFile ) &
 
-(   name=pretty-mode.el; url=http://www.emacswiki.org/emacs/download/pretty-mode.el 
+(   name=pretty-mode.el; url=http://www.emacswiki.org/emacs/download/pretty-mode.el
     getFile && installFile ) &
 
 (   name=magit; url=https://github.com/magit/magit
@@ -156,14 +156,14 @@ loadPath="${VENDOR}"
 (   name=zenburn-theme.el; loadPath=themes; url=https://raw.github.com/bbatsov/zenburn-emacs/master/zenburn-theme.el
     getFile && installFile ) &
 
-(   name=solarized-theme.el; url=https://raw.github.com/bbatsov/solarized-emacs/master/solarized-theme.el
-    getFile && installFile ) &
+#(   name=solarized-theme.el; url=https://raw.github.com/bbatsov/solarized-emacs/master/solarized-theme.el
+#    getFile && installFile )
 
-(   name=solarized-dark-theme.el; loadPath=themes; url=https://raw.github.com/bbatsov/solarized-emacs/master/solarized-dark-theme.el
-    getFile && installFile ) &
+#(   name=solarized-dark-theme.el; loadPath=themes; url=https://raw.github.com/bbatsov/solarized-emacs/master/solarized-dark-theme.el
+#    getFile && installFile )
 
-(   name=solarized-light-theme.el; loadPath=themes; url=https://raw.github.com/bbatsov/solarized-emacs/master/solarized-light-theme.el
-    getFile && installFile ) &
+#(   name=solarized-light-theme.el; loadPath=themes; url=https://raw.github.com/bbatsov/solarized-emacs/master/solarized-light-theme.el
+#    getFile && installFile )
 
 ########################################################################
 # Possibly interesting but not used right now
@@ -183,4 +183,3 @@ loadPath="${VENDOR}"
 
 
 echo "Verify changes using git + ./compile + maybe ./profile !"
-
