@@ -745,29 +745,35 @@ This is provided by other things I use
 #+end_src
 *** CoffeeScript
 #+begin_src emacs-lisp
-  (autoload 'coffee-mode "coffee-mode" "Coffee Mode." t)
+      (autoload 'coffee-mode "coffee-mode" "Coffee Mode." t)
 
-  (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
-  (add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))
+      (add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
+      (add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))
 
-  (eval-after-load "coffee-mode"
-    '(progn
-       (setq coffee-cleanup-whitespace nil
-             coffee-debug-mode t
-             coffee-tab-width 2)
+      (setq coffee-cleanup-whitespace nil
+            coffee-debug-mode t
+            coffee-tab-width 2)
 
-       (defun my-coffee-mode-hook ()
-         "My coffee-mode hook"
-         (my-programming-hook)
-         (electric-indent-mode -1)
-         (electric-layout-mode -1)
-         (whitespace-mode 1)
-         ;;(glasses-mode 1)
-         (flymake-coffee-load)
-         )
+      (defun my-coffee-mode-hook ()
+        "My coffee-mode hook"
+        (my-programming-hook)
 
-       (add-hook 'coffee-mode-hook 'my-coffee-mode-hook)
-       ))
+        (setq ac-sources
+              '(ac-source-imenu
+                ;; ac-source-dictionary
+                ;; ac-source-yasnippet
+                ac-source-words-in-buffer
+                ac-source-words-in-same-mode-buffers
+                ;;ac-source-words-in-all-buffer
+                ))
+        (electric-indent-mode -1)
+        (electric-layout-mode -1)
+        (whitespace-mode 1)
+        ;;(glasses-mode 1)
+        (flymake-coffee-load)
+        (auto-complete-mode))
+
+      (add-hook 'coffee-mode-hook 'my-coffee-mode-hook)
 #+end_src
 *** TODO JavaScript
 
