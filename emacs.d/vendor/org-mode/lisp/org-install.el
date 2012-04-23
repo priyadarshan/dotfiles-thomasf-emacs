@@ -14,7 +14,7 @@
 ;;;;;;  org-babel-pop-to-session-maybe org-babel-load-in-session-maybe
 ;;;;;;  org-babel-expand-src-block-maybe org-babel-view-src-block-info
 ;;;;;;  org-babel-execute-maybe org-babel-execute-safely-maybe) "ob"
-;;;;;;  "ob.el" (20365 61795))
+;;;;;;  "ob.el" (20373 17918))
 ;;; Generated autoloads from ob.el
 
 (autoload 'org-babel-execute-safely-maybe "ob" "\
@@ -318,7 +318,7 @@ exported source code blocks by language.
 ;;;;;;  org-diary org-agenda-list-stuck-projects org-tags-view org-todo-list
 ;;;;;;  org-search-view org-agenda-list org-batch-store-agenda-views
 ;;;;;;  org-store-agenda-views org-batch-agenda-csv org-batch-agenda
-;;;;;;  org-agenda) "org-agenda" "org-agenda.el" (20372 23353))
+;;;;;;  org-agenda) "org-agenda" "org-agenda.el" (20373 17918))
 ;;; Generated autoloads from org-agenda.el
 
 (autoload 'org-agenda "org-agenda" "\
@@ -689,7 +689,7 @@ Extract anniversaries from BBDB for display in the agenda.
 ;;;***
 
 ;;;### (autoloads (org-capture-import-remember-templates org-capture-insert-template-here
-;;;;;;  org-capture) "org-capture" "org-capture.el" (20371 62510))
+;;;;;;  org-capture) "org-capture" "org-capture.el" (20373 17918))
 ;;; Generated autoloads from org-capture.el
 
 (autoload 'org-capture "org-capture" "\
@@ -727,7 +727,7 @@ Set org-capture-templates to be similar to `org-remember-templates'.
 ;;;***
 
 ;;;### (autoloads (org-clock-persistence-insinuate org-get-clocktable)
-;;;;;;  "org-clock" "org-clock.el" (20371 62510))
+;;;;;;  "org-clock" "org-clock.el" (20373 17918))
 ;;; Generated autoloads from org-clock.el
 
 (autoload 'org-get-clocktable "org-clock" "\
@@ -842,7 +842,7 @@ publishing directory.
 ;;;;;;  org-open-at-point-global org-insert-link-global org-store-link
 ;;;;;;  org-run-like-in-org-mode turn-on-orgstruct++ turn-on-orgstruct
 ;;;;;;  orgstruct-mode org-global-cycle org-mode org-version org-babel-do-load-languages)
-;;;;;;  "org" "org.el" (20371 62510))
+;;;;;;  "org" "org.el" (20373 17918))
 ;;; Generated autoloads from org.el
 
 (autoload 'org-babel-do-load-languages "org" "\
@@ -1078,8 +1078,8 @@ Call the customize function with org as argument.
 ;;;***
 
 ;;;### (autoloads (org-insert-export-options-template org-export-as-org
-;;;;;;  org-export-visible org-export) "org-exp" "org-exp.el" (20371
-;;;;;;  62510))
+;;;;;;  org-export-visible org-export) "org-exp" "org-exp.el" (20373
+;;;;;;  17918))
 ;;; Generated autoloads from org-exp.el
 
 (autoload 'org-export "org-exp" "\
@@ -1168,7 +1168,7 @@ Show the raw feed buffer of a feed.
 ;;;***
 
 ;;;### (autoloads (org-footnote-normalize org-footnote-action) "org-footnote"
-;;;;;;  "org-footnote.el" (20371 62510))
+;;;;;;  "org-footnote.el" (20373 17918))
 ;;; Generated autoloads from org-footnote.el
 
 (autoload 'org-footnote-action "org-footnote" "\
@@ -1501,8 +1501,8 @@ Dispatch to the appropriate function to store a link to an IRC session.
 
 ;;;### (autoloads (org-export-as-pdf-and-open org-export-as-pdf org-export-as-latex
 ;;;;;;  org-export-region-as-latex org-replace-region-by-latex org-export-as-latex-to-buffer
-;;;;;;  org-export-as-latex-batch) "org-latex" "org-latex.el" (20371
-;;;;;;  62510))
+;;;;;;  org-export-as-latex-batch) "org-latex" "org-latex.el" (20373
+;;;;;;  17918))
 ;;; Generated autoloads from org-latex.el
 
 (autoload 'org-export-as-latex-batch "org-latex" "\
@@ -1861,7 +1861,7 @@ See also the variable `org-reverse-note-order'.
 
 ;;;### (autoloads (org-table-to-lisp orgtbl-mode turn-on-orgtbl org-table-iterate-buffer-tables
 ;;;;;;  org-table-recalculate-buffer-tables) "org-table" "org-table.el"
-;;;;;;  (20371 62510))
+;;;;;;  (20373 17918))
 ;;; Generated autoloads from org-table.el
 
 (autoload 'org-table-recalculate-buffer-tables "org-table" "\
@@ -1995,14 +1995,14 @@ The XOXO buffer is named *xoxo-<source buffer name>*
 
 ;;;***
 
-;;;### (autoloads nil "org-version" "org-version.el" (20372 23354))
+;;;### (autoloads nil "org-version" "org-version.el" (20373 17919))
 ;;; Generated autoloads from org-version.el
 
 (defconst org-release "7.8.09" "\
 The release version of org-mode.
   Inserted by installing org-mode or when a release is made.")
 
-(defconst org-git-version "release_7.8.09-362-gac5d8c" "\
+(defconst org-git-version "release_7.8.09-372-gc627a2" "\
 The Git version of org-mode.
   Inserted by installing org-mode or when a release is made.")
 
