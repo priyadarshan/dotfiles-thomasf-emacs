@@ -185,7 +185,7 @@ Themes load paths
   (autoload 'haskell-align-imports "haskell-align-imports" "haskell-align-imports" t)
   (autoload 'haskell-navigate-imports "haskell-navigate-imports" "haskell-navigate-imports" t)
   (autoload 'haskell-sort-imports "haskell-sort-imports" "haskell-sort-imports" t)
-
+  (load "go-mode-load")
   (load "haskell-site-file")
   (load "50magit")
 
