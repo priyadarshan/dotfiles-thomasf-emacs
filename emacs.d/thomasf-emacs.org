@@ -688,12 +688,11 @@ This is provided by other things I use
 #+end_src
 *** Text mode hook
 #+begin_src emacs-lisp
-(defun my-textmode-hook ()
-  ;;(table-recognize)
-  ;;(turn-on-auto-fill)
-  (turn-on-undo-tree-mode)
-  )
-(add-hook 'text-mode-hook 'my-textmode-hook)
+  (defun my-textmode-hook ()
+    ;;(table-recognize)
+    ;;(turn-on-auto-fill)
+    (turn-on-undo-tree-mode))
+  (add-hook 'text-mode-hook 'my-textmode-hook)
 #+end_src
 *** Programming hook
 #+begin_src emacs-lisp
@@ -708,39 +707,23 @@ This is provided by other things I use
 ** Programming languages
 *** Erlang
 #+begin_src emacs-lisp
-(add-to-list 'auto-mode-alist '("\\.erl$" . erlang-mode))
-(add-to-list 'auto-mode-alist '("\\.hrl$" . erlang-mode))
+  (add-to-list 'auto-mode-alist '("\\.erl$" . erlang-mode))
+  (add-to-list 'auto-mode-alist '("\\.hrl$" . erlang-mode))
 
-(defun my-erlang-hook ()
-  (my-programming-hook)
-)
-
+  (defun my-erlang-hook ()
+    (my-programming-hook))
 #+end_src
 *** Haskell
 #+begin_src emacs-lisp
-  (eval-after-load "haskell-mode"
-    '(progn
-
-       ;; (defun pretty-lambdas-haskell ()
-       ;;   (font-lock-add-keywords
-       ;;    nil `((,(concat "(?\\(" (regexp-quote "\\") "\\)")
-       ;;           (0 (progn (compose-region (match-beginning 1) (match-end 1)
-       ;;                                     ,(make-char 'greek-iso8859-7 107))
-       ;;                     nil))))))
-
-       (defun my-haskell-mode-hook ()
-         "My haskell-mode hook"
-         (my-programming-hook)
-         ;; (when (window-system)
-         ;;   (add-hook 'haskell-mode-hook 'pretty-lambdas-haskell))
-         (turn-on-haskell-doc-mode)
-         (turn-on-haskell-indentation)
-         (rainbow-delimiters-mode)
-         (eldoc-mode))
-
-       (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
-
-       ))
+  (defun my-haskell-mode-hook ()
+    "My haskell-mode hook"
+    (my-programming-hook)
+    (turn-on-haskell-doc-mode)
+    (turn-on-haskell-indentation)
+    (rainbow-delimiters-mode)
+    (eldoc-mode))
+  
+  (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
 #+end_src
 *** CoffeeScript
 #+begin_src emacs-lisp
