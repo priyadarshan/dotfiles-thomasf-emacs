@@ -689,7 +689,7 @@ Extract anniversaries from BBDB for display in the agenda.
 ;;;***
 
 ;;;### (autoloads (org-capture-import-remember-templates org-capture-insert-template-here
-;;;;;;  org-capture) "org-capture" "org-capture.el" (20373 17918))
+;;;;;;  org-capture) "org-capture" "org-capture.el" (20373 55246))
 ;;; Generated autoloads from org-capture.el
 
 (autoload 'org-capture "org-capture" "\
@@ -842,7 +842,7 @@ publishing directory.
 ;;;;;;  org-open-at-point-global org-insert-link-global org-store-link
 ;;;;;;  org-run-like-in-org-mode turn-on-orgstruct++ turn-on-orgstruct
 ;;;;;;  orgstruct-mode org-global-cycle org-mode org-version org-babel-do-load-languages)
-;;;;;;  "org" "org.el" (20373 17918))
+;;;;;;  "org" "org.el" (20373 55246))
 ;;; Generated autoloads from org.el
 
 (autoload 'org-babel-do-load-languages "org" "\
@@ -1079,7 +1079,7 @@ Call the customize function with org as argument.
 
 ;;;### (autoloads (org-insert-export-options-template org-export-as-org
 ;;;;;;  org-export-visible org-export) "org-exp" "org-exp.el" (20373
-;;;;;;  17918))
+;;;;;;  55246))
 ;;; Generated autoloads from org-exp.el
 
 (autoload 'org-export "org-exp" "\
@@ -1750,7 +1750,7 @@ line directly before or after the table.
 
 ;;;### (autoloads (org-publish-current-project org-publish-current-file
 ;;;;;;  org-publish-all org-publish) "org-publish" "org-publish.el"
-;;;;;;  (20358 48572))
+;;;;;;  (20373 55246))
 ;;; Generated autoloads from org-publish.el
 
 (defalias 'org-publish-project 'org-publish)
@@ -1861,7 +1861,7 @@ See also the variable `org-reverse-note-order'.
 
 ;;;### (autoloads (org-table-to-lisp orgtbl-mode turn-on-orgtbl org-table-iterate-buffer-tables
 ;;;;;;  org-table-recalculate-buffer-tables) "org-table" "org-table.el"
-;;;;;;  (20373 17918))
+;;;;;;  (20373 55246))
 ;;; Generated autoloads from org-table.el
 
 (autoload 'org-table-recalculate-buffer-tables "org-table" "\
@@ -1995,14 +1995,14 @@ The XOXO buffer is named *xoxo-<source buffer name>*
 
 ;;;***
 
-;;;### (autoloads nil "org-version" "org-version.el" (20373 17919))
+;;;### (autoloads nil "org-version" "org-version.el" (20373 55246))
 ;;; Generated autoloads from org-version.el
 
 (defconst org-release "7.8.09" "\
 The release version of org-mode.
   Inserted by installing org-mode or when a release is made.")
 
-(defconst org-git-version "release_7.8.09-372-gc627a2" "\
+(defconst org-git-version "release_7.8.09-384-gfdace8" "\
 The Git version of org-mode.
   Inserted by installing org-mode or when a release is made.")
 
