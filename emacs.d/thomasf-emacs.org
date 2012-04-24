@@ -741,7 +741,6 @@ This is only for x, I would guess.
       (add-hook 'coffee-mode-hook 'my-coffee-mode-hook)
 #+end_src
 *** TODO JavaScript
-
 #+begin_src emacs-lisp
   (font-lock-add-keywords
    'js-mode `(("\\(function *\\)("
@@ -765,6 +764,30 @@ This is only for x, I would guess.
   (add-hook 'js-mode-hook 'my-js-mode-hook)
 
 #+end_src
+**** TODO Flymake jsonlint
+#+begin_src emacs-lisp
+  (require 'flymake)
+  (defun flymake-jsonlint-init ()
+    (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                       'flymake-create-temp-inplace))
+           (local-file (file-relative-name
+                        temp-file
+                        (file-name-directory buffer-file-name))))
+      (list "jsonlint" (list "-c" local-file))))
+
+  (setq flymake-allowed-file-name-masks
+        (cons '(".+\\.json$"
+                flymake-jsonlint-init
+                flymake-simple-cleanup
+                flymake-get-real-file-name)
+              flymake-allowed-file-name-masks))
+
+  (setq flymake-err-line-patterns
+        (cons '("^\\(.*\\): line \\([[:digit:]]+\\), col \\([[:digit:]]+\\), \\(.+\\)$"
+                1 2 3 4)
+              flymake-err-line-patterns))
+#+end_src
+
 *** TODO lisp
 - Should all lisp modes be in the same place?
 Most of this is just copied without ever read
