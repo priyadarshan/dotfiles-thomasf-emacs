@@ -711,24 +711,24 @@ This is only for x, I would guess.
 ** Generic hooks
 *** All modes hook
 #+begin_src emacs-lisp
-  (defun my-all-modes-hook ()
+  (defun thomasf-all-modes-hook ()
     "Hook that should be run every time an major mode is entered"
     (turn-on-undo-tree-mode))
 
-  (add-hook 'after-change-major-mode-hook  'my-all-modes-hook)
+  (add-hook 'after-change-major-mode-hook  'thomasf-all-modes-hook)
 #+end_src
 *** Text mode hook
 #+begin_src emacs-lisp
-  (defun my-textmode-hook ()
+  (defun thomasf-textmode-hook ()
     ;;(table-recognize)
     ;;(turn-on-auto-fill)
     (turn-on-undo-tree-mode))
 
-  (add-hook 'text-mode-hook 'my-textmode-hook)
+  (add-hook 'text-mode-hook 'thomasf-textmode-hook)
 #+end_src
 *** Programming hook
 #+begin_src emacs-lisp
-  (defun my-programming-hook ()
+  (defun thomasf-programming-hook ()
     "Enable things that are convenient across all programming buffers."
     (set (make-local-variable 'comment-auto-fill-only-comments) t)
     (make-local-variable 'column-number-mode)
@@ -742,8 +742,8 @@ This is only for x, I would guess.
   (add-to-list 'auto-mode-alist '("\\.erl$" . erlang-mode))
   (add-to-list 'auto-mode-alist '("\\.hrl$" . erlang-mode))
 
-  (defun my-erlang-hook ()
-    (my-programming-hook))
+  (defun thomasf-erlang-hook ()
+    (thomasf-programming-hook))
 #+end_src
 *** DONE Haskell
 #+begin_src emacs-lisp
@@ -752,15 +752,15 @@ This is only for x, I would guess.
   (autoload 'haskell-sort-imports "haskell-sort-imports" "haskell-sort-imports" t)
   (load "haskell-site-file")
 
-  (defun my-haskell-mode-hook ()
+  (defun thomasf-haskell-mode-hook ()
     "My haskell-mode hook"
-    (my-programming-hook)
+    (thomasf-programming-hook)
     (turn-on-haskell-doc-mode)
     (turn-on-haskell-indentation)
     (if window-system (rainbow-delimiters-mode))
     (eldoc-mode))
 
-  (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
+  (add-hook 'haskell-mode-hook 'thomasf-haskell-mode-hook)
 #+end_src
 *** CoffeeScript
 #+begin_src emacs-lisp
@@ -773,9 +773,9 @@ This is only for x, I would guess.
             coffee-debug-mode t
             coffee-tab-width 2)
 
-      (defun my-coffee-mode-hook ()
+      (defun thomasf-coffee-mode-hook ()
         "My coffee-mode hook"
-        (my-programming-hook)
+        (thomasf-programming-hook)
 
         (setq ac-sources
               '(ac-source-imenu
@@ -792,7 +792,7 @@ This is only for x, I would guess.
         (flymake-coffee-load)
         (auto-complete-mode))
 
-      (add-hook 'coffee-mode-hook 'my-coffee-mode-hook)
+      (add-hook 'coffee-mode-hook 'thomasf-coffee-mode-hook)
 #+end_src
 *** JavaScript
 #+begin_src emacs-lisp
@@ -809,13 +809,13 @@ This is only for x, I would guess.
   (add-to-list 'auto-mode-alist '("\\.json$" . js-mode))
   (setq js-indent-level 2)
 
-  (defun my-js-mode-hook ()
+  (defun thomasf-js-mode-hook ()
     "My js-mode hook"
     ;; electric-layout-mode doesn't play nice with js-mode
-    (my-programming-hook)
+    (thomasf-programming-hook)
     (electric-layout-mode -1))
 
-  (add-hook 'js-mode-hook 'my-js-mode-hook)
+  (add-hook 'js-mode-hook 'thomasf-js-mode-hook)
 #+end_src
 
 JSON
@@ -826,7 +826,7 @@ JSON
   (add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
 
   (defun thomasf-json-mode-hook ()
-    (my-programming-hook)
+    (thomasf-programming-hook)
     (flymake-jsonlint-load))
 
   (add-hook 'json-mode-hook 'thomasf-json-mode-hook)
@@ -867,8 +867,8 @@ Disable slime for now
 
 #+begin_src emacs-lisp
   (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-  (add-hook 'emacs-lisp-mode-hook 'my-programming-hook)
-  (add-hook 'lisp-mode-hook 'my-programming-hook)
+  (add-hook 'emacs-lisp-mode-hook 'thomasf-programming-hook)
+  (add-hook 'lisp-mode-hook 'thomasf-programming-hook)
 
   (add-hook 'emacs-lisp-mode-hook 'emacs-lisp-remove-elc-on-save)
   (add-hook 'emacs-lisp-mode-hook '(lambda () "rainbown-delimiters" (rainbow-delimiters-mode)))
@@ -905,12 +905,12 @@ Disable slime for now
 
   (add-to-list 'auto-mode-alist '("\\.php$" . php-mode))
 
-  (defun my-php-mode-hook ()
+  (defun thomasf-php-mode-hook ()
     "My php mode hook"
-    (my-programming-hook)
+    (thomasf-programming-hook)
     (flymake-php-load))
 
-  (add-hook 'php-mode-hook 'my-php-mode-hook)
+  (add-hook 'php-mode-hook 'thomasf-php-mode-hook)
 
 #+end_src
 *** Python
@@ -924,14 +924,14 @@ Disable slime for now
   ;;(require 'ipython)
   ;;(setq org-babel-python-mode 'python-mode))
 
-  (defun my-python-mode-hook ()
-    (my-programming-hook)
+  (defun thomasf-python-mode-hook ()
+    (thomasf-programming-hook)
     (electric-indent-mode -1)
     (require 'ac-python)
     (setq ac-sources '(ac-source-yasnippet))
     (whitespace-mode))
 
-  (add-hook 'python-mode-hook 'my-python-mode-hook)
+  (add-hook 'python-mode-hook 'thomasf-python-mode-hook)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -961,13 +961,13 @@ Disable slime for now
   (add-to-list 'auto-mode-alist '("Guardfile$" . ruby-mode))
   (add-to-list 'completion-ignored-extensions ".rbc")
 
-  (defun my-ruby-hook ()
+  (defun thomasf-ruby-hook ()
     "My ruby hook"
-    (my-programming-hook)
+    (thomasf-programming-hook)
     (ruby-block-mode t)
     (setq ac-sources '(ac-source-imenu ac-source-yasnippet ac-source-words-in-buffer)))
 
-  (add-hook 'ruby-mode-hook 'my-ruby-hook)
+  (add-hook 'ruby-mode-hook 'thomasf-ruby-hook)
 #+end_src
 
 *** Java
@@ -998,12 +998,12 @@ Does not work very well..
 
 *** CSS
 #+begin_src emacs-lisp
-  (defun my-css-mode-hook ()
+  (defun thomasf-css-mode-hook ()
     "My css-mode hook"
-    (my-programming-hook)
+    (thomasf-programming-hook)
     (if window-system (rainbow-mode)))
 
-  (add-hook 'css-mode-hook 'my-css-mode-hook)
+  (add-hook 'css-mode-hook 'thomasf-css-mode-hook)
   (setq css-indent-offset 3)
 
   (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
@@ -1016,7 +1016,7 @@ Does not work very well..
 
   (defun thomasf-stylus-mode-hook ()
     "My stylus mode hook"
-    (my-programming-hook)
+    (thomasf-programming-hook)
     (if window-system (rainbow-mode))
     (auto-complete-mode))
 
@@ -1034,7 +1034,7 @@ Does not work very well..
   (add-to-list 'auto-mode-alist '("\\.mkdown$" . markdown-mode))
   (add-to-list 'auto-mode-alist '("\\.mdtext$" . markdown-mode))
 
-  (defun my-markdown-mode-hook ()
+  (defun thomasf-markdown-mode-hook ()
     "My markdown-mode hook"
     (setq markdown-command "pandoc -f markdown -t html")
     (define-key markdown-mode-map (kbd "<tab>") nil)
@@ -1042,7 +1042,7 @@ Does not work very well..
     (undo-tree-mode)
     (artbollocks-mode))
 
-  (add-hook 'markdown-mode-hook 'my-markdown-mode-hook)
+  (add-hook 'markdown-mode-hook 'thomasf-markdown-mode-hook)
 #+end_src
 *** HTML
 #+begin_src emacs-lisp
@@ -1051,13 +1051,13 @@ Does not work very well..
   (add-to-list 'auto-mode-alist '("\\.mustache$" . html-mode))
   (add-to-list 'auto-mode-alist '("\\.hb$" . html-mode))
 
-  (defun my-html-mode-hook ()
+  (defun thomasf-html-mode-hook ()
     "My html-mode-hook"
-    (my-programming-hook)
+    (thomasf-programming-hook)
     (zencoding-mode)
     (setq ac-sources '(ac-source-yasnippet)))
 
-  (add-hook 'html-mode-hook 'my-html-mode-hook)
+  (add-hook 'html-mode-hook 'thomasf-html-mode-hook)
 #+end_src
 
 *** YAML
