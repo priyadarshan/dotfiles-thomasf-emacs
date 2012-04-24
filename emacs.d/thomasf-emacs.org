@@ -361,6 +361,7 @@ Current:
 #+begin_src emacs-lisp
   (require 'auto-complete)
   (require 'auto-complete-config)
+  (require 'auto-complete-yasnippet)
   (global-auto-complete-mode t)
   ;;(setq ac-auto-start nil)
   (setq ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
@@ -1337,8 +1338,8 @@ Inspirations:
   (setq org-clock-report-include-clocking-task t)
 #+end_src
 ** Integrations
-*** yasnippet
-#+begin_src emacs-lisp :tangle thomasf-org.el
+*** TODO yasnippet
+#+begin_src emacs-lisp :tangle no
   (defun yas/org-very-safe-expand ()
     (let ((yas/fallback-behavior 'return-nil)) (yas/expand)))
 
