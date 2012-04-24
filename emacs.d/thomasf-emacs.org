@@ -1,7 +1,7 @@
 #+TITLE: Thomas Frössmans gnu emacs configuration
 #+AUTHOR: Thomas Frössman
 #+EMAIL: thomasf@jossystem.se
-#+TAGS: needsSeparation(s)
+#+TAGS: needsSeparation(s) needsExtraction(e)
 #+TAGS: bugsIssue(b) integrationIssue(i) loadingIssue(l) clearificationIssue(c) uncertianIssue(u) deprecationIssue(d)
 #+TODO: TODO WIP DONE DEPRECATED
 #+LANGUAGE: en
@@ -25,6 +25,11 @@ with in emacs I am now re-organizing of this configuration.
 Some things are not working.
 
 * WIP Working notes
+** TODO Split out larger chunks of code to the lisp/ directory
+This file should mainly generate hooks and autoloads!
+Everything will be much smoother this way..
+** TODO Autoloads
+Do manual high level autoloads.. ???
 ** WIP The todo states of this document
 
 ( states are considered to be inherited )
@@ -50,7 +55,6 @@ These packages are implemented and integrated all over this configuration.
 | yasnippet          | Snippet templating                                        |
 | flymake            | On the fly code validation                                |
 |                    |                                                           |
-
 
 * DONE Files and headers
 ** thomasf-bootstrap.el
@@ -129,14 +133,19 @@ Because babel should not have any chance to load from anywhere else
   (setq vendor-dir (concat dotfiles-dir "vendor/"))
   (setq notes-dir (file-truename "~/notes/"))
 
-  (let ((default-directory vendor-dir))
-    (setq load-path
-          (append
-           (let ((load-path (copy-sequence load-path)))
-             (append
-              (copy-sequence (normal-top-level-add-to-load-path '(".")))
-              (normal-top-level-add-subdirs-to-load-path)))
-           load-path)))
+  (defun prepend-load-path-recursive (path)
+    (let ((default-directory path))
+      (setq load-path
+            (append
+             (let ((load-path (copy-sequence load-path)))
+               (append
+                (copy-sequence (normal-top-level-add-to-load-path '(".")))
+                (normal-top-level-add-subdirs-to-load-path)))
+             load-path))))
+
+  (prepend-load-path-recursive vendor-dir)
+  (prepend-load-path-recursive (concat dotfiles-dir "lisp/"))
+
   (setq org-modules '(org-bibtex org-docview org-id org-info org-jsinfo org-habit org-mew org-mhe org-vm org-wl org-w3m org-git-link org-velocity))
   (require 'cl)
   (require 'org-install)
@@ -476,7 +485,7 @@ Current:
   (ido-everywhere t)
   (ido-ubiquitous-mode)
 #+end_src
-* WIP Utility functions
+* WIP Utility functions                                     :needsExtraction:
 ** DONE Insert csv as org table at point
 #+begin_src emacs-lisp :tangle thomasf-org.el
   (defun insert-file-as-org-table (filename)
@@ -807,30 +816,20 @@ This is only for x, I would guess.
     (electric-layout-mode -1))
 
   (add-hook 'js-mode-hook 'my-js-mode-hook)
-
 #+end_src
-**** TODO Flymake jsonlint
+
+JSON
+
 #+begin_src emacs-lisp
-  (require 'flymake)
-  (defun flymake-jsonlint-init ()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                       'flymake-create-temp-inplace))
-           (local-file (file-relative-name
-                        temp-file
-                        (file-name-directory buffer-file-name))))
-      (list "jsonlint" (list "-c" local-file))))
+  (autoload 'json-mode "json-mode" "json-mode" t)
+  (autoload 'flymake-jsonlint-load "flymake-jsonlint" "JSONlint flymake" t)
+  (add-to-list 'auto-mode-alist '("\\.json$" . json-mode))
 
-  (setq flymake-allowed-file-name-masks
-        (cons '(".+\\.json$"
-                flymake-jsonlint-init
-                flymake-simple-cleanup
-                flymake-get-real-file-name)
-              flymake-allowed-file-name-masks))
+  (defun thomasf-json-mode-hook ()
+    (my-programming-hook)
+    (flymake-jsonlint-load))
 
-  (setq flymake-err-line-patterns
-        (cons '("^\\(.*\\): line \\([[:digit:]]+\\), col \\([[:digit:]]+\\), \\(.+\\)$"
-                1 2 3 4)
-              flymake-err-line-patterns))
+  (add-hook 'json-mode-hook 'thomasf-json-mode-hook)
 #+end_src
 
 *** lisp
@@ -952,6 +951,8 @@ Disable slime for now
 #+end_src
 *** Ruby
 #+begin_src emacs-lisp
+  (autoload 'ruby-block-mode "ruby-block" "Ruby block mode" t)
+
   (add-to-list 'auto-mode-alist '("\\.rake$" . ruby-mode))
   (add-to-list 'auto-mode-alist '("Rakefile$" . ruby-mode))
   (add-to-list 'auto-mode-alist '("\\.gemspec$" . ruby-mode))
@@ -960,15 +961,11 @@ Disable slime for now
   (add-to-list 'auto-mode-alist '("Guardfile$" . ruby-mode))
   (add-to-list 'completion-ignored-extensions ".rbc")
 
-  (eval-after-load 'ruby-mode
-    '(progn
-       (require 'ruby-block)))
-
   (defun my-ruby-hook ()
     "My ruby hook"
     (my-programming-hook)
     (ruby-block-mode t)
-    (setq ac-sources '(ac-source-yasnippet ac-source-words-in-buffer)))
+    (setq ac-sources '(ac-source-imenu ac-source-yasnippet ac-source-words-in-buffer)))
 
   (add-hook 'ruby-mode-hook 'my-ruby-hook)
 #+end_src
@@ -1086,7 +1083,7 @@ Does not work very well..
   (setq gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
 #+end_src
 
-* org-mode
+* TODO org-mode
 ** TODO Orgmode
 !VERY MUCH STILL WIP!
 Inspirations:
@@ -1765,4 +1762,3 @@ This is very specific to how and what I do to my caps-lock key.
   (define-key global-map "\C-ca" 'org-agenda)
   (global-set-key (kbd "C-M-r") 'org-capture)
 #+end_src
-

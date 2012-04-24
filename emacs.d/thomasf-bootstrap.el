@@ -25,14 +25,19 @@
 (setq vendor-dir (concat dotfiles-dir "vendor/"))
 (setq notes-dir (file-truename "~/notes/"))
 
-(let ((default-directory vendor-dir))
-  (setq load-path
-        (append
-         (let ((load-path (copy-sequence load-path)))
-           (append
-            (copy-sequence (normal-top-level-add-to-load-path '(".")))
-            (normal-top-level-add-subdirs-to-load-path)))
-         load-path)))
+(defun prepend-load-path-recursive (path)
+  (let ((default-directory path))
+    (setq load-path
+          (append
+           (let ((load-path (copy-sequence load-path)))
+             (append
+              (copy-sequence (normal-top-level-add-to-load-path '(".")))
+              (normal-top-level-add-subdirs-to-load-path)))
+           load-path))))
+
+(prepend-load-path-recursive vendor-dir)
+(prepend-load-path-recursive (concat dotfiles-dir "lisp/"))
+
 (setq org-modules '(org-bibtex org-docview org-id org-info org-jsinfo org-habit org-mew org-mhe org-vm org-wl org-w3m org-git-link org-velocity))
 (require 'cl)
 (require 'org-install)
