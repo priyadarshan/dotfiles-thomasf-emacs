@@ -361,7 +361,7 @@ Current:
 #+begin_src emacs-lisp
   (require 'auto-complete)
   (require 'auto-complete-config)
-  (require 'auto-complete-yasnippet)
+  ;;(require 'auto-complete-yasnippet)
   (global-auto-complete-mode t)
   ;;(setq ac-auto-start nil)
   (setq ac-dwim nil) ; To get pop-ups with docs even if a word is uniquely completed
