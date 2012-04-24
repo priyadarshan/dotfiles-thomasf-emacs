@@ -202,22 +202,20 @@ Set themes load path
   (load "~/.emacs-private" 'noerror 'nomessage)
   (load custom-file 'noerror 'nomessage)
 #+end_src
-** Set up autoloads
+** WIP Set up autoloads
+These should probably generally be moved to where they are configured
 #+begin_src emacs-lisp
-  (autoload 'multi-web-mode "multi-web-mode" "Multi web mode" t)
+
   (autoload 'sws-mode "sws-mode" "Sws mode" t)
   (autoload 'jade-mode "jade-mode" "Jade mode" t)
-  (autoload 'stylus-mode "stylus-mode" "Stylus mode" t)
   (autoload 'describe-unbound-keys "unbound" "Find unbound keys" t)
   (autoload 'zencoding-mode "zencoding-mode" "Zen coding mode" t)
   (autoload 'nyan-mode "nyan-mode" "Nyan mode" t)
   (autoload 'global-yascroll-bar-mode "yascroll" "Yascroll" t)
   (autoload 'artbollocks-mode "artbollocks-mode" "Artbollocks mode" t)
-  (autoload 'haskell-align-imports "haskell-align-imports" "haskell-align-imports" t)
-  (autoload 'haskell-navigate-imports "haskell-navigate-imports" "haskell-navigate-imports" t)
-  (autoload 'haskell-sort-imports "haskell-sort-imports" "haskell-sort-imports" t)
+
   (load "go-mode-load")
-  (load "haskell-site-file")
+
   (load "50magit")
 #+end_src
 ** TODO Load whats always wanted                           :needsSeparation:
@@ -730,7 +728,7 @@ This is only for x, I would guess.
     (if window-system (hl-line-mode +1)))
 #+end_src
 ** Programming languages
-*** Erlang
+*** DEPRECATED Erlang
 #+begin_src emacs-lisp
   (add-to-list 'auto-mode-alist '("\\.erl$" . erlang-mode))
   (add-to-list 'auto-mode-alist '("\\.hrl$" . erlang-mode))
@@ -738,14 +736,19 @@ This is only for x, I would guess.
   (defun my-erlang-hook ()
     (my-programming-hook))
 #+end_src
-*** Haskell
+*** DONE Haskell
 #+begin_src emacs-lisp
+  (autoload 'haskell-align-imports "haskell-align-imports" "haskell-align-imports" t)
+  (autoload 'haskell-navigate-imports "haskell-navigate-imports" "haskell-navigate-imports" t)
+  (autoload 'haskell-sort-imports "haskell-sort-imports" "haskell-sort-imports" t)
+  (load "haskell-site-file")
+
   (defun my-haskell-mode-hook ()
     "My haskell-mode hook"
     (my-programming-hook)
     (turn-on-haskell-doc-mode)
     (turn-on-haskell-indentation)
-    (rainbow-delimiters-mode)
+    (if window-system (rainbow-delimiters-mode))
     (eldoc-mode))
 
   (add-hook 'haskell-mode-hook 'my-haskell-mode-hook)
@@ -782,7 +785,7 @@ This is only for x, I would guess.
 
       (add-hook 'coffee-mode-hook 'my-coffee-mode-hook)
 #+end_src
-*** TODO JavaScript
+*** JavaScript
 #+begin_src emacs-lisp
   (font-lock-add-keywords
    'js-mode `(("\\(function *\\)("
@@ -830,7 +833,7 @@ This is only for x, I would guess.
               flymake-err-line-patterns))
 #+end_src
 
-*** TODO lisp
+*** lisp
 - Should all lisp modes be in the same place?
 Most of this is just copied without ever read
 
@@ -978,7 +981,12 @@ Disable slime for now
        (require 'eclim)))
 #+end_src
 ** Markup/text languages
-*** TODO Multi web mode
+*** DEPRECATED Multi web mode
+Does not work very well..
+
+#+begin_src emacs-lisp
+  (autoload 'multi-web-mode "multi-web-mode" "Multi web mode" t)
+#+end_src
 
 #+begin_src emacs-lisp :tangle no
   (require 'multi-web-mode)
@@ -1002,6 +1010,20 @@ Disable slime for now
   (setq css-indent-offset 3)
 
   (add-to-list 'auto-mode-alist '("\\.css$" . css-mode))
+#+end_src
+
+*** Stylus
+#+begin_src emacs-lisp
+  (autoload 'stylus-mode "stylus-mode" "Stylus mode" t)
+  (add-to-list 'auto-mode-alist '("\\.styl$" . stylus-mode))
+
+  (defun thomasf-stylus-mode-hook ()
+    "My stylus mode hook"
+    (my-programming-hook)
+    (if window-system (rainbow-mode))
+    (auto-complete-mode))
+
+  (add-hook 'stylus-mode-hook 'thomasf-stylus-mode-hook)
 #+end_src
 
 *** Markdown
@@ -1064,7 +1086,7 @@ Disable slime for now
   (setq gnus-ignored-newsgroups "^to\\.\\|^[0-9. ]+\\( \\|$\\)\\|^[\"]\"[#'()]")
 #+end_src
 
-* ORGmode!
+* org-mode
 ** TODO Orgmode
 !VERY MUCH STILL WIP!
 Inspirations:
