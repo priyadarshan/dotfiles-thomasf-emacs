@@ -891,7 +891,6 @@ Inspirations:
   (setq org-agenda-text-search-extra-files (file-expand-wildcards (concat notes-dir "org/*.org")))
   (setq org-default-notes-file (concat notes-dir "agenda/refile.org"))
   (setq org-mobile-inbox-for-pull (concat notes-dir "from-mobile.org"))
-  (setq org-icalendar-alarm-time 240)
 #+end_src
 ** Settings
 *** Misc
@@ -920,9 +919,10 @@ Inspirations:
   (setq org-icalendar-include-body t
         org-icalendar-include-sexps t
         org-icalendar-store-UID t
-        org-icalendar-include-todo 'all
+        org-icalendar-include-todo t
         org-icalendar-use-scheduled '(todo-due event-if-todo event-if-not-todo)
-        org-icalendar-use-deadline '(todo-due event-if-todo event-if-not-todo))
+        org-icalendar-use-deadline '(todo-due event-if-todo event-if-not-todo)
+        org-icalendar-alarm-time 240)
 #+end_src
 
 **** Agenda commands
