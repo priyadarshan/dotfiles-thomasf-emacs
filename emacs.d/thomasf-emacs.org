@@ -886,20 +886,13 @@ Inspirations:
 - http://orgmode
 - http://doc.norang.ca/org-mode.html
 
-** SET UP ORG MODE LOADING!!!
-#+begin_src emacs-lisp
-  (eval-after-load "org-agenda"
-    '(progn
-       (require 'thomasf-org-agenda)))
-
-#+end_src
 ** Set up basic paths for org and org-agenda
 #+begin_src emacs-lisp :tangle thomasf-org.el
-  (setq org-directory notes-dir)
-  (setq org-agenda-files (file-expand-wildcards (concat notes-dir "agenda/*.org")))
-  (setq org-agenda-text-search-extra-files (file-expand-wildcards (concat notes-dir "org/*.org")))
-  (setq org-default-notes-file (concat notes-dir "agenda/refile.org"))
-  (setq org-mobile-inbox-for-pull (concat notes-dir "from-mobile.org"))
+  (setq org-directory notes-dir
+        org-agenda-files (file-expand-wildcards (concat notes-dir "agenda/*.org"))
+        org-agenda-text-search-extra-files (file-expand-wildcards (concat notes-dir "org/*.org"))
+        org-default-notes-file (concat notes-dir "agenda/refile.org")
+        org-mobile-inbox-for-pull (concat notes-dir "from-mobile.org"))
 #+end_src
 ** Settings
 *** Misc
@@ -936,8 +929,8 @@ Inspirations:
 
 *** Refile
 #+begin_src emacs-lisp :tangle thomasf-org.el
-  (setq org-refile-targets (quote ((org-agenda-files :level . 2))))
-  (setq org-refile-use-outline-path (quote file))
+  (setq org-refile-targets (quote ((org-agenda-files :level . 2)))
+        org-refile-use-outline-path (quote file))
 #+end_src
 *** Todo
 **** Default todo states
@@ -1068,17 +1061,6 @@ Inspirations:
 ** MAJOR block'o'code
 
 #+begin_src emacs-lisp :tangle thomasf-org.el
-  (defun bh/find-project-task ()
-    "Move point to the parent (project) task if any"
-    (save-restriction
-      (widen)
-      (let ((parent-task (save-excursion (org-back-to-heading 'invisible-ok) (point))))
-        (while (org-up-heading-safe)
-          (when (member (nth 2 (org-heading-components)) org-todo-keywords-1)
-            (setq parent-task (point))))
-        (goto-char parent-task)
-        parent-task)))
-
 
   ;; (define-key mode-specific-map [?a] 'org-agenda)
 
@@ -1096,18 +1078,13 @@ Inspirations:
   ;; Allow setting single tags without the menu
   ;; (setq org-fast-tag-selection-single-key (quote expert))
 
-
   ;; DIsable orgmode default stuck projects ist
   (setq org-stuck-projects (quote ("" nil nil "")))
-
-  ;; Disable priorities
-  ;; (setq org-enable-priority-commands nil)
-
 
   ;; enable flyspell for all org-mode buffers
   ;;(add-hook 'org-mode-hook 'turn-on-flyspell 'append)
   ;; enable auto revert for all org-mode buffers
-  (add-hook 'org-mode-hook 'turn-on-auto-revert-mode 'append)
+  ;;(add-hook 'org-mode-hook 'turn-on-auto-revert-mode 'append)
 
   ;; Disable default key bindings for include/remove from org agenda
   (add-hook 'org-mode-hook
@@ -1214,6 +1191,17 @@ leaving this untangeled for now, not sure if I even want clocking at all
 
   (add-hook 'org-clock-out-hook 'bh/clock-out-maybe 'append)
 #+end_src
+
+
+
+** SET UP ORG MODE LOADING!!!
+#+begin_src emacs-lisp
+  (eval-after-load "org-agenda"
+    '(progn
+       (require 'thomasf-org-agenda)))
+
+#+end_src
+
 
 * Key bindings
 ** Global

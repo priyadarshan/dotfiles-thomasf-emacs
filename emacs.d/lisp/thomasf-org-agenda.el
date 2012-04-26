@@ -1,3 +1,4 @@
+(require 'thomasf-org)
 (require 'org-agenda)
 (require 'org-checklist)
 
@@ -20,15 +21,16 @@
                            ((org-agenda-overriding-header "Stuck Projects")
                             (org-tags-match-list-sublevels 'indented)
                             (org-agenda-skip-function 'bh/skip-non-stuck-projects)))
-                (tags-todo "-waiting-cancelled/!next"
+                (tags-todo "-waiting-cancelled/!NEXT"
                            ((org-agenda-overriding-header "Next Tasks")
                             (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
                             (org-agenda-todo-ignore-scheduled t)
                             (org-agenda-todo-ignore-deadlines t)
+                            (org-agenda-todo-ignore-with-date t)
                             (org-tags-match-list-sublevels t)
                             (org-agenda-sorting-strategy
                              '(todo-state-down effort-up category-keep))))
-                (tags-todo "-refile-cancelled/!-hold-waiting"
+                (tags-todo "-refile-cancelled/!-HOLD-WAITING"
                            ((org-agenda-overriding-header "Tasks")
                             (org-agenda-skip-function 'bh/skip-project-tasks-maybe)
                             (org-agenda-todo-ignore-scheduled t)
@@ -42,7 +44,7 @@
                             (org-agenda-todo-ignore-deadlines 'future)
                             (org-agenda-sorting-strategy
                              '(category-keep))))
-                (tags-todo "-cancelled/!waiting|hold"
+                (tags-todo "-cancelled/!WAITING|HOLD"
                            ((org-agenda-overriding-header "Waiting and Postponed Tasks")
                             (org-agenda-skip-function 'bh/skip-projects-and-habits)
                             (org-agenda-todo-ignore-scheduled t)
@@ -57,7 +59,7 @@
               ("#" "Stuck Projects" tags-todo "-cancelled/!"
                ((org-agenda-overriding-header "Stuck Projects")
                 (org-agenda-skip-function 'bh/skip-non-stuck-projects)))
-              ("n" "Next Tasks" tags-todo "-waiting-cancelled/!next"
+              ("n" "Next Tasks" tags-todo "-waiting-cancelled/!NEXT"
                ((org-agenda-overriding-header "Next Tasks")
                 (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
                 (org-agenda-todo-ignore-scheduled t)
@@ -65,7 +67,7 @@
                 (org-tags-match-list-sublevels t)
                 (org-agenda-sorting-strategy
                  '(todo-state-down effort-up category-keep))))
-              ("R" "Tasks" tags-todo "-refile-cancelled/!-hold-waiting"
+              ("R" "Tasks" tags-todo "-refile-cancelled/!-HOLD-WAITING"
                ((org-agenda-overriding-header "Tasks")
                 (org-agenda-skip-function 'bh/skip-project-tasks-maybe)
                 (org-agenda-sorting-strategy
@@ -77,7 +79,7 @@
                 (org-agenda-todo-ignore-deadlines 'future)
                 (org-agenda-sorting-strategy
                  '(category-keep))))
-              ("w" "Waiting Tasks" tags-todo "-cancelled/!waiting|hold"
+              ("w" "Waiting Tasks" tags-todo "-cancelled/!WAITING|HOLD"
                ((org-agenda-overriding-header "Waiting and Postponed tasks"))
                (org-agenda-skip-function 'bh/skip-projects-and-habits)
                (org-agenda-todo-ignore-scheduled 'future)
@@ -188,6 +190,27 @@
         nil
       next-headline)))
 
+
+(defun bh/skip-non-stuck-projects ()
+  "Skip trees that are not stuck projects"
+  (bh/list-sublevels-for-projects-indented)
+  (save-restriction
+    (widen)
+    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
+      (if (bh/is-project-p)
+          (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
+                 (has-next ))
+            (save-excursion
+              (forward-line 1)
+              (while (and (not has-next) (< (point) subtree-end) (re-search-forward "^\\*+ NEXT " subtree-end t))
+                (unless (member "WAITING" (org-get-tags-at))
+                  (setq has-next t))))
+            (if has-next
+                next-headline
+              nil)) ; a stuck project, has subtasks but no next task
+        next-headline))))
+
+
 ;; functions for projects
 
 (defun bh/is-project-p ()
@@ -260,5 +283,16 @@
   nil)
 
 
+
+(defun bh/find-project-task ()
+  "Move point to the parent (project) task if any"
+  (save-restriction
+    (widen)
+    (let ((parent-task (save-excursion (org-back-to-heading 'invisible-ok) (point))))
+      (while (org-up-heading-safe)
+        (when (member (nth 2 (org-heading-components)) org-todo-keywords-1)
+          (setq parent-task (point))))
+      (goto-char parent-task)
+      parent-task)))
 
 (provide 'thomasf-org-agenda)
