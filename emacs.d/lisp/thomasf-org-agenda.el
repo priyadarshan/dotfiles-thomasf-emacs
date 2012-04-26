@@ -35,6 +35,7 @@
                             (org-agenda-skip-function 'bh/skip-project-tasks-maybe)
                             (org-agenda-todo-ignore-scheduled t)
                             (org-agenda-todo-ignore-deadlines t)
+                            (org-agenda-todo-ignore-with-date t)
                             (org-agenda-sorting-strategy
                              '(category-keep))))
                 (tags-todo "-cancelled/!"
@@ -51,7 +52,8 @@
                             (org-agenda-todo-ignore-deadlines t)))
                 (tags "-refile/"
                       ((org-agenda-overriding-header "Tasks to Archive")
-                       (org-agenda-skip-function 'bh/skip-non-archivable-tasks))))
+                       (org-agenda-skip-function 'bh/skip-non-archivable-tasks)
+                       (org-tags-match-list-sublevels nil))))
                nil)
               ("r" "Tasks to Refile" tags "REFILE"
                ((org-agenda-overriding-header "Tasks to Refile")
@@ -64,6 +66,7 @@
                 (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
                 (org-agenda-todo-ignore-scheduled t)
                 (org-agenda-todo-ignore-deadlines t)
+                (org-agenda-todo-ignore-with-date t)
                 (org-tags-match-list-sublevels t)
                 (org-agenda-sorting-strategy
                  '(todo-state-down effort-up category-keep))))
@@ -75,18 +78,15 @@
               ("p" "Projects" tags-todo "-cancelled/!"
                ((org-agenda-overriding-header "Projects")
                 (org-agenda-skip-function 'bh/skip-non-projects)
-                (org-agenda-todo-ignore-scheduled 'future)
-                (org-agenda-todo-ignore-deadlines 'future)
                 (org-agenda-sorting-strategy
                  '(category-keep))))
               ("w" "Waiting Tasks" tags-todo "-cancelled/!WAITING|HOLD"
                ((org-agenda-overriding-header "Waiting and Postponed tasks"))
-               (org-agenda-skip-function 'bh/skip-projects-and-habits)
-               (org-agenda-todo-ignore-scheduled 'future)
-               (org-agenda-todo-ignore-deadlines 'future))
+               (org-agenda-skip-function 'bh/skip-projects-and-habits))
               ("A" "Tasks to Archive" tags "-refile/"
                ((org-agenda-overriding-header "Tasks to Archive")
-                (org-agenda-skip-function 'bh/skip-non-archivable-tasks))))))
+                (org-agenda-skip-function 'bh/skip-non-archivable-tasks)
+                (org-tags-match-list-sublevels nil))))))
 
 
 ;; Functions for filtering agenda views
