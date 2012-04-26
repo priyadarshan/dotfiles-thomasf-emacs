@@ -253,7 +253,7 @@ New stuff, to want?
 ;;  (require 'find-file-in-project)
 #+end_src
 
-* WIP Misc                              :needsSeparation:clearificationIssue:
+* WIP General variable configuration    :needsSeparation:clearificationIssue:
 
 Basic variable settings should be
 split from functions and stuff that
@@ -485,6 +485,13 @@ Current:
   (ido-mode t)
   (ido-everywhere t)
   (ido-ubiquitous-mode)
+#+end_src
+* WIP Common configuration
+** Flymake
+#+begin_src emacs-lisp
+  (eval-after-load "flymake"
+    '(progn
+       (require 'flymake-cursor)))
 #+end_src
 * WIP Utility functions                                     :needsExtraction:
 ** DONE Insert csv as org table at point
