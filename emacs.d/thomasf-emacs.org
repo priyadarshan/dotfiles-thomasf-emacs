@@ -730,19 +730,20 @@ Disable slime for now
   (add-hook 'python-mode-hook 'thomasf-python-mode-hook)
 #+end_src
 
-#+begin_src emacs-lisp :tangle no
-  (when (load "flymake" t)
-    (defun flymake-pylint-init (&optional trigger-type)
-      (let* ((temp-file (flymake-init-create-temp-buffer-copy
-                         'flymake-create-temp-with-folder-structure))
-             (local-file (file-relative-name
-                          temp-file
-                          (file-name-directory buffer-file-name)))
-             (options (when trigger-type (list "--trigger-type" trigger-type))))
-        (list  (concat vendor-dir "flymake-python/pyflymake.py") (append options (list local-file)))))
+#+begin_src emacs-lisp
+  (eval-after-load "flymake"
+    '(progn
+       (defun flymake-pylint-init (&optional trigger-type)
+         (let* ((temp-file (flymake-init-create-temp-buffer-copy
+                            'flymake-create-temp-with-folder-structure))
+                (local-file (file-relative-name
+                             temp-file
+                             (file-name-directory buffer-file-name)))
+                (options (when trigger-type (list "--trigger-type" trigger-type))))
+           (list  (concat vendor-dir "flymake-python/pyflymake.py") (append options (list local-file)))))
 
-    (add-to-list 'flymake-allowed-file-name-masks
-                 '("\\.py\\'" flymake-pylint-init)))
+       (add-to-list 'flymake-allowed-file-name-masks
+                    '("\\.py\\'" flymake-pylint-init))))
 
 #+end_src
 *** Ruby
