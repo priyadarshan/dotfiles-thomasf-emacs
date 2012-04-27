@@ -2,7 +2,7 @@
 (require 'org-agenda)
 (require 'org-checklist)
 
-;; Custom agenda commands
+;;;; Custom agenda commands
 
 (setq org-agenda-custom-commands
       (quote (("N" "Notes" tags "note"
@@ -89,7 +89,8 @@
                 (org-tags-match-list-sublevels nil))))))
 
 
-;; Functions for filtering agenda views
+;;;; Agenda view filtering
+
 (defun bh/skip-non-stuck-projects ()
   "Skip trees that are not stuck projects"
   (save-restriction
@@ -231,7 +232,7 @@
               nil))  ; available to archive
         (or next-headline (point-max))))))
 
-;; functions for projects
+;; Project function
 
 (defun bh/is-project-p ()
   "Any task with a todo keyword subtask"
@@ -312,5 +313,88 @@
           (setq parent-task (point))))
       (goto-char parent-task)
       parent-task)))
+
+
+
+;;;; Agenda view sorting
+
+(setq org-agenda-sorting-strategy
+      (quote ((agenda habit-down time-up user-defined-up priority-down effort-up category-keep)
+              (todo category-up priority-down effort-up)
+              (tags category-up priority-down effort-up)
+              (search category-up))))
+
+(setq org-agenda-tags-column -102)
+(setq org-agenda-cmp-user-defined 'bh/agenda-sort)
+
+(defun bh/agenda-sort (a b)
+  "Sorting strategy for agenda items.
+Late deadlines first, then scheduled, then non-late deadlines"
+  (let (result num-a num-b)
+    (cond
+     ((bh/agenda-sort-test 'bh/is-not-scheduled-or-deadline a b))
+     ((bh/agenda-sort-test 'bh/is-due-deadline a b))
+     ((bh/agenda-sort-test-num 'bh/is-late-deadline '< a b))
+     ((bh/agenda-sort-test 'bh/is-scheduled-today a b))
+     ((bh/agenda-sort-test-num 'bh/is-scheduled-late '> a b))
+     ((bh/agenda-sort-test-num 'bh/is-pending-deadline '< a b))
+     (t (setq result nil)))
+    result))
+
+(defmacro bh/agenda-sort-test (fn a b)
+  "Test for agenda sort"
+  `(cond
+    ((and (apply ,fn (list ,a))
+          (apply ,fn (list ,b)))
+     (setq result nil))
+    ((apply ,fn (list ,a))
+     (setq result -1))
+    ((apply ,fn (list ,b))
+     (setq result 1))
+    (t nil)))
+
+(defmacro bh/agenda-sort-test-num (fn compfn a b)
+  `(cond
+    ((apply ,fn (list ,a))
+     (setq num-a (string-to-number (match-string 1 ,a)))
+     (if (apply ,fn (list ,b))
+         (progn
+           (setq num-b (string-to-number (match-string 1 ,b)))
+           (setq result (if (apply ,compfn (list num-a num-b))
+                            -1
+                          1)))
+       (setq result -1)))
+    ((apply ,fn (list ,b))
+     (setq result 1))
+    (t nil)))
+
+(defun bh/is-not-scheduled-or-deadline (date-str)
+  (and (not (bh/is-deadline date-str))
+       (not (bh/is-scheduled date-str))))
+
+(defun bh/is-due-deadline (date-str)
+  (string-match "Deadline:" date-str))
+
+(defun bh/is-late-deadline (date-str)
+  (string-match "In *\\(-.*\\)d\.:" date-str))
+
+(defun bh/is-pending-deadline (date-str)
+  (string-match "In \\([^-]*\\)d\.:" date-str))
+
+(defun bh/is-deadline (date-str)
+  (or (bh/is-due-deadline date-str)
+      (bh/is-late-deadline date-str)
+      (bh/is-pending-deadline date-str)))
+
+(defun bh/is-scheduled (date-str)
+  (or (bh/is-scheduled-today date-str)
+      (bh/is-scheduled-late date-str)))
+
+(defun bh/is-scheduled-today (date-str)
+  (string-match "Scheduled:" date-str))
+
+(defun bh/is-scheduled-late (date-str)
+  (string-match "Sched\.\\(.*\\)x:" date-str))
+
 
 (provide 'thomasf-org-agenda)
