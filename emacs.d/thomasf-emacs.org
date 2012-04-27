@@ -1282,5 +1282,6 @@ This is very specific to how and what I do to my caps-lock key.
 #+begin_src emacs-lisp :tangle thomasf-org.el
   (define-key global-map "\C-cl" 'org-store-link)
   (define-key global-map "\C-ca" 'org-agenda)
+  (global-set-key "\C-cb" 'org-iswitchb)
   (global-set-key (kbd "C-M-r") 'org-capture)
 #+end_src
