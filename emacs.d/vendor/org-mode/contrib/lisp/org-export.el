@@ -145,8 +145,8 @@
     (:with-todo-keywords nil "todo" org-export-with-todo-keywords))
   "Alist between export properties and ways to set them.
 
-The car of the alist is the property name, and the cdr is a list
-like \(KEYWORD OPTION DEFAULT BEHAVIOUR\) where:
+The CAR of the alist is the property name, and the CDR is a list
+like (KEYWORD OPTION DEFAULT BEHAVIOUR) where:
 
 KEYWORD is a string representing a buffer keyword, or nil.
 OPTION is a string that could be found in an #+OPTIONS: line.
@@ -630,9 +630,10 @@ This variable can be either set to `buffer' or `subtree'."
 (defcustom org-export-show-temporary-export-buffer t
   "Non-nil means show buffer after exporting to temp buffer.
 When Org exports to a file, the buffer visiting that file is ever
-shown, but remains buried.  However, when exporting to a temporary
-buffer, that buffer is popped up in a second window.  When this variable
-is nil, the buffer remains buried also in these cases."
+shown, but remains buried.  However, when exporting to
+a temporary buffer, that buffer is popped up in a second window.
+When this variable is nil, the buffer remains buried also in
+these cases."
   :group 'org-export-general
   :type 'boolean)
 
@@ -942,7 +943,9 @@ inferior to file-local settings."
 		   (and buffer-file-name
 			(org-remove-double-quotes buffer-file-name)))
 		  ;; ... and from subtree, when appropriate.
-		  (and subtreep (org-export-get-subtree-options)))))
+		  (and subtreep (org-export-get-subtree-options))
+		  ;; Also install back-end symbol.
+		  `(:back-end ,backend))))
     ;; Return plist.
     options))
 
@@ -1258,16 +1261,13 @@ retrieved."
 ;; `org-export-collect-headline-numbering' builds an alist between
 ;; headlines and their numbering.
 
-(defun org-export-collect-tree-properties (data info backend)
+(defun org-export-collect-tree-properties (data info)
   "Extract tree properties from parse tree.
 
 DATA is the parse tree from which information is retrieved.  INFO
-is a list holding export options.  BACKEND is the back-end called
-for transcoding, as a symbol.
+is a list holding export options.
 
 Following tree properties are set or updated:
-`:back-end'        Back-end used for transcoding.
-
 `:footnote-definition-alist' List of footnotes definitions in
                    original buffer and current parse tree.
 
@@ -1281,8 +1281,6 @@ Following tree properties are set or updated:
 
 `:ignore-list'     List of elements that should be ignored during
                    export.
-
-`:parse-tree'      Whole parse tree.
 
 `:target-list'     List of all targets in the parse tree."
   ;; Install the parse tree in the communication channel, in order to
@@ -1324,8 +1322,7 @@ Following tree properties are set or updated:
 	 (when (or (eq (org-element-type blob) 'target)
 		   (string= (org-element-property :key blob) "TARGET"))
 	   blob)) info)
-     :headline-numbering ,(org-export-collect-headline-numbering data info)
-     :back-end ,backend)
+     :headline-numbering ,(org-export-collect-headline-numbering data info))
    info))
 
 (defun org-export-get-min-level (data options)
@@ -1498,17 +1495,14 @@ OPTIONS is the plist holding export options."
 ;; `org-export-expand' transforms the others back into their original
 ;; shape.
 
-(defun org-export-data (data backend info)
-  "Convert DATA to a string into BACKEND format.
+(defun org-export-data (data info)
+  "Convert DATA into current back-end format.
 
 DATA is a nested list as returned by `org-element-parse-buffer'.
 
-BACKEND is a symbol among supported exporters.
-
 INFO is a plist holding export options and also used as
 a communication channel between elements when walking the nested
-list.  See `org-export-update-info' function for more
-details.
+list.
 
 Return transcoded string."
   (mapconcat
@@ -1521,11 +1515,12 @@ Return transcoded string."
       ;; return string.  Also update INFO and call
       ;; `org-export-filter-plain-text-functions'.
       ((stringp blob)
-       (let ((transcoder (intern (format "org-%s-plain-text" backend))))
+       (let ((transcoder (intern (format "org-%s-plain-text"
+					 (plist-get info :back-end)))))
 	 (org-export-filter-apply-functions
 	  (plist-get info :filter-plain-text)
 	  (if (fboundp transcoder) (funcall transcoder blob info) blob)
-	  backend info)))
+	  info)))
       ;; BLOB is an element or an object.
       (t
        (let* ((type (org-element-type blob))
@@ -1540,7 +1535,9 @@ Return transcoded string."
 		;;      back into Org syntax.
 		((not (org-export-interpret-p blob info)) 'org-export-expand)
 		;; 1.3. Else apply naming convention.
-		(t (let ((trans (intern (format "org-%s-%s" backend type))))
+		(t (let ((trans (intern (format "org-%s-%s"
+						(plist-get info :back-end)
+						type))))
 		     (and (fboundp trans) trans)))))
 	      ;; 2. Compute CONTENTS of BLOB.
 	      (contents
@@ -1548,7 +1545,7 @@ Return transcoded string."
 		;; Case 0. No transcoder or no contents: ignore BLOB.
 		((or (not transcoder) (not (org-element-contents blob))) nil)
 		;; Case 1. Transparently export an Org document.
-		((eq type 'org-data) (org-export-data blob backend info))
+		((eq type 'org-data) (org-export-data blob info))
 		;; Case 2. For a greater element.
 		((memq type org-element-greater-elements)
 		 ;; Ignore contents of an archived tree
@@ -1557,8 +1554,7 @@ Return transcoded string."
 			  (eq type 'headline)
 			  (eq (plist-get info :with-archived-trees) 'headline)
 			  (org-element-property :archivedp blob))
-		   (org-element-normalize-string
-		    (org-export-data blob backend info))))
+		   (org-element-normalize-string (org-export-data blob info))))
 		;; Case 3. For an element containing objects.
 		(t
 		 (org-export-data
@@ -1573,14 +1569,14 @@ Return transcoded string."
 			(let ((parent (org-export-get-parent blob info)))
 			  (memq (org-element-type parent)
 				'(footnote-definition item)))))
-		  backend info))))
+		  info))))
 	      ;; 3. Transcode BLOB into RESULTS string.
 	      (results (cond
 			((not transcoder) nil)
 			((eq transcoder 'org-export-expand)
 			 (org-export-data
 			  `(org-data nil ,(funcall transcoder blob contents))
-			  backend info))
+			  info))
 			(t (funcall transcoder blob contents info)))))
 	 ;; 4. Return results.
 	 (cond
@@ -1599,24 +1595,22 @@ Return transcoded string."
 			 (concat (org-element-normalize-string results)
 				 (make-string post-blank ?\n))
 		       (concat results (make-string post-blank ? ))))
-		   backend info)))
+		   info)))
 	     ;; Eventually return string.
 	     results)))))))
    (org-element-contents data) ""))
 
-(defun org-export-secondary-string (secondary backend info)
-  "Convert SECONDARY string into BACKEND format.
+(defun org-export-secondary-string (secondary info)
+  "Convert SECONDARY string into current back-end target format.
 
 SECONDARY is a nested list as returned by
-`org-element-parse-secondary-string'.
-
-BACKEND is a symbol among supported exporters.  INFO is a plist
-used as a communication channel.
+`org-element-parse-secondary-string'.  INFO is a plist used as
+a communication channel.
 
 Return transcoded string."
   ;; Make SECONDARY acceptable for `org-export-data'.
   (let ((s (if (listp secondary) secondary (list secondary))))
-    (org-export-data `(org-data nil ,@s) backend (copy-sequence info))))
+    (org-export-data `(org-data nil ,@s) (copy-sequence info))))
 
 (defun org-export-interpret-p (blob info)
   "Non-nil if element or object BLOB should be interpreted as Org syntax.
@@ -1663,15 +1657,15 @@ Any element in `:ignore-list' will be skipped when using
 ;; Filters allow end-users to tweak easily the transcoded output.
 ;; They are the functional counterpart of hooks, as every filter in
 ;; a set is applied to the return value of the previous one.
-
+;;
 ;; Every set is back-end agnostic.  Although, a filter is always
 ;; called, in addition to the string it applies to, with the back-end
 ;; used as argument, so it's easy enough for the end-user to add
 ;; back-end specific filters in the set.  The communication channel,
 ;; as a plist, is required as the third argument.
-
+;;
 ;; Filters sets are defined below. There are of four types:
-
+;;
 ;; - `org-export-filter-parse-tree-functions' applies directly on the
 ;;   complete parsed tree.  It's the only filters set that doesn't
 ;;   apply to a string.
@@ -1681,32 +1675,46 @@ Any element in `:ignore-list' will be skipped when using
 ;;   not recognized as Org syntax.
 ;; - `org-export-filter-TYPE-functions' applies on the string returned
 ;;   after an element or object of type TYPE has been transcoded.
-
+;;
 ;; All filters sets are applied through
 ;; `org-export-filter-apply-functions' function.  Filters in a set are
 ;; applied in a LIFO fashion.  It allows developers to be sure that
 ;; their filters will be applied first.
+;;
+;; Filters properties are installed in communication channel with
+;; `org-export-install-filters' function.
+;;
+;; Eventually, a hook (`org-export-before-parsing-hook') is run just
+;; before parsing to allow for heavy structure modifications.
 
-;; Filters properties are installed in communication channel just
-;; before parsing, with `org-export-install-filters' function.
+
+;;;; Before Parsing Hook
+
+(defvar org-export-before-parsing-hook nil
+  "Hook run before parsing an export buffer.
+This is run after include keywords have been expanded and Babel
+code executed, on a copy of original buffer's area being
+exported.  Visibility is the same as in the original one.  Point
+is left at the beginning of the new one.")
 
 ;;;; Special Filters
+
 (defvar org-export-filter-parse-tree-functions nil
-  "Filter, or list of filters, applied to the parsed tree.
+  "List of functions applied to the parsed tree.
 Each filter is called with three arguments: the parse tree, as
 returned by `org-element-parse-buffer', the back-end, as
 a symbol, and the communication channel, as a plist.  It must
 return the modified parse tree to transcode.")
 
 (defvar org-export-filter-final-output-functions nil
-  "Filter, or list of filters, applied to the transcoded string.
+  "List of functions applied to the transcoded string.
 Each filter is called with three arguments: the full transcoded
 string, the back-end, as a symbol, and the communication channel,
 as a plist.  It must return a string that will be used as the
 final export output.")
 
 (defvar org-export-filter-plain-text-functions nil
-  "Filter, or list of filters, applied to plain text.
+  "List of functions applied to plain text.
 Each filter is called with three arguments: a string which
 contains no Org syntax, the back-end, as a symbol, and the
 communication channel, as a plist.  It must return a string or
@@ -2029,21 +2037,20 @@ verbatim, as a string, the back-end, as a symbol, and the
 communication channel, as a plist.  It must return a string or
 nil.")
 
-(defun org-export-filter-apply-functions (filters value backend info)
-  "Call every function in FILTERS with arguments VALUE, BACKEND and INFO.
-Functions are called in a LIFO fashion, to be sure that developer
-specified filters, if any, are called first."
+(defun org-export-filter-apply-functions (filters value info)
+  "Call every function in FILTERS.
+Functions are called with arguments VALUE, current export
+back-end and INFO.  Call is done in a LIFO fashion, to be sure
+that developer specified filters, if any, are called first."
   (loop for filter in filters
 	if (not value) return nil else
-	do (setq value (funcall filter value backend info)))
+	do (setq value (funcall filter value (plist-get info :back-end) info)))
   value)
 
-(defun org-export-install-filters (backend info)
+(defun org-export-install-filters (info)
   "Install filters properties in communication channel.
 
-BACKEND is a symbol specifying which back-end specific filters to
-install, if any.  INFO is a plist containing the current
-communication channel.
+INFO is a plist containing the current communication channel.
 
 Return the updated communication channel."
   (let (plist)
@@ -2052,7 +2059,8 @@ Return the updated communication channel."
 	    (setq plist (plist-put plist (car p) (eval (cdr p)))))
 	  org-export-filters-alist)
     ;; Prepend back-end specific filters to that list.
-    (let ((back-end-filters (intern (format "org-%s-filters-alist" backend))))
+    (let ((back-end-filters (intern (format "org-%s-filters-alist"
+					    (plist-get info :back-end)))))
       (when (boundp back-end-filters)
 	(mapc (lambda (p)
 		;; Single values get consed, lists are prepended.
@@ -2138,47 +2146,43 @@ Return code as a string."
       ;;    they might not be accessible anymore in a narrowed parse
       ;;    tree.  Also install user's and developer's filters.
       (let ((info (org-export-install-filters
-		   backend
 		   (org-export-store-footnote-definitions
 		    (org-export-get-environment backend subtreep ext-plist))))
-	    ;; 2. Get parse tree.  If NOEXPAND is non-nil, simply
-	    ;;    parse current visible part of buffer.
-	    (tree (if noexpand (org-element-parse-buffer nil visible-only)
-		    ;; Otherwise, buffer isn't parsed directly.
-		    ;; Instead, a temporary copy is created, where
-		    ;; include keywords are expanded and code blocks
-		    ;; are evaluated.
-		    (let ((buf (or (buffer-file-name (buffer-base-buffer))
-				   (current-buffer))))
-		      (org-export-with-current-buffer-copy
+	    ;; 2. Get parse tree.  Buffer isn't parsed directly.
+	    ;;    Instead, a temporary copy is created, where include
+	    ;;    keywords are expanded and code blocks are evaluated.
+	    (tree (let ((buf (or (buffer-file-name (buffer-base-buffer))
+				 (current-buffer))))
+		    (org-export-with-current-buffer-copy
+		     (unless noexpand
 		       (org-export-expand-include-keyword)
 		       ;; Setting `org-current-export-file' is
 		       ;; required by Org Babel to properly resolve
 		       ;; noweb references.
 		       (let ((org-current-export-file buf))
-			 (org-export-blocks-preprocess))
-		       (org-element-parse-buffer nil visible-only))))))
+			 (org-export-blocks-preprocess)))
+		     (goto-char (point-min))
+		     (run-hooks 'org-export-before-parsing-hook)
+		     (org-element-parse-buffer nil visible-only)))))
 	;; 3. Call parse-tree filters to get the final tree.
 	(setq tree
 	      (org-export-filter-apply-functions
-	       (plist-get info :filter-parse-tree) tree backend info))
+	       (plist-get info :filter-parse-tree) tree info))
 	;; 4. Now tree is complete, compute its properties and add
 	;;    them to communication channel.
 	(setq info
 	      (org-combine-plists
-	       info
-	       (org-export-collect-tree-properties tree info backend)))
+	       info (org-export-collect-tree-properties tree info)))
 	;; 5. Eventually transcode TREE.  Wrap the resulting string
 	;;    into a template, if required.  Eventually call
 	;;    final-output filter.
-	(let* ((body (org-element-normalize-string
-		      (org-export-data tree backend info)))
+	(let* ((body (org-element-normalize-string (org-export-data tree info)))
 	       (template (intern (format "org-%s-template" backend)))
 	       (output (org-export-filter-apply-functions
 			(plist-get info :filter-final-output)
 			(if (or (not (fboundp template)) body-only) body
 			  (funcall template body info))
-			backend info)))
+			info)))
 	  ;; Maybe add final OUTPUT to kill ring, then return it.
 	  (when org-export-copy-to-kill-ring (org-kill-new output))
 	  output)))))
@@ -2892,9 +2896,7 @@ INFO is a plist holding export options."
 	 ;; expanded recursively.
 	 (value
 	  (let ((val (plist-get info (intern (format ":macro-%s" key)))))
-	    (if (stringp val) val
-	      (org-export-secondary-string
-	       val (plist-get info :back-end) info)))))
+	    (if (stringp val) val (org-export-secondary-string val info)))))
     ;; Replace arguments in VALUE.
     (let ((s 0) n)
       (while (string-match "\\$\\([0-9]+\\)" value s)

@@ -5893,7 +5893,7 @@ needs to be inserted at a specific position in the font-lock sequence.")
 		 (0 (org-get-checkbox-statistics-face) t)))
 	   ;; Description list items
 	   '("^[ \t]*[-+*][ \t]+\\(.*?[ \t]+::\\)\\([ \t]+\\|$\\)"
-	     1 'bold prepend)
+	     1 'org-list-dt prepend)
 	   ;; ARCHIVEd headings
 	   (list (concat
 		  org-outline-regexp-bol
@@ -20706,7 +20706,7 @@ the functionality can be provided as a fall-back.")
 	     (fill-paragraph justify) t))
 	  ;; Else falls back on `org-fill-paragraph-fallback-function'
 	  (org-fill-paragraph-fallback-function
-	   (funcall org-fill-paragraph-fallback-function))
+	   (funcall org-fill-paragraph-fallback-function justify))
 	  ;; Else simply call `fill-paragraph'.
 	  (t nil))))
 
