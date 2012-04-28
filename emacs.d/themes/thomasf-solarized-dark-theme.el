@@ -1,4 +1,4 @@
-(require 'solarized-theme)
+(require 'thomasf-solarized)
 
 (deftheme thomasf-solarized-dark "The dark variant of the Solarized colour theme")
 

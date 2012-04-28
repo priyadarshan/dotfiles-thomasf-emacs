@@ -2,6 +2,9 @@
 (require 'org-agenda)
 (require 'org-checklist)
 
+;;
+;; Most of this is from http://doc.norang.ca/org-mode.html
+;;
 ;;;; Custom agenda commands
 
 (setq org-agenda-custom-commands
